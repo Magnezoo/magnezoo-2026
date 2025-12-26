@@ -20,22 +20,32 @@ bun dev
 
 起動後、ブラウザで `http://localhost:3000` を開き、動作を確認してください。表示内容を編集する場合は、`app/page.tsx` を編集すると自動的にページが更新されます。
 
-## フォント設定
+## コントリビューション
 
-本プロジェクトでは `next/font` を利用し、Vercel 提供のフォントファミリー「Geist」を自動で最適化して読み込む設定を行っています。
+適宜ブランチを切り、プルリクエストを送信してください。
+送信する際は、Notion の ID を使い、下記のようにタイトルをつけてください。
+
+タイトルの例: 「[MZ26TSK-43] ドキュメントを更新」
+
+自動的に Notion のタスクに紐つきます。
+
+### PR のレビューについて
+
+レビュアーは全て @yuito-it へ送信してください。
+
+### PR のチェックについて
+
+`next lint`による Lint がかかります。
+チェックが通らない限り、マージはできません。
+
+## デプロイ
+
+本アプリケーションのデプロイはデジタル創作サークル UniProject の Kubernetes 環境を使用いたします。
+また、ArgoCD による CI/CD を実装いたします。
+タグを作成するのみで、自動的にデプロイされます。
 
 ## 参考資料
 
 - Next.js ドキュメント: https://nextjs.org/docs — Next.js の機能および API を参照してください。
 - Learn Next.js: https://nextjs.org/learn — インタラクティブなチュートリアルです。
 - Next.js GitHub リポジトリ: https://github.com/vercel/next.js — 実装例や問題報告、貢献情報を確認できます。
-
-## デプロイ
-
-本アプリケーションの簡易なデプロイ方法としては Vercel の利用を推奨します。Vercel の新規デプロイページ: https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme
-
-デプロイ方法の詳細は Next.js のデプロイに関するドキュメントを参照してください: https://nextjs.org/docs/app/building-your-application/deploying
-
-## その他
-
-追加の設定やプロジェクト固有の手順が必要な場合は、プロジェクトの担当者に問い合わせてください。
