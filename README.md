@@ -1,10 +1,12 @@
 # Magnezoo 2026
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 概要
 
-## Getting Started
+本プロジェクトは Next.js を用いて構築されたウェブアプリケーションです。本書はプロジェクトの概要、開発手順、およびデプロイ手順を記載します。
 
-First, run the development server:
+## 開発環境の起動
+
+開発サーバーを起動するには、プロジェクトルートで以下のいずれかのコマンドを実行してください。
 
 ```bash
 npm run dev
@@ -16,23 +18,24 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+起動後、ブラウザで `http://localhost:3000` を開き、動作を確認してください。表示内容を編集する場合は、`app/page.tsx` を編集すると自動的にページが更新されます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## フォント設定
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+本プロジェクトでは `next/font` を利用し、Vercel 提供のフォントファミリー「Geist」を自動で最適化して読み込む設定を行っています。
 
-## Learn More
+## 参考資料
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js ドキュメント: https://nextjs.org/docs — Next.js の機能および API を参照してください。
+- Learn Next.js: https://nextjs.org/learn — インタラクティブなチュートリアルです。
+- Next.js GitHub リポジトリ: https://github.com/vercel/next.js — 実装例や問題報告、貢献情報を確認できます。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## デプロイ
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+本アプリケーションの簡易なデプロイ方法としては Vercel の利用を推奨します。Vercel の新規デプロイページ: https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme
 
-## Deploy on Vercel
+デプロイ方法の詳細は Next.js のデプロイに関するドキュメントを参照してください: https://nextjs.org/docs/app/building-your-application/deploying
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## その他
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+追加の設定やプロジェクト固有の手順が必要な場合は、プロジェクトの担当者に問い合わせてください。
