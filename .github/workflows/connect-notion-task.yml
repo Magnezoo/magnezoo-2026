@@ -1,0 +1,95 @@
+name: Connect Notion Task with GitHub PR
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - review_requested
+      - closed
+
+# 環境によって適切な値を入れる
+env:
+  NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }} # ntn_から始まるNotionのトークン
+  DATABASE_ID: ${{ secrets.DATABASE_ID }} # NotionページURLの先頭に付くID
+  NOTION_STATUS_PROPERTY_NAME: "ステータス"
+  NOTION_STATUS_PROPERTY_VALUE_IN_PROGRESS: "進行中"
+  NOTION_STATUS_PROPERTY_VALUE_REVIEW: "レビュー中"
+  NOTION_STATUS_PROPERTY_VALUE_COMPLETED: "完了"
+  NOTION_GITHUB_PR_PROPERTY_NAME: "GitHub PR(text)"
+
+jobs:
+  connect-notion-task-with-github-pr:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 変更前のNotion ID Propertyを抽出
+        if: github.event.changes.title != null
+        id: extract_notion_id_property_before
+        run: |
+          TITLE="${{ github.event.changes.title.from }}"
+          if [[ "$TITLE" =~ ^\[(.+?)\] ]]; then
+            NOTION_ID_PROPERTY_BEFORE="${BASH_REMATCH[1]}"
+            echo "抽出された変更前のNotion ID Property: $NOTION_ID_PROPERTY_BEFORE"
+            echo "VALUE=$NOTION_ID_PROPERTY_BEFORE" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Notion ID Propertyを抽出
+        id: extract_notion_id_property
+        run: |
+          TITLE="${{ github.event.pull_request.title }}"
+          if [[ "$TITLE" =~ ^\[(.+?)\] ]]; then
+            NOTION_ID_PROPERTY="${BASH_REMATCH[1]}"
+            echo "抽出されたNotion ID Property: $NOTION_ID_PROPERTY"
+            echo "VALUE=$NOTION_ID_PROPERTY" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Notionステータスの更新値を設定
+        if: steps.extract_notion_id_property.outputs.VALUE != '' || steps.extract_notion_id_property_before.outputs.VALUE != ''
+        id: set_notion_status
+        run: |
+          case "${{ github.event.action }}" in
+            opened|reopened)
+              STATUS="${{ env.NOTION_STATUS_PROPERTY_VALUE_IN_PROGRESS }}"
+              ;;
+            review_requested)
+              STATUS="${{ env.NOTION_STATUS_PROPERTY_VALUE_REVIEW }}"
+              ;;
+            closed)
+              if [[ "${{ github.event.pull_request.merged }}" == 'true' ]]; then
+                STATUS="${{ env.NOTION_STATUS_PROPERTY_VALUE_COMPLETED }}"
+              fi
+              ;;
+          esac
+          if [[ -n "$STATUS" ]]; then
+            echo "更新先のNotionステータス: $STATUS"
+            echo "VALUE=$STATUS" >> $GITHUB_OUTPUT
+            echo "PROPERTY_NAME=${{ env.NOTION_STATUS_PROPERTY_NAME }}" >> $GITHUB_OUTPUT
+          else
+            echo "ステータス更新はありません"
+          fi
+
+      - name: Change Notion Task
+        if: steps.extract_notion_id_property.outputs.VALUE != '' || steps.extract_notion_id_property_before.outputs.VALUE != ''
+        uses: TakanoriOnuma/notion-task-connector-with-github-pr@v0.0.4
+        with:
+          beforeNotionIdProperty: ${{ steps.extract_notion_id_property_before.outputs.VALUE }}
+          notionIdProperty: ${{ steps.extract_notion_id_property.outputs.VALUE }}
+          statusPropertyName: ${{ steps.set_notion_status.outputs.PROPERTY_NAME }}
+          statusPropertyValue: ${{ steps.set_notion_status.outputs.VALUE }}
+          githubPrPropertyName: ${{ env.NOTION_GITHUB_PR_PROPERTY_NAME }}
+        env:
+          NOTION_TOKEN: ${{ env.NOTION_TOKEN }}
+          DATABASE_ID: ${{ env.DATABASE_ID }}
+
+      - name: Comment Connected Tasks
+        if: steps.extract_notion_id_property.outputs.VALUE != '' || steps.extract_notion_id_property_before.outputs.VALUE != ''
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          file-path: ./connected-tasks.md
+          comment-tag: CONNECTED_NOTION_TASKS
