@@ -1,10 +1,12 @@
 # Magnezoo 2026
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 概要
 
-## Getting Started
+本プロジェクトは Next.js を用いて構築されたウェブアプリケーションです。本書はプロジェクトの概要、開発手順、およびデプロイ手順を記載します。
 
-First, run the development server:
+## 開発環境の起動
+
+開発サーバーを起動するには、プロジェクトルートで以下のいずれかのコマンドを実行してください。
 
 ```bash
 npm run dev
@@ -16,23 +18,34 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+起動後、ブラウザで `http://localhost:3000` を開き、動作を確認してください。表示内容を編集する場合は、`app/page.tsx` を編集すると自動的にページが更新されます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## コントリビューション
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+適宜ブランチを切り、プルリクエストを送信してください。
+送信する際は、Notion の ID を使い、下記のようにタイトルをつけてください。
 
-## Learn More
+タイトルの例: 「[MZ26TSK-43] ドキュメントを更新」
 
-To learn more about Next.js, take a look at the following resources:
+自動的に Notion のタスクに紐つきます。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### PR のレビューについて
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+レビュアーは全て @yuito-it へ送信してください。
 
-## Deploy on Vercel
+### PR のチェックについて
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`next lint`による Lint がかかります。
+チェックが通らない限り、マージはできません。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## デプロイ
+
+本アプリケーションのデプロイはデジタル創作サークル UniProject の Kubernetes 環境を使用いたします。
+また、ArgoCD による CI/CD を実装いたします。
+タグを作成するのみで、自動的にデプロイされます。
+
+## 参考資料
+
+- Next.js ドキュメント: https://nextjs.org/docs — Next.js の機能および API を参照してください。
+- Learn Next.js: https://nextjs.org/learn — インタラクティブなチュートリアルです。
+- Next.js GitHub リポジトリ: https://github.com/vercel/next.js — 実装例や問題報告、貢献情報を確認できます。
