@@ -17,7 +17,6 @@ spec:
           image: magnezoo:latest
           ports:
             - containerPort: 3000
-          restartPolicy: Always
           resources:
             limits:
               memory: "512Mi"
