@@ -1,8 +1,24 @@
-name: test
+name: magnezoo
 services:
-  web:
-    build:
-      context: .
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: magnezoo_user
+      POSTGRES_PASSWORD: securepassword
+      POSTGRES_DB: magnezoo_db
     ports:
-      - "3000:3000"
-    restart: unless-stopped
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+volumes:
+  db_data:
+
+networks:
+  magnezoo:
+    driver: bridge
