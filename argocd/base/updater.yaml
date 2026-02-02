@@ -1,0 +1,14 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: magnezoo
+  namespace: argocd
+spec:
+  namespace: argocd
+  applicationRefs:
+    - namePattern: "magnezoo"
+      images:
+        - alias: "magnezoo"
+          imageName: "registry.uniproject.jp/nnn/magnezoo:x.x.x-x"
+          commonUpdateSettings:
+            updateStrategy: "semver"

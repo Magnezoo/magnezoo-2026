@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magnezoo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: magnezoo
+  template:
+    metadata:
+      labels:
+        app: magnezoo
+    spec:
+      containers:
+        - name: magnezoo
+          image: magnezoo:latest
+          ports:
+            - containerPort: 3000
+          restartPolicy: Always
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"

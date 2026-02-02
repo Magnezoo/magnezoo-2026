@@ -1,0 +1,14 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: event-manager
+  namespace: argocd
+spec:
+  namespace: argocd
+  applicationRefs:
+    - namePattern: "event-manager"
+      images:
+        - alias: "event-manager"
+          imageName: "registry.uniproject.jp/infra/event-manager:x.x.x-x"
+          commonUpdateSettings:
+            updateStrategy: "semver"
