@@ -36,7 +36,7 @@ jobs:
         with:
           reviewdog_version: latest
       - name: Run reviewdog with eslint
-        uses: mongolyy/reviewdog-action-biome@bf7dffa9b14e8904941a18a28782b74fc40104f0 # v1
+        uses: reviewdog/action-eslint@v1 # v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           filter_mode: diff_context
