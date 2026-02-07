@@ -12,3 +12,14 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model EventStartSubscriber {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  event Event
+}
+
+enum Event {
+  MAGNEZOO
+  BOOTH
+}
