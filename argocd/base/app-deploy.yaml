@@ -20,12 +20,5 @@ spec:
           envFrom:
             - secretRef:
                 name: magnezoo-secret
-          resources:
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
-            requests:
-              memory: "256Mi"
-              cpu: "250m"
       imagePullSecrets:
         - name: internal-harbor
