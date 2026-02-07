@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: magnezoo
-          image: registry.uniproject.jp/nnn/magnezoo:latest
+          image: registry.uniproject.jp/nnn/magnezoo:0.2.0
           ports:
             - containerPort: 3000
           resources:
