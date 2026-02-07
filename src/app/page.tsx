@@ -124,14 +124,14 @@ function SubscriptionModal({
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 rounded-lg bg-black text-white px-4 py-2 font-medium hover:opacity-90 disabled:opacity-50 transition-opacity"
+              className="flex-1 rounded-lg bg-black text-white px-4 py-2 font-medium hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer"
             >
               {isLoading ? "登録中..." : "登録"}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-900 dark:text-zinc-50 px-4 py-2 font-medium hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
+              className="flex-1 rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-900 dark:text-zinc-50 px-4 py-2 font-medium hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
             >
               キャンセル
             </button>
@@ -207,7 +207,7 @@ export default function Home() {
                   <div className="flex flex-col gap-2">
                     <button
                       onClick={() => setOpenModal(event.id)}
-                      className="w-full rounded-lg bg-black text-white px-4 py-2 font-medium hover:opacity-90 transition-opacity"
+                      className="w-full rounded-lg bg-black text-white px-4 py-2 font-medium hover:opacity-90 transition-opacity cursor-pointer"
                     >
                       通知を受け取る
                     </button>
