@@ -121,6 +121,19 @@ function SubscriptionModal({
             </div>
           )}
 
+          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+            送信することにより、
+            <Link
+              href="/privacy"
+              className="underline hover:opacity-80 transition-opacity"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              プライバシー・ポリシー
+            </Link>
+            に同意したものと見なします。
+          </p>
+
           <div className="flex gap-2 pt-4">
             <button
               type="submit"
