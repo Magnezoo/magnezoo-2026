@@ -6,3 +6,6 @@ resources:
   - app-ingress.yaml
   - registry.yaml
   - updater.yaml
+  - db-deploy.yaml
+  - db-service.yaml
+  - secret.yaml
