@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const TARGET_DATE = new Date("2026-03-15T19:00:00");
@@ -8,7 +9,7 @@ const TARGET_DATE = new Date("2026-03-15T19:00:00");
 const events = [
   {
     id: "online",
-    title: "オンライン企画",
+    title: "Magnezoo 〜みんなのウチの子決定戦！〜",
     thumbnail: "/img/thumbnail/online.png",
     description:
       "あなたのウチの子が主役になる！自慢のペット写真を投稿して、オンライン会場で展示＆投票！犬猫から爬虫類まで、なんでもOK！最強に尊い「ウチの子No.1」を決めよう🐾✨",
@@ -191,6 +192,19 @@ export default function Home() {
                   <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50 mb-2">
                     {event.title}
                   </h2>
+                  <div className="mb-3">
+                    <span
+                      className={`inline-block px-2 py-1 rounded text-xs font-semibold ${
+                        event.eventType === "MAGNEZOO"
+                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                          : "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200"
+                      }`}
+                    >
+                      {event.eventType === "MAGNEZOO"
+                        ? "オンライン"
+                        : "オフライン"}
+                    </span>
+                  </div>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
                     {event.description}
                   </p>
@@ -231,6 +245,21 @@ export default function Home() {
           eventType={openedEvent.eventType}
         />
       )}
+      <footer>
+        <p className="mt-12 text-xs text-zinc-400 text-center">
+          &copy; 2026 Magnezoo 製作委員会 All rights reserved. Server provided
+          by by{" "}
+          <Link
+            href="https://uniproject.jp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:opacity-80 transition-opacity"
+          >
+            デジタル創作サークルUniProject
+          </Link>
+          .
+        </p>
+      </footer>
     </div>
   );
 }
