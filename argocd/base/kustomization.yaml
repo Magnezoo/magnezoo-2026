@@ -9,3 +9,4 @@ resources:
   - db-deploy.yaml
   - db-service.yaml
   - secret.yaml
+  - db-pvc.yaml
