@@ -1,10 +1,12 @@
 "use client";
 
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const TARGET_DATE = new Date("2026-03-15T19:00:00");
+const TARGET_DATE = new Date("2026-04-10T19:00:00");
+const EARLY_ACCESS_DATE = new Date("2026-02-25T09:00:00");
 
 const events = [
   {
@@ -121,11 +123,11 @@ function SubscriptionModal({
             </div>
           )}
 
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+          <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
             送信することにより、
             <Link
               href="/privacy"
-              className="underline hover:opacity-80 transition-opacity"
+              className="inline text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium underline transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -171,8 +173,16 @@ export default function Home() {
       <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-2">
         イベントまで待機
       </h1>
-      <p className="text-zinc-600 dark:text-zinc-300 mb-12">
+      <p className="text-sm text-zinc-600 dark:text-zinc-400">
         開催日時: {TARGET_DATE.toLocaleString()}
+      </p>
+      <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-12">
+        物販募集開始日時: {EARLY_ACCESS_DATE.toLocaleString()}
+      </p>
+      <p className="text-base text-zinc-700 dark:text-zinc-300 mb-12 leading-relaxed max-w-2xl text-center">
+        磁石祭 ZEROのオンライン企画 Magnezooが今年も開催されます！
+        <br />
+        昨年に加え、今年は物販企画も実施予定です。 奮ってご参加ください！
       </p>
 
       <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6">
