@@ -12,7 +12,6 @@
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "@types/pg": "^8.16.0",
-    "dotenv": "^17.2.4",
     "next": "16.1.6",
     "pg": "^8.18.0",
     "prisma": "^7.3.0",
@@ -20,6 +19,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "dotenv": "^17.2.4",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^25.2.1",
     "@types/react": "^19.2.13",

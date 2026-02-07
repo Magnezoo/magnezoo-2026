@@ -17,6 +17,9 @@ spec:
           image: registry.uniproject.jp/nnn/magnezoo:0.2.0
           ports:
             - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: magnezoo-secrets
           resources:
             limits:
               memory: "512Mi"
