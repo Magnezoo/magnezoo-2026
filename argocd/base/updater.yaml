@@ -9,6 +9,6 @@ spec:
     - namePattern: "magnezoo"
       images:
         - alias: "magnezoo"
-          imageName: "registry.uniproject.jp/nnn/magnezoo:x.x.x-x"
+          imageName: "registry.uniproject.jp/nnn/magnezoo:x.x.x"
           commonUpdateSettings:
             updateStrategy: "semver"
