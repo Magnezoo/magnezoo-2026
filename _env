@@ -10,3 +10,5 @@
 # one found in a remote Prisma Postgres URL, does not contain any sensitive information.
 
 DATABASE_URL="postgres://magnezoo_user:securepassword@localhost:5432/magnezoo_db"
+
+BETTER_AUTH_SECRET=RVxji2PPJcZeQXBjI1zv3PCO4thhwP93
