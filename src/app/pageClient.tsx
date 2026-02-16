@@ -20,7 +20,7 @@ const events = [
   },
   {
     id: "booth",
-    title: "ブース企画",
+    title: "Magnezoo 物販企画(仮)",
     thumbnail: "/img/thumbnail/booth.png",
     description:
       "生徒から募集した「ウチの子（ペット）」の写真をもとに制作する、ネット企画Magnezoo発の物販企画です。ここでしか手に入らない、尊くて愛しい限定アイテムを展開します。写真募集開始までお待ちください！",
