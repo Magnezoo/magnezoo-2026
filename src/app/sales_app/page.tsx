@@ -1,6 +1,6 @@
 export default function SalesAppCampainPage() {
   return (
-    <div className="flex text-center leading-relaxed min-h-screen items-center justify-center bg-[#FFEECE] font-sans text-black space-y-8">
+    <div className="flex text-center leading-relaxed min-h-screen items-center justify-center bg-[#FFEECE] font-sans text-black space-y-8 py-10">
       <main>
         <h1 className="text-xl font-bold mb-2">【物販企画】</h1>
         <h2 className="text-2xl font-bold mb-8">
@@ -31,7 +31,7 @@ export default function SalesAppCampainPage() {
         <br />
         <ol>
           <li>
-            1.写真を撮る：
+            <strong>1.写真を撮る：</strong>
             <br />
             あなたのウチの子（ペット等）のかわいい写真を撮ってください！
             <br />
@@ -41,19 +41,19 @@ export default function SalesAppCampainPage() {
           </li>
           <br />
           <li>
-            2.応募フォームに記入する：
+            <strong>2.応募フォームに記入する：</strong>
             <br />
             以下の応募フォームに必要事項を記入してください。
           </li>
           <br />
           <li>
-            3.写真をアップロードする：
+            <strong>3.写真をアップロードする：</strong>
             <br />
             応募フォーム内で、撮った写真をアップロードしてください。
           </li>
           <br />
           <li>
-            4.送信する：
+            <strong>4.送信する：</strong>
             <br />
             すべての情報が入力されたら、応募フォームを送信してください。
           </li>
