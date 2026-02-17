@@ -60,8 +60,8 @@ export default function SalesAppCampainPage() {
             <br />
             応募方法は以下の通りです。
           </p>
-          <ol className="list-decimal list-inside text-left mx-auto max-w-md space-y-4">
-            <li>
+          <ol className="list-inside list-none text-left mx-auto max-w-md space-y-4">
+            <li className="whitespace-nowrap">
               <span className="font-bold">1. 写真を撮る：</span>
               <br />
               あなたのウチの子（ペット等）のかわいい写真を撮影してください。
@@ -72,18 +72,22 @@ export default function SalesAppCampainPage() {
                 地域猫や犬カフェ・猫カフェ等の写真も歓迎します！
               </span>
             </li>
-            <li>
-              <span className="font-bold">2. 応募フォームに記入する：</span>
+            <li className="whitespace-nowrap">
+              <span className="font-bold list-none">
+                2. 応募フォームに記入する：
+              </span>
               <br />
               以下の応募フォームに必要事項を記入してください。
             </li>
-            <li>
-              <span className="font-bold">3. 写真をアップロードする：</span>
+            <li className="whitespace-nowrap">
+              <span className="font-bold list-none">
+                3. 写真をアップロードする：
+              </span>
               <br />
               応募フォーム内で、撮影した写真をアップロードしてください。
             </li>
-            <li>
-              <span className="font-bold">4. 送信する：</span>
+            <li className="whitespace-nowrap">
+              <span className="font-bold list-none">4. 送信する：</span>
               <br />
               すべての情報が入力されたら、応募フォームを送信してください。
             </li>
@@ -97,11 +101,11 @@ export default function SalesAppCampainPage() {
 
         <Section title="注意事項">
           <ul className="list-disc list-inside text-left mx-auto max-w-md space-y-2">
-            <li>
+            <li className="whitespace-nowrap">
               応募は<span className="font-bold text-[#E48B00]">何回でもOK</span>
               です！
             </li>
-            <li>
+            <li className="whitespace-nowrap">
               写真はオリジナルのもので、他人の著作権を侵害しないものに限ります。
               <ul className="list-[circle] ml-6 space-y-1">
                 <li>人が写っている写真は望ましくありません。</li>
@@ -114,8 +118,12 @@ export default function SalesAppCampainPage() {
                 </li>
               </ul>
             </li>
-            <li>選ばれた写真は、商品化のために加工されることがあります。</li>
-            <li>応募された写真は返却いたしませんので、ご了承ください。</li>
+            <li className="whitespace-nowrap">
+              選ばれた写真は、商品化のために加工されることがあります。
+            </li>
+            <li className="whitespace-nowrap">
+              応募された写真は返却いたしませんので、ご了承ください。
+            </li>
           </ul>
         </Section>
 
