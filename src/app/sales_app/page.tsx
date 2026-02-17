@@ -1,6 +1,6 @@
 export default function SalesAppCampainPage() {
   return (
-    <div className="flex text-center min-h-screen items-center justify-center bg-[#FFEECE] font-sans text-black">
+    <div className="flex text-center leading-relaxed min-h-screen items-center justify-center bg-[#FFEECE] font-sans text-black space-y-8">
       <main>
         <h1 className="text-xl font-bold mb-2">【物販企画】</h1>
         <h2 className="text-2xl font-bold mb-8">
