@@ -1,3 +1,73 @@
+.animated-bg-circles .circle4 {
+  width: 180px;
+  height: 180px;
+  right: 18vw;
+  bottom: 12vh;
+  background: #e48b00;
+  opacity: 0.09;
+  animation-delay: 12s;
+}
+.animated-bg-circles .circle5 {
+  width: 120px;
+  height: 120px;
+  left: 60vw;
+  top: 18vh;
+  background: #ffd699;
+  opacity: 0.13;
+  animation-delay: 2s;
+}
+/* 幾何学的な背景アニメーション */
+.animated-bg-circles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.animated-bg-circles .circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.12;
+  animation: move-circles 16s linear infinite alternate;
+}
+
+.animated-bg-circles .circle1 {
+  width: 420px;
+  height: 420px;
+  left: 5vw;
+  top: 10vh;
+  background: #e48b00;
+  animation-delay: 0s;
+}
+.animated-bg-circles .circle2 {
+  width: 320px;
+  height: 320px;
+  right: 8vw;
+  top: 40vh;
+  background: #ffd699;
+  animation-delay: 4s;
+}
+.animated-bg-circles .circle3 {
+  width: 260px;
+  height: 260px;
+  left: 30vw;
+  bottom: 8vh;
+  background: #ffeece;
+  animation-delay: 8s;
+}
+
+@keyframes move-circles {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-30px) scale(1.08);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
 @import "tailwindcss";
 
 :root {
