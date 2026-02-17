@@ -128,7 +128,11 @@ export default function SalesAppCampainPage() {
         </Section>
 
         {/* TODO: 応募フォームのボタン追加 */}
-
+        <div className="flex flex-col items-center py-10">
+          <button className="bg-white border-2 border-black text-black font-bold py-4 px-12 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-200 text-lg">
+            応募フォームはこちら
+          </button>
+        </div>
         <div className="mt-12">
           {/* TODO: 大きく目立つようにする */}
           <p className="text-[#E48B00] text-2xl font-semibold tracking-wide">
