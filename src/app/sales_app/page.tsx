@@ -151,7 +151,6 @@ export default function SalesAppCampainPage() {
           </button>
         </div>
         <div className="mt-12">
-          {/* TODO: 大きく目立つようにする */}
           <p className="text-[#E48B00] text-2xl font-semibold tracking-wide">
             みなさんのご応募をお待ちしております！
           </p>
