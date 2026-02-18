@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import {
@@ -42,9 +42,12 @@ function GoogleIcon() {
   );
 }
 
-export default function SignInPage() {
-  const searchParams = useSearchParams();
-  const redirect = searchParams?.get("redirect") || "/";
+export default function SignInPage({
+  searchParams,
+}: {
+  searchParams?: { redirect?: string };
+}) {
+  const redirect = searchParams?.redirect || "/";
   const router = useRouter();
 
   const [loading, setLoading] = useState<string | null>(null);
@@ -58,8 +61,12 @@ export default function SignInPage() {
         providerId,
         callbackURL: redirect,
       });
-    } catch (e: any) {
-      setError(e?.message || String(e));
+    } catch (e: unknown) {
+      if (e && typeof e === "object" && "message" in e) {
+        setError((e as Error).message);
+      } else {
+        setError(String(e));
+      }
     } finally {
       setLoading(null);
     }
