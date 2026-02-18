@@ -117,12 +117,12 @@ export default function SalesAppCampainPage() {
         </Section>
 
         <Section title="注意事項">
-          <ul className="list-disc list-inside text-left mx-auto max-w-md space-y-2">
-            <li className="whitespace-nowrap">
+          <ul className="list-disc list-outside text-left mx-auto max-w-md space-y-2">
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
               応募は<span className="font-bold text-[#E48B00]">何回でもOK</span>
               です！
             </li>
-            <li className="whitespace-nowrap">
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
               写真はオリジナルのもので、他人の著作権を侵害しないものに限ります。
               <ul className="list-[circle] ml-6 space-y-1">
                 <li>人が写っている写真は望ましくありません。</li>
@@ -135,10 +135,10 @@ export default function SalesAppCampainPage() {
                 </li>
               </ul>
             </li>
-            <li className="whitespace-nowrap">
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
               選ばれた写真は、商品化のために加工されることがあります。
             </li>
-            <li className="whitespace-nowrap">
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
               応募された写真は返却いたしませんので、ご了承ください。
             </li>
           </ul>
