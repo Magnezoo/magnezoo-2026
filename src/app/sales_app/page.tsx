@@ -78,7 +78,7 @@ export default function SalesAppCampainPage() {
             応募方法は以下の通りです。
           </p>
           <ol className="list-inside list-none text-left mx-auto max-w-md space-y-4">
-            <li className="whitespace-nowrap">
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
               <span className="font-bold">1. 写真を撮る：</span>
               <br />
               あなたのウチの子（ペット等）のかわいい写真を撮影してください。
@@ -89,21 +89,21 @@ export default function SalesAppCampainPage() {
                 地域猫や犬カフェ・猫カフェ等の写真も歓迎します！
               </span>
             </li>
-            <li className="whitespace-nowrap">
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
               <span className="font-bold list-none">
                 2. 応募フォームに記入する：
               </span>
               <br />
               以下の応募フォームに必要事項を記入してください。
             </li>
-            <li className="whitespace-nowrap">
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
               <span className="font-bold list-none">
                 3. 写真をアップロードする：
               </span>
               <br />
               応募フォーム内で、撮影した写真をアップロードしてください。
             </li>
-            <li className="whitespace-nowrap">
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
               <span className="font-bold list-none">4. 送信する：</span>
               <br />
               すべての情報が入力されたら、応募フォームを送信してください。
