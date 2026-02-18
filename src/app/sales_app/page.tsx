@@ -41,12 +41,29 @@ export default function SalesAppCampainPage() {
         </header>
 
         <Section title="企画概要">
-          <p className="mb-2">
-            Magnezoo物販企画(仮)は、生徒から募集した「ウチの子（ペット）」の写真をもとに制作する、
-            <br />
-            ネット企画Magnezoo発の物販企画です。
-            <br />
-            ここでしか手に入らない、尊くて愛しい限定アイテムを展開します。
+          <p className="mb-2 leading-normal [&_span]:inline-block max-w-xl mx-auto">
+            <span>
+              <span>
+                <span>Magnezoo物販企画(仮)は、</span>
+                <span>生徒から募集した</span>
+              </span>
+              <span>
+                <span>「ウチの子（ペット）」の</span>
+                <span>写真をもとに</span>
+                <span>制作する、</span>
+              </span>
+              <span>
+                <span>ネット企画Magnezoo発の</span>
+                <span>物販企画です。</span>
+              </span>
+              <span>
+                <span>ここでしか手に入らない、</span>
+                <span>
+                  <span>尊くて愛しい</span>限定アイテムを
+                </span>
+              </span>
+              <span>展開します。</span>
+            </span>
           </p>
         </Section>
 
