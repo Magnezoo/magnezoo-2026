@@ -6,10 +6,10 @@ import { redirect } from "next/navigation";
 export default async function SignInPage({
   searchParams,
 }: {
-  searchParams: Promise<{ redirectPath?: string }>;
+  searchParams: Promise<{ redirect_to?: string }>;
 }) {
   const session = await auth.api.getSession({ headers: await headers() });
-  const { redirectPath } = await searchParams;
+  const { redirect_to: redirectPath } = await searchParams;
   if (session) {
     redirect(redirectPath ?? "/");
   }

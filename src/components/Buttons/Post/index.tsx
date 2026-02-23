@@ -39,7 +39,7 @@ export default function PostButton({
         <button
           onClick={() => {
             redirect(
-              `/signin${path ? `?redirect=${encodeURIComponent(path)}` : ""}`,
+              `/signin${path ? `?redirect_to=${encodeURIComponent(path)}` : ""}`,
             );
           }}
           className={`${className}`}
