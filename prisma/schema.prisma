@@ -34,6 +34,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  posts         Post[]
 
   @@unique([email])
   @@map("user")
@@ -82,4 +83,22 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model Post {
+  id                 String   @id @db.Uuid
+  title              String
+  description        String   @db.Text
+  imageUrl           String
+  published          Boolean  @default(false)
+  authorId           String
+  isSalesApplication Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  author             User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([title])
+  @@index([isSalesApplication])
+  @@index([createdAt])
+  @@map("post")
 }
