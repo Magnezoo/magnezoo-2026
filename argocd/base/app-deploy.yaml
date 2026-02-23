@@ -23,8 +23,8 @@ spec:
           volumeMounts:
             - name: app-image-storage
               mountPath: /app/public/posts
-              imagePullSecrets:
-                - name: internal-harbor
+      imagePullSecrets:
+        - name: internal-harbor
       volumes:
         - name: app-image-storage
           persistentVolumeClaim:
