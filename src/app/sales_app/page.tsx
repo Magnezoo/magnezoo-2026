@@ -1,3 +1,6 @@
+import PostButton from "@/components/Buttons/Post";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Link from "next/link";
 
 function Section({
@@ -17,7 +20,8 @@ function Section({
   );
 }
 
-export default function SalesAppCampainPage() {
+export default async function SalesAppCampainPage() {
+  const session = await auth.api.getSession({ headers: await headers() });
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#FFEECE] font-sans text-black py-10 overflow-hidden">
       {/* 幾何学的な背景アニメーション */}
@@ -144,11 +148,12 @@ export default function SalesAppCampainPage() {
           </ul>
         </Section>
 
-        {/* TODO: 応募フォームのボタン追加 */}
         <div className="flex flex-col items-center py-10">
-          <button className="bg-white border-2 border-black text-black font-bold py-4 px-12 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all duration-200 text-lg cursor-pointer">
-            応募フォームはこちら
-          </button>
+          <PostButton
+            userId={session?.user?.id}
+            path="/sales_app"
+            className="bg-white border-2 border-black text-black font-bold py-4 px-12 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all duration-200 text-lg cursor-pointer"
+          />
         </div>
         <div className="mt-12">
           <p className="text-[#E48B00] text-2xl font-semibold tracking-wide">

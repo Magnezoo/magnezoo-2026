@@ -34,6 +34,12 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  posts         Post[]
+
+  role       String?
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
 
   @@unique([email])
   @@map("user")
@@ -50,7 +56,10 @@ model Session {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  impersonatedBy String?
+
   @@unique([token])
+  @@index([userId])
   @@map("session")
 }
 
@@ -70,6 +79,7 @@ model Account {
   createdAt             DateTime
   updatedAt             DateTime
 
+  @@index([userId])
   @@map("account")
 }
 
@@ -81,5 +91,23 @@ model Verification {
   createdAt  DateTime?
   updatedAt  DateTime?
 
+  @@index([identifier])
   @@map("verification")
+}
+
+model Post {
+  id                 String   @id @default(uuid()) @db.Uuid
+  title              String
+  description        String   @db.Text
+  imageUrl           String
+  authorId           String
+  isSalesApplication Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  author             User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([title])
+  @@index([isSalesApplication])
+  @@index([createdAt])
+  @@map("post")
 }
