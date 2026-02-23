@@ -15,7 +15,14 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "@mui/material/Link";
-import { useState, useRef, useEffect, type ChangeEvent } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  type ChangeEvent,
+  FormEvent,
+} from "react";
+import { createPost } from "./action";
 
 export enum PostFormStep {
   TitleAndDescription = 1,
@@ -25,10 +32,12 @@ export enum PostFormStep {
 
 export default function PostForm({
   isSalesApplication,
+  userId,
   open,
   onClose,
 }: {
   isSalesApplication?: boolean;
+  userId: string;
   open: boolean;
   onClose: () => void;
 }) {
@@ -116,6 +125,37 @@ export default function PostForm({
   })();
 
   if (!open) return null;
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // 入力フィールドはステップでアンマウントされるため
+    // フォーム要素から取得せず、コンポーネントの state を使って送信する
+    if (!image) {
+      alert("画像が選択されていません。");
+      return;
+    }
+
+    try {
+      const success = await createPost({
+        title: String(title),
+        content: String(description),
+        image: image,
+        userId,
+        isSalesApplication: Boolean(salesAgreementChecked),
+      });
+
+      if (success) {
+        alert("投稿が保存されました！");
+        onClose();
+      } else {
+        alert("投稿の保存に失敗しました。");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("投稿の保存中にエラーが発生しました。");
+    }
+  };
 
   return (
     <Stack
@@ -238,7 +278,7 @@ export default function PostForm({
           px={{ xs: 3, xl: 10 }}
           gap={4}
           flex={1}
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSubmit}
           sx={{
             position: "relative",
             overflowY: { xs: "auto", md: "visible" },
@@ -281,6 +321,7 @@ export default function PostForm({
                       >
                         <TextField
                           fullWidth
+                          name="title"
                           label="タイトル"
                           variant="outlined"
                           value={title}
@@ -302,6 +343,7 @@ export default function PostForm({
                         <TextField
                           fullWidth
                           label="説明"
+                          name="description"
                           variant="outlined"
                           multiline
                           rows={7}
@@ -338,6 +380,7 @@ export default function PostForm({
                         }}
                       >
                         <input
+                          name="image"
                           ref={fileInputRef}
                           type="file"
                           accept="image/*"
@@ -441,6 +484,7 @@ export default function PostForm({
                             name="isSalesApp"
                             control={
                               <Checkbox
+                                name="isSalesApp"
                                 checked={salesAgreementChecked}
                                 onChange={(e) =>
                                   setSalesAgreementChecked(e.target.checked)
@@ -457,6 +501,7 @@ export default function PostForm({
                           name="agreeTos"
                           control={
                             <Checkbox
+                              name="agreeTos"
                               checked={tosChecked}
                               onChange={(e) => setTosChecked(e.target.checked)}
                               required

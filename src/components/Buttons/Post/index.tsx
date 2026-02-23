@@ -17,21 +17,24 @@ export default function PostButton({
 
   return (
     <>
-      <PostForm
-        isSalesApplication
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      />
       {userId ? (
-        <button
-          onClick={() => setOpen(true)}
-          className={`${className}`}
-          id="post_btn"
-        >
-          投稿する
-        </button>
+        <>
+          <PostForm
+            isSalesApplication
+            userId={userId}
+            open={open}
+            onClose={() => {
+              setOpen(false);
+            }}
+          />
+          <button
+            onClick={() => setOpen(true)}
+            className={`${className}`}
+            id="post_btn"
+          >
+            投稿する
+          </button>
+        </>
       ) : (
         <button
           onClick={() => {
