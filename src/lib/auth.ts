@@ -48,4 +48,7 @@ export const auth = betterAuth({
     }),
     admin(),
   ],
+  advanced: {
+    trustedProxyHeaders: true,
+  },
 });
