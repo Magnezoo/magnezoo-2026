@@ -51,5 +51,4 @@ export const auth = betterAuth({
   advanced: {
     trustedProxyHeaders: true,
   },
-  baseURL: "https://magnezoo.unipro-n.com",
 });
