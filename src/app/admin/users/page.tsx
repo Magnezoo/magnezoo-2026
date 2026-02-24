@@ -1,4 +1,4 @@
-import UsersDatagrid from "@/components/admin/Datagrids/Users";
+import UsersDatagrid from "@/components/admin/Datagrids/User";
 import prisma from "@/lib/prisma";
 import { Stack, Typography } from "@mui/material";
 
