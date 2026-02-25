@@ -4,7 +4,8 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { Metadata } from "next";
 import { headers } from "next/headers";
-import { Link } from "@mui/material";
+import { Link as MUILink } from "@mui/material";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "あなたのウチの子が商品に！？ - Magnezoo 物販企画",
@@ -169,7 +170,8 @@ export default async function SalesAppCampainPage() {
               企画全般: Slackにて @あかつきゆいと / @おは._.ゆーし にグループDM
             </li>
             <li>
-              法的な問題: <Link href="/privacy">プライバシー・ポリシー</Link>
+              法的な問題:{" "}
+              <MUILink href="/privacy">プライバシー・ポリシー</MUILink>
               をご確認ください
             </li>
           </ul>
