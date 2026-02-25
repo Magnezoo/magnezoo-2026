@@ -40,6 +40,7 @@ model User {
   banned     Boolean?  @default(false)
   banReason  String?
   banExpires DateTime?
+  slacks     Slacks[]
 
   @@unique([email])
   @@map("user")
@@ -110,4 +111,17 @@ model Post {
   @@index([isSalesApplication])
   @@index([createdAt])
   @@map("post")
+}
+
+model Slacks {
+  id            Int      @id @default(autoincrement())
+  name          String
+  isDisplayname Boolean  @default(false)
+  userId        String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("slacks")
 }
