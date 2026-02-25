@@ -7,6 +7,16 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "5mb",
     },
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "magnezoo.unipro-n.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
