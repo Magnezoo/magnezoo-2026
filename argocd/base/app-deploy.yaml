@@ -23,6 +23,10 @@ spec:
           volumeMounts:
             - name: app-image-storage
               mountPath: /app/public/img/posts
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
       imagePullSecrets:
         - name: internal-harbor
       volumes:
