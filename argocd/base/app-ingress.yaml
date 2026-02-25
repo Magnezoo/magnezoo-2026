@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: app
   annotations:
-    cert-manager.io/cluster-issuer: le-cf-staging
+    cert-manager.io/cluster-issuer: le-cf-production
 spec:
   ingressClassName: nginx
   rules:
