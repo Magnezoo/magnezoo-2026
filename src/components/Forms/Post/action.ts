@@ -17,7 +17,7 @@ export const createPost = async ({
   isSalesApplication: boolean;
 }) => {
   try {
-    const dir = `${process.cwd()}/public/posts`;
+    const dir = `${process.cwd()}/public/img/posts`;
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
@@ -33,7 +33,7 @@ export const createPost = async ({
       data: {
         title,
         description: content,
-        imageUrl: `/posts/${filename}`,
+        imageUrl: `/img/posts/${filename}`,
         isSalesApplication,
         authorId: userId,
       },
