@@ -5,7 +5,6 @@ import {
   Backdrop,
   Button,
   Checkbox,
-  FormControlLabel,
   FormHelperText,
   IconButton,
   MenuItem,
@@ -509,48 +508,88 @@ export default function PostFormClient({
                           />
 
                           {isSalesApplication && (
-                            <FormControlLabel
-                              name="isSalesApp"
-                              control={
-                                <Checkbox
-                                  name="isSalesApp"
-                                  checked={salesAgreementChecked}
-                                  onChange={(e) =>
-                                    setSalesAgreementChecked(e.target.checked)
-                                  }
-                                  disabled={submitting}
-                                  required
-                                />
-                              }
-                              required
-                              label="磁石祭2026の物販企画にて販売される可能性があること、その場合、運営からの連絡に対応する必要があることを理解しています。"
-                            />
-                          )}
-
-                          <FormControlLabel
-                            name="agreeTos"
-                            control={
+                            <Box
+                              sx={{
+                                display: "grid",
+                                gridTemplateColumns: "28px 1fr",
+                                columnGap: 1,
+                                alignItems: "start",
+                                width: "100%",
+                              }}
+                            >
                               <Checkbox
-                                name="agreeTos"
-                                checked={tosChecked}
+                                name="isSalesApp"
+                                checked={salesAgreementChecked}
                                 onChange={(e) =>
-                                  setTosChecked(e.target.checked)
+                                  setSalesAgreementChecked(e.target.checked)
                                 }
                                 disabled={submitting}
                                 required
+                                size="small"
+                                sx={{ alignSelf: "start" }}
                               />
-                            }
-                            required
-                            label={
-                              <>
-                                <Link href={"/terms"}>利用規約</Link>と
-                                <Link href={"/privacy"}>
-                                  プライバシー・ポリシー
-                                </Link>
-                                に同意します。
-                              </>
-                            }
-                          />
+                              <Box
+                                sx={{
+                                  fontSize: 14,
+                                  lineHeight: 1.5,
+                                  color: "#333",
+                                  minWidth: 0,
+                                  wordBreak: "break-word",
+                                }}
+                                textAlign={"left"}
+                              >
+                                磁石祭2026の物販企画にて販売される可能性があること、その場合、運営からの連絡に対応する必要があることを理解しています。
+                              </Box>
+                            </Box>
+                          )}
+
+                          <Box
+                            sx={{
+                              display: "grid",
+                              gridTemplateColumns: "28px 1fr",
+                              columnGap: 1,
+                              alignItems: "start",
+                              width: "100%",
+                            }}
+                          >
+                            <Checkbox
+                              name="agreeTos"
+                              checked={tosChecked}
+                              onChange={(e) => setTosChecked(e.target.checked)}
+                              disabled={submitting}
+                              required
+                              size="small"
+                              sx={{ alignSelf: "start" }}
+                            />
+                            <Box
+                              sx={{
+                                fontSize: 14,
+                                lineHeight: 1.5,
+                                color: "#333",
+                                minWidth: 0,
+                                wordBreak: "break-word",
+                              }}
+                              textAlign={"left"}
+                            >
+                              <Link
+                                href={"/terms"}
+                                underline="hover"
+                                color="inherit"
+                              >
+                                利用規約
+                              </Link>
+                              と
+                              <Link
+                                href={"/privacy"}
+                                underline="hover"
+                                color="inherit"
+                                sx={{ ml: 0.5 }}
+                              >
+                                プライバシー・ポリシー
+                              </Link>
+                              に同意します。
+                            </Box>
+                          </Box>
                         </Box>
                       </>
                     );
