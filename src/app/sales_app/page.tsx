@@ -1,5 +1,7 @@
 import PostButton from "@/components/Buttons/Post";
+import SlackSttingsGuard from "@/components/Dialogs/SlackSetting/Guard";
 import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import Link from "next/link";
 
@@ -22,6 +24,9 @@ function Section({
 
 export default async function SalesAppCampainPage() {
   const session = await auth.api.getSession({ headers: await headers() });
+  const slack = session?.user?.id
+    ? await prisma.slacks.findUnique({ where: { userId: session.user.id } })
+    : null;
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#FFEECE] font-sans text-black py-10 overflow-hidden">
       {/* 幾何学的な背景アニメーション */}
@@ -160,6 +165,9 @@ export default async function SalesAppCampainPage() {
             みなさんのご応募をお待ちしております！
           </p>
         </div>
+        {session && (
+          <SlackSttingsGuard isNeed={!slack} userId={session?.user?.id} />
+        )}
       </main>
       <footer>
         <p className="mt-12 text-xs text-zinc-400 text-center">
