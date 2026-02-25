@@ -1,9 +1,11 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-export const GET = async (request: Request) => {
-  const { searchParams } = new URL(request.url);
-  const filename = searchParams.get("filename");
+export const GET = async (
+  request: Request,
+  { params }: { params: Promise<{ filename: string }> },
+) => {
+  const { filename } = await params;
 
   if (!filename) {
     return new Response("Image URL is required", { status: 400 });

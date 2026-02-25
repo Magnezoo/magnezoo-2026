@@ -33,7 +33,7 @@ export const createPost = async ({
       data: {
         title,
         description: content,
-        imageUrl: `https://magnezoo.unipro-n.com/api/post_images?filename=${filename}`,
+        imageUrl: `https://magnezoo.unipro-n.com/api/post_images/${filename}`,
         isSalesApplication,
         authorId: userId,
       },
