@@ -5,6 +5,7 @@ metadata:
 spec:
   entryPoints:
     - websecure
+    - web
   routes:
     - kind: Rule
       match: Host(`magnezoo.unipro-n.com`) && PathPrefix(`/`)
