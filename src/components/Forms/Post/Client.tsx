@@ -2,6 +2,7 @@
 
 import {
   Box,
+  Backdrop,
   Button,
   Checkbox,
   FormControlLabel,
@@ -11,6 +12,7 @@ import {
   MenuList,
   Stack,
   TextField,
+  CircularProgress,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -70,6 +72,7 @@ export default function PostFormClient({
     isSalesApplication ? false : true,
   );
   const [tosChecked, setTosChecked] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -139,6 +142,7 @@ export default function PostFormClient({
       return;
     }
 
+    setSubmitting(true);
     try {
       const compressedImage = await compressImage(image, 1024, 0.8);
       const success = await createPost({
@@ -160,6 +164,8 @@ export default function PostFormClient({
       enqueueSnackbar("投稿の保存中にエラーが発生しました。", {
         variant: "error",
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -296,6 +302,12 @@ export default function PostFormClient({
               maxHeight: { xs: "calc(100vh - 80px)", md: "none" },
             }}
           >
+            <Backdrop open={submitting} sx={{ zIndex: 1300, color: "#fff" }}>
+              <Stack alignItems="center" spacing={2}>
+                <CircularProgress color="inherit" />
+                <Typography>送信中…</Typography>
+              </Stack>
+            </Backdrop>
             <Box sx={{ position: "absolute", top: 12, right: 12 }}>
               <IconButton
                 onClick={onClose}
@@ -337,6 +349,7 @@ export default function PostFormClient({
                             variant="outlined"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
+                            disabled={submitting}
                             required
                           />
                           <FormHelperText sx={{ fontSize: 15 }}>
@@ -360,6 +373,7 @@ export default function PostFormClient({
                             rows={7}
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
+                            disabled={submitting}
                             required
                           />
                           <FormHelperText sx={{ fontSize: 15 }}>
@@ -399,7 +413,11 @@ export default function PostFormClient({
                             style={{ display: "none" }}
                             required
                           />
-                          <Button variant="outlined" onClick={openFilePicker}>
+                          <Button
+                            variant="outlined"
+                            onClick={openFilePicker}
+                            disabled={submitting}
+                          >
                             画像を選択
                           </Button>
                           <FormHelperText sx={{ fontSize: 15 }}>
@@ -500,6 +518,7 @@ export default function PostFormClient({
                                   onChange={(e) =>
                                     setSalesAgreementChecked(e.target.checked)
                                   }
+                                  disabled={submitting}
                                   required
                                 />
                               }
@@ -517,6 +536,7 @@ export default function PostFormClient({
                                 onChange={(e) =>
                                   setTosChecked(e.target.checked)
                                 }
+                                disabled={submitting}
                                 required
                               />
                             }
@@ -543,7 +563,12 @@ export default function PostFormClient({
 
             <Stack direction="row" spacing={2} justifyContent="flex-end">
               {step !== PostFormStep.TitleAndDescription && (
-                <Button variant="outlined" onClick={handleBack} type="button">
+                <Button
+                  variant="outlined"
+                  onClick={handleBack}
+                  type="button"
+                  disabled={submitting}
+                >
                   戻る
                 </Button>
               )}
@@ -561,7 +586,7 @@ export default function PostFormClient({
                     ? "submit"
                     : "button"
                 }
-                disabled={!canProceed}
+                disabled={!canProceed || submitting}
               >
                 {step === PostFormStep.PublicationSettings ? "保存" : "次へ"}
               </Button>
