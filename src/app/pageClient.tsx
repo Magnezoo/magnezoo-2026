@@ -254,7 +254,7 @@ export default function Home() {
                       now >= event.earlyAccessTime &&
                       now < event.targetTime ? (
                         <Link
-                          href="/posts/submit"
+                          href="/sales_app"
                           className="flex-1 inline-flex items-center justify-center rounded-lg border border-amber-600 text-amber-700 dark:text-amber-200 px-4 py-2 font-medium hover:bg-amber-50 dark:hover:bg-amber-900 transition-colors"
                         >
                           物販企画の写真公募に応募する
