@@ -35,6 +35,11 @@ import { redirect } from "next/navigation";
 const NAVIGATION_ITEMS = [
   { text: "投稿一覧", href: "/admin/posts", icon: <DescriptionIcon /> },
   { text: "ユーザー管理", href: "/admin/users", icon: <PersonIcon /> },
+  {
+    text: "イベント開始通知",
+    href: "/admin/subscribers",
+    icon: <PersonIcon />,
+  },
 ];
 
 const drawerWidth = 240;
