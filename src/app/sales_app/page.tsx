@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { Metadata } from "next";
 import { headers } from "next/headers";
-import Link from "next/link";
+import { Link } from "@mui/material";
 
 export const metadata: Metadata = {
   title: "あなたのウチの子が商品に！？ - Magnezoo 物販企画",
@@ -156,6 +156,21 @@ export default async function SalesAppCampainPage() {
             </li>
             <li className="md:whitespace-nowrap whitespace-break-spaces">
               応募された写真は返却いたしませんので、ご了承ください。
+            </li>
+          </ul>
+        </Section>
+
+        <Section title="この企画に関するお問い合わせ">
+          <p>
+            企画に関するご質問やご不明点がある場合は、以下の方法でお問い合わせください。
+          </p>
+          <ul className="list-disc list-outside text-left mx-auto max-w-md space-y-2 mt-4">
+            <li>
+              企画全般: Slackにて @あかつきゆいと / @おは._.ゆーし にグループDM
+            </li>
+            <li>
+              法的な問題: <Link href="/privacy">プライバシー・ポリシー</Link>
+              をご確認ください
             </li>
           </ul>
         </Section>
