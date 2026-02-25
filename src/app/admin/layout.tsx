@@ -4,7 +4,7 @@ import "../globals.css";
 import Sidebar from "@/components/admin/Sidebar";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { unauthorized } from "next/navigation";
+import { forbidden, unauthorized } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +31,9 @@ export default async function RootLayout({
   });
   if (!session) {
     unauthorized();
+  }
+  if (session.user.role !== "admin") {
+    forbidden();
   }
   return (
     <html lang="ja">
