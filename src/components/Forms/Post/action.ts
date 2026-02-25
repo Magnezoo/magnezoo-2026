@@ -33,7 +33,7 @@ export const createPost = async ({
       data: {
         title,
         description: content,
-        imageUrl: `/img/posts/${filename}`,
+        imageUrl: `/api/post_images?filename=${filename}`,
         isSalesApplication,
         authorId: userId,
       },
