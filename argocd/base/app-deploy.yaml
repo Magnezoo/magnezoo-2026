@@ -22,7 +22,7 @@ spec:
                 name: magnezoo-secret
           volumeMounts:
             - name: app-image-storage
-              mountPath: /app/public/posts
+              mountPath: /app/public/img/posts
       imagePullSecrets:
         - name: internal-harbor
       volumes:
