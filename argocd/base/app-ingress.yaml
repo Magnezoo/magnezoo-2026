@@ -4,6 +4,7 @@ metadata:
   name: app
   annotations:
     cert-manager.io/cluster-issuer: le-cf-production
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
 spec:
   ingressClassName: nginx
   rules:
