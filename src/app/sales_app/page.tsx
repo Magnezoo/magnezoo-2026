@@ -2,8 +2,15 @@ import PostButton from "@/components/Buttons/Post";
 import SlackSttingsGuard from "@/components/Dialogs/SlackSetting/Guard";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { Metadata } from "next";
 import { headers } from "next/headers";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "あなたのウチの子が商品に！？ - Magnezoo 物販企画",
+  description:
+    "Magnezoo物販企画(仮)は、生徒から募集した「ウチの子（ペット）」の写真をもとに制作する、ネット企画Magnezoo発の物販企画です。こちらから写真を応募できます。ここでしか手に入らない、尊くて愛しい限定アイテムを展開します。",
+};
 
 function Section({
   title,
