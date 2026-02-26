@@ -1,7 +1,8 @@
-import fs from "fs";
+import fs from "node:fs";
+import path from "node:path";
 import { marked } from "marked";
 import Link from "next/link";
-import path from "path";
+import parse from "html-react-parser";
 
 export default async function PrivacyPage() {
   const filePath = path.join(process.cwd(), "public", "terms.md");
@@ -102,10 +103,7 @@ export default async function PrivacyPage() {
             }
           }
         `}</style>
-        <div
-          className="privacy-content"
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
-        />
+        <div className="privacy-content">{parse(htmlContent)}</div>
       </div>
       <footer>
         <p className="mt-12 text-xs text-zinc-400 text-center">
