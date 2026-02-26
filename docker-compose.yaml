@@ -1,7 +1,7 @@
 name: magnezoo
 services:
   postgres:
-    image: postgres:13
+    image: postgres:16
     environment:
       POSTGRES_USER: magnezoo_user
       POSTGRES_PASSWORD: securepassword
