@@ -1,34 +1,24 @@
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: magnezoo
+  name: app
+  annotations:
+    cert-manager.io/cluster-issuer: le-cf-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
 spec:
-  entryPoints:
-    - websecure
-  routes:
-    - kind: Rule
-      match: Host(`magnezoo.unipro-n.com`) && PathPrefix(`/`)
-      observability:
-        accessLogs: true
-        metrics: true
-        tracing: true
-      priority: 10
-      services:
-        - kind: Service
-          name: magnezoo
-          passHostHeader: true
-          port: 80
-          responseForwarding:
-            flushInterval: 1ms
-          scheme: http
-          sticky:
-            cookie:
-              httpOnly: true
-              name: cookie
-              secure: true
-          strategy: wrr
-          weight: 10
+  ingressClassName: nginx
+  rules:
+    - host: magnezoo.unipro-n.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: magnezoo
+                port:
+                  number: 80
   tls:
-    certResolver: cf-prod
-    domains:
-      - main: magnezoo.unipro-n.com
+    - hosts:
+        - magnezoo.unipro-n.com
+      secretName: magnezoo-site-dashboard-tls

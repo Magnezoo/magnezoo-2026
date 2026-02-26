@@ -26,7 +26,7 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: 変更前のNotion ID Propertyを抽出
         if: github.event.changes.title != null
@@ -76,7 +76,7 @@ jobs:
 
       - name: Change Notion Task
         if: steps.extract_notion_id_property.outputs.VALUE != '' || steps.extract_notion_id_property_before.outputs.VALUE != ''
-        uses: TakanoriOnuma/notion-task-connector-with-github-pr@v0.0.4
+        uses: TakanoriOnuma/notion-task-connector-with-github-pr@807e4e6d852bec7b7004e65694a2648979584c9f # v0.0.4
         with:
           beforeNotionIdProperty: ${{ steps.extract_notion_id_property_before.outputs.VALUE }}
           notionIdProperty: ${{ steps.extract_notion_id_property.outputs.VALUE }}
@@ -89,7 +89,7 @@ jobs:
 
       - name: Comment Connected Tasks
         if: steps.extract_notion_id_property.outputs.VALUE != '' || steps.extract_notion_id_property_before.outputs.VALUE != ''
-        uses: thollander/actions-comment-pull-request@v3
+        uses: thollander/actions-comment-pull-request@24bffb9b452ba05a4f3f77933840a6a841d1b32b # v3
         with:
           file-path: ./connected-tasks.md
           comment-tag: CONNECTED_NOTION_TASKS

@@ -1,6 +1,5 @@
 "use client";
 
-import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -20,7 +19,7 @@ const events = [
   },
   {
     id: "booth",
-    title: "ブース企画",
+    title: "Magnezoo 物販企画(仮)",
     thumbnail: "/img/thumbnail/booth.png",
     description:
       "生徒から募集した「ウチの子（ペット）」の写真をもとに制作する、ネット企画Magnezoo発の物販企画です。ここでしか手に入らない、尊くて愛しい限定アイテムを展開します。写真募集開始までお待ちください！",
@@ -98,7 +97,10 @@ function SubscriptionModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-900 dark:text-zinc-50 mb-2">
+            <label
+              className="block text-sm font-medium text-zinc-900 dark:text-zinc-50 mb-2"
+              htmlFor="email"
+            >
               メールアドレス
             </label>
             <input
@@ -190,7 +192,7 @@ export default function Home() {
           const isBeforeEarlyAccess =
             event.earlyAccessTime && now < event.earlyAccessTime;
           const countdownTarget = isBeforeEarlyAccess
-            ? event.earlyAccessTime!
+            ? event.earlyAccessTime
             : event.targetTime;
           const countdownLabel = isBeforeEarlyAccess
             ? "募集開始まで"
@@ -242,12 +244,32 @@ export default function Home() {
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <button
-                      onClick={() => setOpenModal(event.id)}
-                      className="w-full rounded-lg bg-black text-white px-4 py-2 font-medium hover:opacity-90 transition-opacity cursor-pointer"
-                    >
-                      通知を受け取る
-                    </button>
+                    <div className="flex gap-2 flex-col">
+                      <button
+                        onClick={() => setOpenModal(event.id)}
+                        className="flex-1 rounded-lg bg-black text-white px-4 py-2 font-medium hover:opacity-90 transition-opacity cursor-pointer"
+                        type="button"
+                      >
+                        通知を受け取る
+                      </button>
+
+                      {event.eventType === "BOOTH" &&
+                      event.earlyAccessTime &&
+                      now >= event.earlyAccessTime &&
+                      now < event.targetTime ? (
+                        <Link
+                          href="/sales_app"
+                          className="flex-1 inline-flex items-center justify-center rounded-lg border border-amber-600 text-amber-700 dark:text-amber-200 px-4 py-2 font-medium hover:bg-amber-50 dark:hover:bg-amber-900 transition-colors"
+                        >
+                          物販企画の写真公募に応募する
+                        </Link>
+                      ) : (
+                        <div
+                          className="flex-1 rounded-lg px-8 py-5"
+                          aria-hidden
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -271,7 +293,7 @@ export default function Home() {
       <footer>
         <p className="mt-12 text-xs text-zinc-400 text-center">
           &copy; 2026 Magnezoo 製作委員会 All rights reserved. Server provided
-          by by{" "}
+          by{" "}
           <Link
             href="https://uniproject.jp"
             target="_blank"

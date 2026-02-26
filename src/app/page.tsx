@@ -1,6 +1,6 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Home from "./pageClient";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Waiting... - Magnezoo 〜みんなのウチの子決定戦！〜",

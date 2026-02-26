@@ -1,6 +1,7 @@
+import fs from "node:fs";
+import path from "node:path";
+import parse from "html-react-parser";
 import { marked } from "marked";
-import fs from "fs";
-import path from "path";
 import Link from "next/link";
 
 export default async function PrivacyPage() {
@@ -23,6 +24,7 @@ export default async function PrivacyPage() {
             stroke="currentColor"
             strokeWidth="2"
           >
+            <title>戻る</title>
             <path d="M10 12l-4-4 4-4" />
           </svg>
           戻る
@@ -102,15 +104,12 @@ export default async function PrivacyPage() {
             }
           }
         `}</style>
-        <div
-          className="privacy-content"
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
-        />
+        <div className="privacy-content">{parse(htmlContent)}</div>
       </div>
       <footer>
         <p className="mt-12 text-xs text-zinc-400 text-center">
           &copy; 2026 Magnezoo 製作委員会 All rights reserved. Server provided
-          by by{" "}
+          by{" "}
           <Link
             href="https://uniproject.jp"
             target="_blank"

@@ -20,5 +20,16 @@ spec:
           envFrom:
             - secretRef:
                 name: magnezoo-secret
+          volumeMounts:
+            - name: app-image-storage
+              mountPath: /app/public/img/posts
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
       imagePullSecrets:
         - name: internal-harbor
+      volumes:
+        - name: app-image-storage
+          persistentVolumeClaim:
+            claimName: app-image-pvc

@@ -1,0 +1,15 @@
+import { Stack, Typography } from "@mui/material";
+import UsersDatagrid from "@/components/admin/Datagrids/User";
+import prisma from "@/lib/prisma";
+
+export default async function UsersPage() {
+  const users = await prisma.user.findMany();
+
+  return (
+    <Stack spacing={2}>
+      <Typography variant="h4">ユーザー管理</Typography>
+      <Typography variant="body1">合計ユーザー数: {users.length}</Typography>
+      <UsersDatagrid rows={users} />
+    </Stack>
+  );
+}

@@ -4,6 +4,7 @@ resources:
   - app-deploy.yaml
   - app-service.yaml
   - app-ingress.yaml
+  - app-pv.yaml
   - registry.yaml
   - updater.yaml
   - db-deploy.yaml
