@@ -1,6 +1,6 @@
 "use server";
 
-import fs from "fs";
+import fs from "node:fs";
 import prisma from "@/lib/prisma";
 
 export const createPost = async ({

@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+import parse from "html-react-parser";
 import { marked } from "marked";
 import Link from "next/link";
-import parse from "html-react-parser";
 
 export default async function PrivacyPage() {
   const filePath = path.join(process.cwd(), "public", "terms.md");
@@ -23,7 +23,9 @@ export default async function PrivacyPage() {
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
+            aria-hidden="true"
           >
+            <title>戻るアイコン</title>
             <path d="M10 12l-4-4 4-4" />
           </svg>
           戻る

@@ -97,7 +97,10 @@ function SubscriptionModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-900 dark:text-zinc-50 mb-2">
+            <label
+              className="block text-sm font-medium text-zinc-900 dark:text-zinc-50 mb-2"
+              htmlFor="email"
+            >
               メールアドレス
             </label>
             <input
@@ -245,6 +248,7 @@ export default function Home() {
                       <button
                         onClick={() => setOpenModal(event.id)}
                         className="flex-1 rounded-lg bg-black text-white px-4 py-2 font-medium hover:opacity-90 transition-opacity cursor-pointer"
+                        type="button"
                       >
                         通知を受け取る
                       </button>

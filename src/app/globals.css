@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 .animated-bg-circles .circle4 {
   width: 180px;
   height: 180px;
@@ -68,7 +70,6 @@
     transform: translateY(0) scale(1);
   }
 }
-@import "tailwindcss";
 
 :root {
   --background: #ffffff;

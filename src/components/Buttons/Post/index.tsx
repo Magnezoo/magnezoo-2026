@@ -31,6 +31,7 @@ export default function PostButton({
             onClick={() => setOpen(true)}
             className={`${className}`}
             id="post_btn"
+            type="button"
           >
             投稿する
           </button>
@@ -43,6 +44,7 @@ export default function PostButton({
             );
           }}
           className={`${className}`}
+          type="button"
         >
           ログインして投稿する
         </button>
