@@ -1,4 +1,4 @@
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -34,9 +34,7 @@ export default function RootLayout({
       >
         {children}
       </body>
-      {process.env.NODE_ENV === "production" && (
-        <GoogleAnalytics gaId={"G-C93T9DHG9G"} />
-      )}
+      <GoogleTagManager gtmId={"GTM-MR2QPRG5"} />
     </html>
   );
 }
