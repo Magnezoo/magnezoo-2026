@@ -110,7 +110,7 @@ export default async function PrivacyPage() {
       <footer>
         <p className="mt-12 text-xs text-zinc-400 text-center">
           &copy; 2026 Magnezoo 製作委員会 All rights reserved. Server provided
-          by by{" "}
+          by{" "}
           <Link
             href="https://uniproject.jp"
             target="_blank"
