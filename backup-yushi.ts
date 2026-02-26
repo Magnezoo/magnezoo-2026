@@ -31,27 +31,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    try {
-  const subscriber = await prisma.eventStartSubscriber.create({
-    data: {
-      email,
-      event,
-    },
-  });
+    // 既に登録されているかチェック
+    const existing = await prisma.eventStartSubscriber.findUnique({
+      where: { email },
+    });
 
-  return NextResponse.json(
-    { success: true, id: subscriber.id },
-    { status: 201 },
-  );
-} catch (e: any) {
-  if (e.code === "P2002") {
-    return NextResponse.json(
-      { error: "このイベントには既に登録されています" },
-      { status: 409 },
-    );
-  }
-  throw e;
-}
+    if (existing) {
+      return NextResponse.json(
+        { error: "このメールアドレスは既に登録されています" },
+        { status: 409 },
+      );
+    }
 
     // DB に保存
     const subscriber = await prisma.eventStartSubscriber.create({
