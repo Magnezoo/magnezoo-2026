@@ -34,7 +34,9 @@ export default function RootLayout({
       >
         {children}
       </body>
-      <GoogleAnalytics gaId={"G-C93T9DHG9G"} />
+      {process.env.NODE_ENV === "production" && (
+        <GoogleAnalytics gaId={"G-C93T9DHG9G"} />
+      )}
     </html>
   );
 }

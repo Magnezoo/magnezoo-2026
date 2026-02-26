@@ -40,7 +40,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Sidebar user={session!.user}>{children}</Sidebar>
+        <Sidebar user={session.user}>{children}</Sidebar>
       </body>
     </html>
   );

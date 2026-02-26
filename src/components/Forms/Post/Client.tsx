@@ -93,14 +93,13 @@ export default function PostFormClient({
 
   useEffect(() => {
     return () => {
-      if (preview) {
+      if (preview?.url) {
         try {
           URL.revokeObjectURL(preview.url);
         } catch {}
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [image]);
+  }, [preview?.url]);
 
   const formatBytes = (bytes: number) => {
     if (bytes === 0) return "0 B";
