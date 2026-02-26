@@ -1,30 +1,30 @@
 "use client";
 
+import CloseIcon from "@mui/icons-material/Close";
 import {
-  Box,
   Backdrop,
+  Box,
   Button,
   Checkbox,
+  CircularProgress,
   FormHelperText,
   IconButton,
   MenuItem,
   MenuList,
   Stack,
   TextField,
-  CircularProgress,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import Link from "@mui/material/Link";
+import { SnackbarProvider, useSnackbar } from "notistack";
 import {
-  useState,
-  useRef,
-  useEffect,
   type ChangeEvent,
-  FormEvent,
+  type FormEvent,
+  useEffect,
+  useRef,
+  useState,
 } from "react";
 import { createPost } from "./action";
-import { SnackbarProvider, useSnackbar } from "notistack";
 
 export enum PostFormStep {
   TitleAndDescription = 1,
@@ -107,7 +107,7 @@ export default function PostFormClient({
     const k = 1024;
     const sizes = ["B", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+    return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
   };
 
   const titleValid = title.trim().length > 0;

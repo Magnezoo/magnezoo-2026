@@ -1,7 +1,7 @@
-import { marked } from "marked";
 import fs from "fs";
-import path from "path";
+import { marked } from "marked";
 import Link from "next/link";
+import path from "path";
 
 export default async function PrivacyPage() {
   const filePath = path.join(process.cwd(), "public", "terms.md");

@@ -1,8 +1,8 @@
 "use client";
 
-import PostForm from "@/components/Forms/Post";
 import { redirect } from "next/navigation";
 import { useState } from "react";
+import PostForm from "@/components/Forms/Post";
 
 export default function PostButton({
   className,

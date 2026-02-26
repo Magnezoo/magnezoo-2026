@@ -1,7 +1,7 @@
-import prisma from "@/lib/prisma";
-import { Stack, Typography, Button } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import prisma from "@/lib/prisma";
 
 export default async function UserPage({
   params,

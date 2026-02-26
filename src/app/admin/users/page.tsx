@@ -1,6 +1,6 @@
+import { Stack, Typography } from "@mui/material";
 import UsersDatagrid from "@/components/admin/Datagrids/User";
 import prisma from "@/lib/prisma";
-import { Stack, Typography } from "@mui/material";
 
 export default async function UsersPage() {
   const users = await prisma.user.findMany();

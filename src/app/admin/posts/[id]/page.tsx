@@ -1,8 +1,8 @@
-import prisma from "@/lib/prisma";
-import Link from "next/link";
-import { Stack, Typography, Button } from "@mui/material";
-import { notFound } from "next/navigation";
+import { Button, Stack, Typography } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import prisma from "@/lib/prisma";
 
 export default async function PostsPage({
   params,

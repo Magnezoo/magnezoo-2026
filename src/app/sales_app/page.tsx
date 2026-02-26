@@ -1,11 +1,11 @@
+import { Link as MUILink } from "@mui/material";
+import type { Metadata } from "next";
+import { headers } from "next/headers";
+import Link from "next/link";
 import PostButton from "@/components/Buttons/Post";
 import SlackSttingsGuard from "@/components/Dialogs/SlackSetting/Guard";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { Metadata } from "next";
-import { headers } from "next/headers";
-import { Link as MUILink } from "@mui/material";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "あなたのウチの子が商品に！？ - Magnezoo 物販企画",

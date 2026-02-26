@@ -1,24 +1,24 @@
 "use client";
 
-import React from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RestoreIcon from "@mui/icons-material/Restore";
+import SaveIcon from "@mui/icons-material/Save";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Button, darken } from "@mui/material";
 import {
   DataGrid,
-  DataGridProps,
+  type DataGridProps,
   GridActionsCellItem,
+  type GridColDef,
+  type GridRowId,
+  type GridValidRowModel,
   gridClasses,
-  GridColDef,
-  GridRowId,
-  GridValidRowModel,
   useGridApiRef,
 } from "@mui/x-data-grid";
-import RestoreIcon from "@mui/icons-material/Restore";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SaveIcon from "@mui/icons-material/Save";
 import { jaJP } from "@mui/x-data-grid/locales";
-import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
+import { enqueueSnackbar } from "notistack";
+import React from "react";
 import { deletePost, updatePost } from "./actions";
 
 type Row = {

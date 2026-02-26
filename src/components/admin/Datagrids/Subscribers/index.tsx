@@ -1,18 +1,18 @@
 "use client";
 
-import React from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
   DataGrid,
   GridActionsCellItem,
-  GridColDef,
-  GridRowId,
+  type GridColDef,
+  type GridRowId,
   useGridApiRef,
 } from "@mui/x-data-grid";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { jaJP } from "@mui/x-data-grid/locales";
-import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
+import { enqueueSnackbar } from "notistack";
+import React from "react";
 import { deleteUser } from "./actions";
 
 type Row = {

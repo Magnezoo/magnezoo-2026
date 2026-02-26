@@ -1,6 +1,6 @@
+import { Stack, Typography } from "@mui/material";
 import PostsDatagrid from "@/components/admin/Datagrids/Post";
 import prisma from "@/lib/prisma";
-import { Stack, Typography } from "@mui/material";
 
 export default async function PostsPage() {
   const posts = await prisma.post.findMany();

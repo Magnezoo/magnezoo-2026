@@ -12,8 +12,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { setSlackSetting } from "./action";
 import React from "react";
+import { setSlackSetting } from "./action";
 
 export default function SlackSettingDialog({
   userId,

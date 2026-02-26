@@ -1,16 +1,16 @@
 "use client";
-import { authClient } from "@/lib/auth-client";
 import {
   Box,
+  Button,
   Card,
   CardContent,
-  Typography,
-  Button,
   Stack,
   SvgIcon,
+  Typography,
 } from "@mui/material";
 import { redirect } from "next/navigation";
 import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
 
 const providers = [
   { id: "njr-google", label: "N中等部" },
