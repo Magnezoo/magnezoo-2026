@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@/generated/prisma/client";
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,26 +33,28 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-  const subscriber = await prisma.eventStartSubscriber.create({
-    data: {
-      email,
-      event,
-    },
-  });
+      const subscriber = await prisma.eventStartSubscriber.create({
+        data: {
+          email,
+          event,
+        },
+      });
 
-  return NextResponse.json(
-    { success: true, id: subscriber.id },
-    { status: 201 },
-  );
-} catch (e: any) {
-  if (e.code === "P2002") {
-    return NextResponse.json(
-      { error: "このイベントには既に登録されています" },
-      { status: 409 },
-    );
-  }
-  throw e;
-}
+      return NextResponse.json(
+        { success: true, id: subscriber.id },
+        { status: 201 },
+      );
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === "P2002"
+      ) {
+        return NextResponse.json(
+          { error: "このメールアドレスは既に登録されています" },
+          { status: 409 },
+        );
+      }
+    }
 
     // DB に保存
     const subscriber = await prisma.eventStartSubscriber.create({
