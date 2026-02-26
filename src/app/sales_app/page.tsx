@@ -171,7 +171,9 @@ export default async function SalesAppCampainPage() {
             </li>
             <li>
               法的な問題:{" "}
-              <MUILink href="/privacy">プライバシー・ポリシー</MUILink>
+              <MUILink href="/privacy" target="_blank">
+                プライバシー・ポリシー
+              </MUILink>
               をご確認ください
             </li>
           </ul>

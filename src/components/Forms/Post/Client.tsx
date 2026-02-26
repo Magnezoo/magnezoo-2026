@@ -574,6 +574,7 @@ export default function PostFormClient({
                               <Link
                                 href={"/terms"}
                                 underline="hover"
+                                target="_blank"
                                 color="inherit"
                               >
                                 利用規約
@@ -582,6 +583,7 @@ export default function PostFormClient({
                               <Link
                                 href={"/privacy"}
                                 underline="hover"
+                                target="_blank"
                                 color="inherit"
                                 sx={{ ml: 0.5 }}
                               >
