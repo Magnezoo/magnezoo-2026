@@ -192,7 +192,7 @@ export default function Home() {
           const isBeforeEarlyAccess =
             event.earlyAccessTime && now < event.earlyAccessTime;
           const countdownTarget = isBeforeEarlyAccess
-            ? event.earlyAccessTime!
+            ? event.earlyAccessTime
             : event.targetTime;
           const countdownLabel = isBeforeEarlyAccess
             ? "募集開始まで"
