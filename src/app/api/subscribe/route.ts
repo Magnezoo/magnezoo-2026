@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@/generated/prisma/client";
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,16 +32,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 既に登録されているかチェック
-    const existing = await prisma.eventStartSubscriber.findUnique({
-      where: { email },
-    });
+    try {
+      const subscriber = await prisma.eventStartSubscriber.create({
+        data: {
+          email,
+          event,
+        },
+      });
 
-    if (existing) {
       return NextResponse.json(
-        { error: "このメールアドレスは既に登録されています" },
-        { status: 409 },
+        { success: true, id: subscriber.id },
+        { status: 201 },
       );
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === "P2002"
+      ) {
+        return NextResponse.json(
+          { error: "このメールアドレスは既に登録されています" },
+          { status: 409 },
+        );
+      }
     }
 
     // DB に保存
