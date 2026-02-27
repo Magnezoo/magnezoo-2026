@@ -8,6 +8,7 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
+import { sendGTMEvent } from "@next/third-parties/google";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
@@ -53,6 +54,7 @@ export default function SignInPageClient({
     setError(null);
     setLoading(providerId);
     try {
+      sendGTMEvent({ event: `signin`, account_provider: providerId });
       await authClient.signIn.oauth2({
         providerId,
         callbackURL: redirectUri,
