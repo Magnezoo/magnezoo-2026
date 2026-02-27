@@ -2,7 +2,13 @@ import fs from "node:fs";
 import path from "node:path";
 import parse from "html-react-parser";
 import { marked } from "marked";
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "プライバシーポリシー",
+  description: "Magnezooのプライバシーポリシーページです。",
+};
 
 export default async function PrivacyPage() {
   const filePath = path.join(process.cwd(), "public", "privacy.md");

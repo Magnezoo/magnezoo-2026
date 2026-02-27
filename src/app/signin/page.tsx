@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import SignInPageClient from "./Client";
+
+export const metadata: Metadata = {
+  title: "サインイン",
+  description: "Magnezooのサインインページです。",
+};
 
 export default async function SignInPage({
   searchParams,
