@@ -46,7 +46,7 @@ export const GET = async (
       headers: { "Content-Type": blob.type },
     });
   } catch (error) {
-    return new Response("Error fetching image: " + (error as Error).message, {
+    return new Response(`Error fetching image: ${(error as Error).message}`, {
       status: 500,
     });
   }
