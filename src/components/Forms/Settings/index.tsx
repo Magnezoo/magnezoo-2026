@@ -95,15 +95,17 @@ const SettingsForm = ({
       }
 
       // Slack情報を更新
-      const slackResult = await updateSlacksName(
-        userId,
-        slackName,
-        initialSlackDisplayName,
-      );
+      if (initialSlackName) {
+        // Slack登録済みの場合のみ実行
+        const slackResult = await updateSlacksName(
+          slackName,
+          initialSlackDisplayName,
+        );
 
-      if (!slackResult.success) {
-        setMessage(slackResult.error || "Slack設定の保存に失敗しました。");
-        return;
+        if (!slackResult.success) {
+          setMessage(slackResult.error || "Slack設定の保存に失敗しました。");
+          return;
+        }
       }
 
       setMessage("保存しました。");

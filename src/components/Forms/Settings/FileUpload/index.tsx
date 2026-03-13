@@ -30,72 +30,89 @@ const FileUpload = ({
   return (
     <Box>
       <input
-        ref={inputRef}
-        id={inputId}
-        type="file"
-        accept={accept}
-        style={{ display: "none" }}
-        onChange={(event) => {
-          handleFile(event.target.files?.[0] ?? null);
-          event.currentTarget.value = "";
-        }}
+      ref={inputRef}
+      id={inputId}
+      type="file"
+      accept={accept}
+      disabled={disabled}
+      style={{ display: "none" }}
+      onChange={(event) => {
+        handleFile(event.target.files?.[0] ?? null);
+        event.currentTarget.value = "";
+      }}
       />
 
       <Box
-        component="label"
-        htmlFor={inputId}
-        onDragOver={(event) => {
-          event.preventDefault();
-          if (!disabled) {
-            setIsDragging(true);
-          }
-        }}
-        onDragLeave={() => {
-          setIsDragging(false);
-        }}
-        onDrop={(event) => {
-          event.preventDefault();
-          setIsDragging(false);
-          handleFile(event.dataTransfer.files?.[0] ?? null);
-        }}
+      component="label"
+      htmlFor={inputId}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled}
+      onKeyDown={(event) => {
+        if (disabled) return;
+        if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        inputRef.current?.click();
+        }
+      }}
+      onClick={(event) => {
+        if (disabled) {
+        event.preventDefault();
+        return;
+        }
+      }}
+      onDragOver={(event) => {
+        event.preventDefault();
+        if (!disabled) {
+        setIsDragging(true);
+        }
+      }}
+      onDragLeave={() => {
+        setIsDragging(false);
+      }}
+      onDrop={(event) => {
+        event.preventDefault();
+        setIsDragging(false);
+        handleFile(event.dataTransfer.files?.[0] ?? null);
+      }}
+      sx={{
+        width: 170,
+        minHeight: 92,
+        borderRadius: "8px",
+        bgcolor: "#d9d9d9",
+        border: "1px solid",
+        borderColor: isDragging ? "#8d8d8d" : "#b6b6b6",
+        display: "grid",
+        placeItems: "center",
+        textAlign: "center",
+        cursor: disabled ? "not-allowed" : "pointer",
+        transition: "border-color 0.15s ease, background-color 0.15s ease",
+        opacity: disabled ? 0.6 : 1,
+        "&:hover": {
+        bgcolor: disabled ? "#d9d9d9" : "#cfcfcf",
+        },
+      }}
+      >
+      <Box
         sx={{
-          width: 170,
-          minHeight: 92,
-          borderRadius: "8px",
-          bgcolor: "#d9d9d9",
-          border: "1px solid",
-          borderColor: isDragging ? "#8d8d8d" : "#b6b6b6",
-          display: "grid",
-          placeItems: "center",
-          textAlign: "center",
-          cursor: disabled ? "not-allowed" : "pointer",
-          transition: "border-color 0.15s ease, background-color 0.15s ease",
-          opacity: disabled ? 0.6 : 1,
-          "&:hover": {
-            bgcolor: disabled ? "#d9d9d9" : "#cfcfcf",
-          },
+        px: 1.2,
+        py: 0.7,
+        display: "grid",
+        placeItems: "center",
+        color: "#5f5f5f",
         }}
       >
-        <Box
-          sx={{
-            px: 1.2,
-            py: 0.7,
-            display: "grid",
-            placeItems: "center",
-            color: "#5f5f5f",
-          }}
-        >
-          <CloudUploadOutlinedIcon sx={{ fontSize: 36, mb: 0.25 }} />
+        <CloudUploadOutlinedIcon sx={{ fontSize: 36, mb: 0.25 }} />
 
-          <Typography
-            variant="caption"
-            sx={{ fontSize: 11, lineHeight: 1.3, color: "#585858" }}
-          >
-            ドラッグもしくはクリックで
-            <br />
-            アップロード
-          </Typography>
-        </Box>
+        <Typography
+        variant="caption"
+        sx={{ fontSize: 11, lineHeight: 1.3, color: "#585858" }}
+        >
+        ドラッグもしくはクリックで
+        <br />
+        アップロード
+        </Typography>
+      </Box>
       </Box>
     </Box>
   );

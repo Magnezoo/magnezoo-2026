@@ -6,12 +6,13 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const ALLOWED_MIME_TYPES = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
+const ALLOWED_MIME_TYPES = new Map<string, string>([
+  ["image/jpeg", "jpg"],
+  ["image/png", "png"],
+  ["image/webp", "webp"],
+  ["image/gif", "gif"],
 ]);
+
 /**
  * プロフィール画像をアップロードしてURLを返す
  * @param image - アップロードするファイル
@@ -41,15 +42,32 @@ export const uploadProfileImage = async (
       return { imageUrl: null, error: "画像サイズは5MB以下にしてください。" };
     }
 
+    // バッファを取得
+    const buffer = Buffer.from(await image.arrayBuffer());
+
+    // MIME タイプをチェック
+    const type = image.type;
+    if (
+      type !== "image/jpeg" &&
+      type !== "image/png" &&
+      type !== "image/webp" &&
+      type !== "image/gif"
+    ) {
+      return {
+        imageUrl: null,
+        error: "アップロードしたファイルは有効な画像ではありません。",
+      };
+    }
+
     const dir = `${process.cwd()}/public/img/users`;
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
 
-    const safeName = image.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const filename = `${Date.now()}-${safeName}`;
+    // 拡張子はサーバー側で確定（MIME タイプから取得）
+    const extension = ALLOWED_MIME_TYPES.get(image.type);
+    const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.${extension}`;
     const filepath = `${dir}/${filename}`;
-    const buffer = Buffer.from(await image.arrayBuffer());
 
     fs.writeFileSync(filepath, buffer);
 
@@ -71,11 +89,18 @@ export const uploadProfileImage = async (
  * @returns 成功時はtrue、失敗時はエラーメッセージ
  */
 export const updateSlacksName = async (
-  userId: string,
   slackName: string,
   isDisplayname: boolean,
 ): Promise<{ success: boolean; error: string | null }> => {
   try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    const userId = session?.user.id;
+    if (!userId) {
+      return { success: false, error: "認証が必要です。" };
+    }
+
     if (!slackName.trim()) {
       return { success: false, error: "Slack表示名を入力してください。" };
     }
