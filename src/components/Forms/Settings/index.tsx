@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { updateSlacksName, uploadProfileImage } from "./action";
 import FileUpload from "./FileUpload";
@@ -36,6 +36,7 @@ const SettingsForm = ({
   initialSlackDisplayName,
 }: SettingsFormProps) => {
   const router = useRouter();
+  const saveLockRef = useRef(false);
   const [slackName, setSlackName] = useState(initialSlackName);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
@@ -57,6 +58,7 @@ const SettingsForm = ({
 
   const handleFileSelect = (file: File) => {
     if (!ALLOWED_MIME_TYPES.has(file.type)) {
+      setSelectedFile(null);
       setMessage(
         "対応していない画像形式です。JPEG/PNG/WebP/GIFを選択してください。",
       );
@@ -67,9 +69,10 @@ const SettingsForm = ({
   };
 
   const handleSave = async () => {
-    if (saving) {
+    if (saveLockRef.current) {
       return;
     }
+    saveLockRef.current = true;
     setSaving(true);
     try {
       let imageUrl = initialImage;
@@ -116,6 +119,7 @@ const SettingsForm = ({
       console.error(error);
       setMessage("保存中にエラーが発生しました。");
     } finally {
+      saveLockRef.current = false;
       setSaving(false);
     }
   };
