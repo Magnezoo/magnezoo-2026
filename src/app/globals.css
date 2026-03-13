@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 .animated-bg-circles .circle4 {
   width: 180px;
