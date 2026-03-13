@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { updateSlacksName, uploadProfileImage } from "./action";
 import FileUpload from "./FileUpload";
@@ -43,21 +43,19 @@ const SettingsForm = ({
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  const previewUrl = useMemo(() => {
-    if (selectedFile) {
-      return URL.createObjectURL(selectedFile);
-    }
-    return initialImage || "";
-  }, [initialImage, selectedFile]);
+  const [previewUrl, setPreviewUrl] = useState(initialImage || "");
 
   useEffect(() => {
-    if (!selectedFile || !previewUrl) {
+    if (!selectedFile) {
+      setPreviewUrl(initialImage || "");
       return;
     }
+    const url = URL.createObjectURL(selectedFile);
+    setPreviewUrl(url);
     return () => {
-      URL.revokeObjectURL(previewUrl);
+      URL.revokeObjectURL(url);
     };
-  }, [previewUrl, selectedFile]);
+  }, [selectedFile, initialImage]);
 
   const handleFileSelect = (file: File) => {
     if (!ALLOWED_MIME_TYPES.has(file.type)) {
@@ -125,7 +123,7 @@ const SettingsForm = ({
         <Typography variant="caption" color="error">
           Slackのアカウント名が見つかりません。まだ応募していない場合は、
           <Link href="/sales_app" className="text-blue-500 hover:underline">
-            応募フォーム
+            応募ページ
           </Link>
           から応募してください。
         </Typography>
