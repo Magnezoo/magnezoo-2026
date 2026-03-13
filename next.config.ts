@@ -1,3 +1,4 @@
+import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -5,6 +6,9 @@ const nextConfig: NextConfig = {
     authInterrupts: true,
     serverActions: {
       bodySizeLimit: "5mb",
+    },
+    mdxRs: {
+      mdxType: "gfm",
     },
   },
   images: {
@@ -18,6 +22,13 @@ const nextConfig: NextConfig = {
     ],
   },
   output: "standalone",
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: ["remark-gfm", ["remark-toc", { heading: "目次" }]],
+  },
+});
+
+export default withMDX(nextConfig);
