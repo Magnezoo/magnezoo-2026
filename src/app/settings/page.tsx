@@ -42,7 +42,6 @@ export default async function SettingsPage() {
           initialImage={user.image ?? null}
           initialSlackName={slacks?.name ?? ""}
           initialSlackDisplayName={slacks?.isDisplayname ?? false}
-          userId={user.id}
         />
       </div>
     </div>

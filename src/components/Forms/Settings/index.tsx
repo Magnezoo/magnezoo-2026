@@ -20,7 +20,6 @@ type SettingsFormProps = {
   initialImage: string | null;
   initialSlackName: string;
   initialSlackDisplayName: boolean;
-  userId: string;
 };
 
 const ALLOWED_MIME_TYPES = new Set([
@@ -35,7 +34,6 @@ const SettingsForm = ({
   initialImage,
   initialSlackName,
   initialSlackDisplayName,
-  userId,
 }: SettingsFormProps) => {
   const router = useRouter();
   const [slackName, setSlackName] = useState(initialSlackName);
