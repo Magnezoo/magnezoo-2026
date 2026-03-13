@@ -1,6 +1,8 @@
 "use server";
 
 import fs from "node:fs";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -10,7 +12,6 @@ const ALLOWED_MIME_TYPES = new Set([
   "image/webp",
   "image/gif",
 ]);
-
 /**
  * プロフィール画像をアップロードしてURLを返す
  * @param image - アップロードするファイル
@@ -20,6 +21,14 @@ export const uploadProfileImage = async (
   image: File,
 ): Promise<{ imageUrl: string | null; error: string | null }> => {
   try {
+    // 認証チェック
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user) {
+      return { imageUrl: null, error: "認証が必要です。" };
+    }
+
     if (!image) {
       return { imageUrl: null, error: "画像が選択されていません。" };
     }
