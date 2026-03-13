@@ -1,6 +1,7 @@
 "use server";
 
 import fs from "node:fs";
+import prisma from "@/lib/prisma";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_MIME_TYPES = new Set([
@@ -10,6 +11,11 @@ const ALLOWED_MIME_TYPES = new Set([
   "image/gif",
 ]);
 
+/**
+ * プロフィール画像をアップロードしてURLを返す
+ * @param image - アップロードするファイル
+ * @returns 画像URL又はエラーメッセージ
+ */
 export const uploadProfileImage = async (
   image: File,
 ): Promise<{ imageUrl: string | null; error: string | null }> => {
@@ -45,5 +51,42 @@ export const uploadProfileImage = async (
       imageUrl: null,
       error: "画像のアップロードに失敗しました。",
     };
+  }
+};
+
+/**
+ * ユーザーのSlack表示名を更新する
+ * @param userId - ユーザーID
+ * @param slackName - 新しいSlack表示名
+ * @param isDisplayname - Slackを表示するかどうか
+ * @returns 成功時はtrue、失敗時はエラーメッセージ
+ */
+export const updateSlacksName = async (
+  userId: string,
+  slackName: string,
+  isDisplayname: boolean,
+): Promise<{ success: boolean; error: string | null }> => {
+  try {
+    if (!slackName.trim()) {
+      return { success: false, error: "Slack表示名を入力してください。" };
+    }
+
+    await prisma.slacks.upsert({
+      where: { userId },
+      update: {
+        name: slackName.trim(),
+        isDisplayname,
+      },
+      create: {
+        userId,
+        name: slackName.trim(),
+        isDisplayname,
+      },
+    });
+
+    return { success: true, error: null };
+  } catch (error) {
+    console.error("Failed to update slacks name:", error);
+    return { success: false, error: "Slack設定の保存に失敗しました。" };
   }
 };

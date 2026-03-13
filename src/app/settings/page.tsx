@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import { headers } from "next/headers";
 import SettingsForm from "@/components/Forms/Settings";
 import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 
 // export const metadata: Metadata = {
 //   title: "あなたのウチの子が商品に！？ - Magnezoo 物販企画",
@@ -22,6 +23,11 @@ export default async function SettingsPage() {
     return <Typography>ログイン情報の取得に失敗しました。</Typography>;
   }
 
+  // ユーザーの Slack データを取得
+  const slacks = await prisma.slacks.findUnique({
+    where: { userId: user.id },
+  });
+
   return (
     <div>
       <Typography variant="h2" gutterBottom>
@@ -34,6 +40,9 @@ export default async function SettingsPage() {
         <SettingsForm
           initialName={user.name ?? ""}
           initialImage={user.image ?? null}
+          initialSlackName={slacks?.name ?? ""}
+          initialSlackDisplayName={slacks?.isDisplayname ?? false}
+          userId={user.id}
         />
       </div>
     </div>

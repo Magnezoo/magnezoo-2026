@@ -8,15 +8,19 @@ import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import { uploadProfileImage } from "./action";
+import { updateSlacksName, uploadProfileImage } from "./action";
 import FileUpload from "./FileUpload";
 
 type SettingsFormProps = {
   initialName: string;
   initialImage: string | null;
+  initialSlackName: string;
+  initialSlackDisplayName: boolean;
+  userId: string;
 };
 
 const ALLOWED_MIME_TYPES = new Set([
@@ -26,9 +30,15 @@ const ALLOWED_MIME_TYPES = new Set([
   "image/gif",
 ]);
 
-const SettingsForm = ({ initialName, initialImage }: SettingsFormProps) => {
+const SettingsForm = ({
+  initialName,
+  initialImage,
+  initialSlackName,
+  initialSlackDisplayName,
+  userId,
+}: SettingsFormProps) => {
   const router = useRouter();
-  const [name, setName] = useState(initialName);
+  const [slackName, setSlackName] = useState(initialSlackName);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -61,12 +71,6 @@ const SettingsForm = ({ initialName, initialImage }: SettingsFormProps) => {
   };
 
   const handleSave = async () => {
-    const trimmedName = name.trim();
-    if (!trimmedName) {
-      setMessage("名前を入力してください。");
-      return;
-    }
-
     setSaving(true);
     try {
       let imageUrl = initialImage;
@@ -80,13 +84,27 @@ const SettingsForm = ({ initialName, initialImage }: SettingsFormProps) => {
         imageUrl = uploaded.imageUrl;
       }
 
-      const result = await authClient.updateUser({
-        name: trimmedName,
-        image: imageUrl || undefined,
-      });
+      // ユーザープロフィール（アイコン）を更新
+      if (selectedFile) {
+        const result = await authClient.updateUser({
+          image: imageUrl || undefined,
+        });
 
-      if (result.error) {
-        setMessage("保存に失敗しました。時間をおいて再度お試しください。");
+        if (result.error) {
+          setMessage("保存に失敗しました。時間をおいて再度お試しください。");
+          return;
+        }
+      }
+
+      // Slack情報を更新
+      const slackResult = await updateSlacksName(
+        userId,
+        slackName,
+        initialSlackDisplayName,
+      );
+
+      if (!slackResult.success) {
+        setMessage(slackResult.error || "Slack設定の保存に失敗しました。");
         return;
       }
 
@@ -103,14 +121,32 @@ const SettingsForm = ({ initialName, initialImage }: SettingsFormProps) => {
 
   return (
     <Stack spacing={2} sx={{ maxWidth: 520 }}>
+      {!initialSlackName && (
+        <Typography variant="caption" color="error">
+          Slackのアカウント名が見つかりません。まだ応募していない場合は、
+          <Link href="/sales_app" className="text-blue-500 hover:underline">
+            応募フォーム
+          </Link>
+          から応募してください。
+        </Typography>
+      )}
       <Box>
         <TextField
-          label="表示名"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
+          label="Slackのアカウント名"
+          value={slackName}
+          disabled={!initialSlackName}
+          onChange={(event) => setSlackName(event.target.value)}
           fullWidth
+          helperText=""
         />
+        <Typography variant="caption" color="text.secondary" className="mb-2">
+          Slackのアカウント名は、応募するときに入力したSlackの氏名, 表示名です。
+        </Typography>
       </Box>
+
+      <Typography variant="h3" gutterBottom>
+        アイコン
+      </Typography>
 
       <Box className="flex items-center gap-10">
         <div>
@@ -120,10 +156,10 @@ const SettingsForm = ({ initialName, initialImage }: SettingsFormProps) => {
           </Typography>
           <Avatar
             src={previewUrl}
-            alt={name || "ユーザー"}
+            alt={initialName || "ユーザー"}
             sx={{ width: 96, height: 96, bgcolor: "orange" }}
           >
-            {name?.charAt(0) || "U"}
+            {initialName?.charAt(0) || "U"}
           </Avatar>
         </div>
         <FileUpload
