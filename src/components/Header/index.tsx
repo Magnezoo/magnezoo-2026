@@ -88,7 +88,11 @@ export default function ButtonAppBar() {
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
           >
-            <MenuItem component={Link} href="/settings" onClick={handleCloseMenu}>
+            <MenuItem
+              component={Link}
+              href="/settings"
+              onClick={handleCloseMenu}
+            >
               <ListItemIcon>
                 <SettingsIcon fontSize="small" />
               </ListItemIcon>
