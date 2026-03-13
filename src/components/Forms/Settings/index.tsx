@@ -67,6 +67,9 @@ const SettingsForm = ({
   };
 
   const handleSave = async () => {
+    if (saving) {
+      return;
+    }
     setSaving(true);
     try {
       let imageUrl = initialImage;
