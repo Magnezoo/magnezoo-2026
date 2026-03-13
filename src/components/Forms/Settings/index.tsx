@@ -137,7 +137,7 @@ const SettingsForm = ({
           fullWidth
           helperText=""
         />
-        <Typography variant="caption" color="text.secondary" className="mb-2">
+        <Typography variant="caption" color="textSecondary" className="mb-2">
           Slackのアカウント名は、応募するときに入力したSlackの氏名, 表示名です。
         </Typography>
       </Box>
@@ -167,7 +167,7 @@ const SettingsForm = ({
         />
       </Box>
 
-      <Box className="flex justify-end">
+      <Box className="flex justify-end" style={{ marginTop: 48 }}>
         <Button
           variant="contained"
           onClick={handleSave}
