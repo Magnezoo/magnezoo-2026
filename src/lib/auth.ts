@@ -46,7 +46,11 @@ export const auth = betterAuth({
         },
       ],
     }),
-    admin(),
+    admin({
+      // アカウントがBANされたときのメッセージ（自己BANも含む）
+      bannedUserMessage:
+        "Your account has been deleted. (This message will also appear if you deleted it yourself.) To create a new account, please contact 'Akatsuki Yuito' on Slack.",
+    }),
   ],
   advanced: {
     trustedProxyHeaders: true,

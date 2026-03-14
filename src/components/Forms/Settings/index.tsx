@@ -4,6 +4,7 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
 import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -11,8 +12,10 @@ import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import DeleteAccountButton from "@/components/Buttons/Settings";
+import DeleteAccountDialog from "@/components/Dialogs/Settings";
 import { authClient } from "@/lib/auth-client";
-import { updateSlacksName, uploadProfileImage } from "./action";
+import { banSelfAccount, updateSlacksName, uploadProfileImage } from "./action";
 import FileUpload from "./FileUpload";
 
 type SettingsFormProps = {
@@ -37,9 +40,12 @@ const SettingsForm = ({
 }: SettingsFormProps) => {
   const router = useRouter();
   const saveLockRef = useRef(false);
+  const deleteLockRef = useRef(false);
   const [slackName, setSlackName] = useState(initialSlackName);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   const [previewUrl, setPreviewUrl] = useState(initialImage || "");
@@ -124,6 +130,33 @@ const SettingsForm = ({
     }
   };
 
+  const handleDeleteAccount = async () => {
+    if (deleteLockRef.current) {
+      return;
+    }
+
+    deleteLockRef.current = true;
+    setDeleting(true);
+    try {
+      const result = await banSelfAccount();
+      if (!result.success) {
+        setMessage(result.error || "アカウント削除に失敗しました。");
+        return;
+      }
+
+      setDeleteDialogOpen(false);
+      await authClient.signOut();
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      setMessage("アカウント削除中にエラーが発生しました。");
+    } finally {
+      deleteLockRef.current = false;
+      setDeleting(false);
+    }
+  };
+
   return (
     <Stack spacing={2} sx={{ maxWidth: 520 }}>
       {!initialSlackName && (
@@ -186,6 +219,30 @@ const SettingsForm = ({
           保存する
         </Button>
       </Box>
+
+      <Divider style={{ marginTop: 32, marginBottom: 32 }}></Divider>
+
+      <Typography variant="h4" color="error" gutterBottom>
+        アカウントを削除
+      </Typography>
+
+      <Typography variant="body2" color="error">
+        アカウントを削除すると、以後このアカウントではログインできなくなります。
+      </Typography>
+
+      <Box className="flex justify-end" sx={{ mt: 2 }}>
+        <DeleteAccountButton
+          disabled={deleting || saving}
+          onClick={() => setDeleteDialogOpen(true)}
+        />
+      </Box>
+
+      <DeleteAccountDialog
+        open={deleteDialogOpen}
+        loading={deleting}
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={handleDeleteAccount}
+      />
 
       <Snackbar
         open={Boolean(message)}

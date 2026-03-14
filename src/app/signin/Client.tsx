@@ -11,6 +11,7 @@ import {
 import { sendGTMEvent } from "@next/third-parties/google";
 import { redirect } from "next/navigation";
 import { useState } from "react";
+import SignInErrorDialog from "@/components/Dialogs/signin";
 import { authClient } from "@/lib/auth-client";
 
 const providers = [
@@ -54,6 +55,8 @@ export default function SignInPageClient({
     setError(null);
     setLoading(providerId);
     try {
+      sessionStorage.setItem("signin_oauth_pending", "1");
+      sessionStorage.setItem("signin_oauth_started_at", String(Date.now()));
       sendGTMEvent({ event: `signin`, account_provider: providerId });
       await authClient.signIn.oauth2({
         providerId,
@@ -113,11 +116,7 @@ export default function SignInPageClient({
             ))}
           </Stack>
 
-          {error && (
-            <Typography color="error" sx={{ mt: 2 }}>
-              {error}
-            </Typography>
-          )}
+          <SignInErrorDialog error={error} onClose={() => setError(null)} />
         </CardContent>
       </Card>
     </Box>
