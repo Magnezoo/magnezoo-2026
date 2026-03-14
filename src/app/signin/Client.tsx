@@ -55,8 +55,6 @@ export default function SignInPageClient({
     setError(null);
     setLoading(providerId);
     try {
-      sessionStorage.setItem("signin_oauth_pending", "1");
-      sessionStorage.setItem("signin_oauth_started_at", String(Date.now()));
       sendGTMEvent({ event: `signin`, account_provider: providerId });
       await authClient.signIn.oauth2({
         providerId,

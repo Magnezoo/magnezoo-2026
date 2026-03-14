@@ -58,23 +58,11 @@ export default function SignInErrorDialog({
       return mapAuthErrorMessage(directMessage);
     }
 
-    if (dismissed || typeof window === "undefined") {
-      return null;
-    }
-
-    const pending = sessionStorage.getItem("signin_oauth_pending") === "1";
-    const startedAt = Number(
-      sessionStorage.getItem("signin_oauth_started_at") || "0",
-    );
-    const isFresh = startedAt > 0 && Date.now() - startedAt < 5 * 60 * 1000;
-
-    return pending && isFresh ? BANNED_ACCOUNT_MESSAGE : null;
+    return null;
   }, [error, queryError, dismissed]);
 
   const handleClose = () => {
     setDismissed(true);
-    sessionStorage.removeItem("signin_oauth_pending");
-    sessionStorage.removeItem("signin_oauth_started_at");
     onClose();
   };
 
