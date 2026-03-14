@@ -25,7 +25,6 @@ const mapAuthErrorMessage = (raw: string | null | undefined): string | null => {
   const normalized = raw.toLowerCase();
   const isBannedError =
     normalized.includes("banned") ||
-    normalized.includes("ban") ||
     normalized.includes("user_banned") ||
     normalized.includes("deleted");
 
