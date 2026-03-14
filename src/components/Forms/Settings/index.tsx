@@ -147,7 +147,6 @@ const SettingsForm = ({
       setDeleteDialogOpen(false);
       await authClient.signOut();
       router.push("/");
-      router.refresh();
     } catch (error) {
       console.error(error);
       setMessage("アカウント削除中にエラーが発生しました。");

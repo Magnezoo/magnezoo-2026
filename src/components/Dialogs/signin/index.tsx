@@ -43,13 +43,9 @@ export default function SignInErrorDialog({
   const searchParams = useSearchParams();
   const [dismissed, setDismissed] = useState(false);
 
+  // OAuth仕様に従い、codeやmessageはエラー判定に含めません。
   const queryError = useMemo(() => {
-    return (
-      searchParams.get("error") ||
-      searchParams.get("code") ||
-      searchParams.get("message") ||
-      searchParams.get("error_description")
-    );
+    return searchParams.get("error") || searchParams.get("error_description");
   }, [searchParams]);
 
   const message = useMemo(() => {
