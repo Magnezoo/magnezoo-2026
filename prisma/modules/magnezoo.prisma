@@ -37,6 +37,7 @@ model Posts {
   tags  TagsPosts[]
   votes Vote[]
 
+  @@index([userId], map: "idx_posts_user_id")
   @@index([isDraft], map: "idx_draft")
   @@map("posts")
 }
