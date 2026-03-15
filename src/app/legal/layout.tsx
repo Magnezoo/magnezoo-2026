@@ -41,7 +41,7 @@ const richElementClassName = [
 
 export default function MdxLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="flex w-full justify-center px-4 sm:px-6 lg:px-8 scheme-light">
+    <main className="flex w-full justify-center px-4 sm:px-6 lg:px-8 bg-white">
       <article
         className={`${proseBaseClassName} ${responsiveClassName} ${layoutClassName} ${headingClassName} ${richElementClassName}`}
       >
