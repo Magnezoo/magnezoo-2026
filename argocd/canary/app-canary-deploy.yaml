@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: magnezoo
+  name: magnezoo-canary
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: magnezoo
-      version: stable
+      version: canary
   template:
     metadata:
       labels:
         app: magnezoo
-        version: stable
+        version: canary
     spec:
       containers:
         - name: magnezoo
