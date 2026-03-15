@@ -11,7 +11,7 @@ model Users {
   iconType  IconType  @map("icon_type")
   isEnabled Boolean   @default(true) @map("is_enabled")
   createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @default(now()) @map("updated_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
   posts Posts[]
@@ -30,7 +30,7 @@ model Posts {
   isDraft     Boolean   @default(true) @map("is_draft")
   userId      String?   @map("user_id") @db.Uuid
   createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @default(now()) @map("updated_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at")
 
   user  Users?      @relation(fields: [userId], references: [id])
