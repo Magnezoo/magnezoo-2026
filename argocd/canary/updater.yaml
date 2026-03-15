@@ -6,7 +6,7 @@ metadata:
 spec:
   namespace: argocd
   applicationRefs:
-    - namePattern: "magnezoo-2026-canary"
+    - namePattern: "magnezoo-canary"
       images:
         - alias: "magnezoo"
           imageName: "registry.uniproject.jp/nnn/magnezoo:x.x.x-x"
