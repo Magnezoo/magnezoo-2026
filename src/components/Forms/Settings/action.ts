@@ -124,3 +124,39 @@ export const updateSlacksName = async (
     return { success: false, error: "Slack設定の保存に失敗しました。" };
   }
 };
+
+/**
+ * ログイン中ユーザーを自己BANしてアカウント削除相当の状態にする
+ */
+export const banSelfAccount = async (): Promise<{
+  success: boolean;
+  error: string | null;
+}> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    const userId = session?.user.id;
+
+    if (!userId) {
+      return { success: false, error: "認証が必要です。" };
+    }
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        banned: true,
+        banReason: "self-requested account deletion",
+        banExpires: null,
+      },
+    });
+
+    return { success: true, error: null };
+  } catch (error) {
+    console.error("Failed to ban self account:", error);
+    return {
+      success: false,
+      error: "アカウント削除に失敗しました。時間をおいて再度お試しください。",
+    };
+  }
+};

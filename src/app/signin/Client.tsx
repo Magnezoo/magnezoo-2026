@@ -11,6 +11,7 @@ import {
 import { sendGTMEvent } from "@next/third-parties/google";
 import { redirect } from "next/navigation";
 import { useState } from "react";
+import SignInErrorDialog from "@/components/Dialogs/signin";
 import { authClient } from "@/lib/auth-client";
 
 const providers = [
@@ -113,11 +114,7 @@ export default function SignInPageClient({
             ))}
           </Stack>
 
-          {error && (
-            <Typography color="error" sx={{ mt: 2 }}>
-              {error}
-            </Typography>
-          )}
+          <SignInErrorDialog error={error} onClose={() => setError(null)} />
         </CardContent>
       </Card>
     </Box>
