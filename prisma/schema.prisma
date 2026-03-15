@@ -37,6 +37,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   posts         Post[]
+  votes         Vote[]
 
   role       String?
   banned     Boolean?  @default(false)
@@ -99,20 +100,53 @@ model Verification {
 }
 
 model Post {
-  id                 String   @id @default(uuid()) @db.Uuid
+  id                 String      @id @default(uuid()) @db.Uuid
   title              String
-  description        String   @db.Text
+  description        String      @db.Text
   imageUrl           String
   authorId           String
-  isSalesApplication Boolean  @default(false)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-  author             User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  isSalesApplication Boolean     @default(false)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  author             User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  tags               TagsPosts[]
+  votes              Vote[]
 
   @@index([title])
   @@index([isSalesApplication])
   @@index([createdAt])
   @@map("post")
+}
+
+model Tags {
+  id   String @id @default(uuid()) @db.Uuid
+  name String @unique @db.VarChar(20)
+
+  posts TagsPosts[]
+
+  @@map("tags")
+}
+
+model TagsPosts {
+  tagId  String @map("tag_id") @db.Uuid
+  postId String @map("post_id") @db.Uuid
+
+  tag  Tags @relation(fields: [tagId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+
+  @@id([tagId, postId])
+  @@map("tags_posts")
+}
+
+model Vote {
+  userId String @map("user_id")
+  postId String @map("post_id") @db.Uuid
+
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+
+  @@id([userId, postId])
+  @@map("vote")
 }
 
 model Slacks {
