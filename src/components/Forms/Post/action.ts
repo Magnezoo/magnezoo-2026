@@ -3,6 +3,7 @@
 import fs from "node:fs";
 import prisma from "@/lib/prisma";
 
+// タグの取得（名前順）
 export const getTags = async (): Promise<{ id: string; name: string }[]> => {
   return await prisma.tags.findMany({ orderBy: { name: "asc" } });
 };
@@ -35,9 +36,9 @@ export const createPost = async ({
       fs.writeFileSync(filepath, buffer);
     }
 
-    // タグ名は最大20文字に切り詰め、重複を除去する
+    // タグ名は最大32文字に切り詰め、重複を除去する
     const validTagNames = [
-      ...new Set(tagNames.map((n) => n.trim().slice(0, 20)).filter(Boolean)),
+      ...new Set(tagNames.map((n) => n.trim().slice(0, 32)).filter(Boolean)),
     ];
 
     await prisma.post.create({

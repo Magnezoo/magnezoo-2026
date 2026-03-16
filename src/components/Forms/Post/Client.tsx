@@ -599,7 +599,7 @@ export default function PostFormClient({
                           />
                           <FormHelperText sx={{ fontSize: 15 }}>
                             タグを選択するか、新しいタグ名を入力して Enter
-                            キーで追加できます（最大20文字）。
+                            キーで追加できます（最大32文字）。
                           </FormHelperText>
                         </Box>
 
