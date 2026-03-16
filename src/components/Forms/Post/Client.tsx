@@ -523,9 +523,14 @@ export default function PostFormClient({
                               setSelectedTags(newValue)
                             }
                             getOptionLabel={(option) =>
-                              typeof option === "string" ? option : option.name
+                              !option
+                                ? ""
+                                : typeof option === "string"
+                                  ? option
+                                  : option.name
                             }
                             isOptionEqualToValue={(option, value) => {
+                              if (!option || !value) return false;
                               const optName =
                                 typeof option === "string"
                                   ? option
@@ -554,9 +559,11 @@ export default function PostFormClient({
                                     checked={selected}
                                     style={{ marginRight: 8 }}
                                   />
-                                  {typeof option === "string"
-                                    ? option
-                                    : option.name}
+                                  {!option
+                                    ? ""
+                                    : typeof option === "string"
+                                      ? option
+                                      : option.name}
                                 </li>
                               );
                             }}
@@ -569,9 +576,11 @@ export default function PostFormClient({
                                   <Chip
                                     key={key}
                                     label={
-                                      typeof option === "string"
-                                        ? option
-                                        : option.name
+                                      !option
+                                        ? ""
+                                        : typeof option === "string"
+                                          ? option
+                                          : option.name
                                     }
                                     size="small"
                                     {...tagProps}
