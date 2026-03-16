@@ -347,6 +347,7 @@ export default function PostFormClient({
                   whiteSpace: { xs: "normal", xl: "nowrap" },
                   py: { xs: 1.5, xl: 2 },
                 }}
+                disabled={!(titleValid && descriptionValid) || submitting}
               >
                 2. 画像のアップロード
               </MenuItem>
@@ -366,6 +367,14 @@ export default function PostFormClient({
                   whiteSpace: { xs: "normal", xl: "nowrap" },
                   py: { xs: 1.5, xl: 2 },
                 }}
+                disabled={
+                  !(
+                    titleValid &&
+                    descriptionValid &&
+                    imagesValid &&
+                    !submitting
+                  )
+                }
               >
                 3. 公開設定
               </MenuItem>

@@ -43,11 +43,13 @@ export const createPost = async ({
       ...new Set(tagNames.map((n) => n.trim().slice(0, 32)).filter(Boolean)),
     ].slice(0, MAX_TAGS);
 
+    const imageUrl = `/api/post_images/${filename}`;
+
     await prisma.post.create({
       data: {
         title,
         description: content,
-        imageUrl: `https://magnezoo.unipro-n.com/api/post_images/${filename}`,
+        imageUrl,
         isSalesApplication,
         authorId: userId,
         tags:
