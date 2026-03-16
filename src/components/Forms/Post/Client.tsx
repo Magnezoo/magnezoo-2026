@@ -33,6 +33,7 @@ import { createPost, getTags } from "./action";
 type Tag = { id: string; name: string };
 
 const MAX_TAGS = 5;
+const MAX_TAG_LENGTH = 32;
 // * Tagの値が文字列かオブジェクトかに関わらず、タグ名を取得するユーティリティ関数
 const getTagName = (tag: Tag | string | undefined) => {
   if (!tag) return "";
@@ -82,15 +83,38 @@ export default function PostFormClient({
   const [image, setImage] = useState<File | null>(null);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
   const [selectedTags, setSelectedTags] = useState<(Tag | string)[]>([]);
+  const [tagInputValue, setTagInputValue] = useState("");
   const [salesAgreementChecked, setSalesAgreementChecked] = useState<boolean>(
     !isSalesApplication,
   );
   const [tosChecked, setTosChecked] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   useEffect(() => {
-    getTags().then(setAvailableTags);
-  }, []);
+    let isMounted = true;
+
+    getTags()
+      .then((tags) => {
+        if (!isMounted) return;
+        setAvailableTags(tags);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (!isMounted) return;
+        enqueueSnackbar(
+          "タグ候補の取得に失敗しました。時間をおいて再度お試しください。",
+          {
+            variant: "error",
+          },
+        );
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [enqueueSnackbar]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -145,8 +169,6 @@ export default function PostFormClient({
     }
   })();
 
-  const { enqueueSnackbar } = useSnackbar();
-
   // * タグの選択肢が最大数に達している場合、未選択のタグを選択できないようにするロジック
   const handleTagsChange = (_: unknown, newValue: (Tag | string)[]) => {
     if (newValue.length > MAX_TAGS) {
@@ -156,7 +178,35 @@ export default function PostFormClient({
       return;
     }
 
+    const tooLongTag = newValue.find(
+      (tag) => getTagName(tag).length > MAX_TAG_LENGTH,
+    );
+    if (tooLongTag) {
+      enqueueSnackbar(`タグは最大${MAX_TAG_LENGTH}文字までです。`, {
+        variant: "warning",
+      });
+      return;
+    }
+
     setSelectedTags(newValue);
+  };
+
+  const handleTagInputChange = (
+    _: unknown,
+    newInputValue: string,
+    reason: string,
+  ) => {
+    if (reason === "input" && newInputValue.length > MAX_TAG_LENGTH) {
+      setTagInputValue(newInputValue.slice(0, MAX_TAG_LENGTH));
+      if (tagInputValue.length < MAX_TAG_LENGTH) {
+        enqueueSnackbar(`タグは最大${MAX_TAG_LENGTH}文字までです。`, {
+          variant: "warning",
+        });
+      }
+      return;
+    }
+
+    setTagInputValue(newInputValue);
   };
 
   if (!open) return null;
@@ -539,6 +589,8 @@ export default function PostFormClient({
                             options={availableTags}
                             value={selectedTags}
                             onChange={handleTagsChange}
+                            inputValue={tagInputValue}
+                            onInputChange={handleTagInputChange}
                             getOptionLabel={getTagName}
                             isOptionEqualToValue={(option, value) => {
                               if (!option || !value) return false;
