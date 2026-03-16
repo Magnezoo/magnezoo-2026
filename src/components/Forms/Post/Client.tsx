@@ -183,7 +183,7 @@ export default function PostFormClient({
         content: String(description),
         image: compressedImage,
         userId,
-        isSalesApplication: Boolean(salesAgreementChecked),
+        isSalesApplication: salesAgreementChecked,
         tagNames,
       });
 
