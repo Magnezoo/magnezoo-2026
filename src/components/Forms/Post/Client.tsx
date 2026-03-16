@@ -1,11 +1,15 @@
 "use client";
 
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CloseIcon from "@mui/icons-material/Close";
 import {
+  Autocomplete,
   Backdrop,
   Box,
   Button,
   Checkbox,
+  Chip,
   CircularProgress,
   FormHelperText,
   IconButton,
@@ -24,7 +28,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { createPost } from "./action";
+import { createPost, getTags } from "./action";
+
+type Tag = { id: string; name: string };
 
 export enum PostFormStep {
   TitleAndDescription = 1,
@@ -67,11 +73,17 @@ export default function PostFormClient({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<(Tag | string)[]>([]);
   const [salesAgreementChecked, setSalesAgreementChecked] = useState<boolean>(
     isSalesApplication ? false : true,
   );
   const [tosChecked, setTosChecked] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
+
+  useEffect(() => {
+    getTags().then(setAvailableTags);
+  }, []);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -143,12 +155,16 @@ export default function PostFormClient({
     setSubmitting(true);
     try {
       const compressedImage = await compressImage(image, 1024, 0.8);
+      const tagNames = selectedTags.map((t) =>
+        typeof t === "string" ? t : t.name,
+      );
       const success = await createPost({
         title: String(title),
         content: String(description),
         image: compressedImage,
         userId,
         isSalesApplication: Boolean(salesAgreementChecked),
+        tagNames,
       });
 
       if (success) {
@@ -490,6 +506,93 @@ export default function PostFormClient({
                         >
                           公開設定
                         </Typography>
+
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 1,
+                          }}
+                        >
+                          <Autocomplete
+                            multiple
+                            freeSolo
+                            options={availableTags}
+                            value={selectedTags}
+                            onChange={(_, newValue) =>
+                              setSelectedTags(newValue)
+                            }
+                            getOptionLabel={(option) =>
+                              typeof option === "string" ? option : option.name
+                            }
+                            isOptionEqualToValue={(option, value) => {
+                              const optName =
+                                typeof option === "string"
+                                  ? option
+                                  : option.name;
+                              const valName =
+                                typeof value === "string" ? value : value.name;
+                              return optName === valName;
+                            }}
+                            disableCloseOnSelect
+                            openOnFocus
+                            disabled={submitting}
+                            renderOption={(props, option, { selected }) => {
+                              const { key, ...rest } =
+                                props as React.HTMLAttributes<HTMLLIElement> & {
+                                  key: React.Key;
+                                };
+                              return (
+                                <li key={key} {...rest}>
+                                  <Checkbox
+                                    icon={
+                                      <CheckBoxOutlineBlankIcon fontSize="small" />
+                                    }
+                                    checkedIcon={
+                                      <CheckBoxIcon fontSize="small" />
+                                    }
+                                    checked={selected}
+                                    style={{ marginRight: 8 }}
+                                  />
+                                  {typeof option === "string"
+                                    ? option
+                                    : option.name}
+                                </li>
+                              );
+                            }}
+                            renderTags={(value, getTagProps) =>
+                              value.map((option, index) => {
+                                const { key, ...tagProps } = getTagProps({
+                                  index,
+                                });
+                                return (
+                                  <Chip
+                                    key={key}
+                                    label={
+                                      typeof option === "string"
+                                        ? option
+                                        : option.name
+                                    }
+                                    size="small"
+                                    {...tagProps}
+                                  />
+                                );
+                              })
+                            }
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="タグ"
+                                placeholder="タグを選択または入力"
+                                variant="outlined"
+                              />
+                            )}
+                          />
+                          <FormHelperText sx={{ fontSize: 15 }}>
+                            タグを選択するか、新しいタグ名を入力して Enter
+                            キーで追加できます（最大20文字）。
+                          </FormHelperText>
+                        </Box>
 
                         <Box
                           sx={{
