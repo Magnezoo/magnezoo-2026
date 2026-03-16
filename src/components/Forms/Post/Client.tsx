@@ -11,6 +11,7 @@ import {
   Checkbox,
   Chip,
   CircularProgress,
+  Divider,
   FormHelperText,
   IconButton,
   MenuItem,
@@ -31,6 +32,13 @@ import {
 import { createPost, getTags } from "./action";
 
 type Tag = { id: string; name: string };
+
+const MAX_TAGS = 5;
+// * Tagの値が文字列かオブジェクトかに関わらず、タグ名を取得するユーティリティ関数
+const getTagName = (tag: Tag | string | undefined) => {
+  if (!tag) return "";
+  return typeof tag === "string" ? tag : tag.name;
+};
 
 export enum PostFormStep {
   TitleAndDescription = 1,
@@ -139,6 +147,18 @@ export default function PostFormClient({
   })();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  // * タグの選択肢が最大数に達している場合、未選択のタグを選択できないようにするロジック
+  const handleTagsChange = (_: unknown, newValue: (Tag | string)[]) => {
+    if (newValue.length > MAX_TAGS) {
+      enqueueSnackbar(`タグは最大${MAX_TAGS}件までです。`, {
+        variant: "warning",
+      });
+      return;
+    }
+
+    setSelectedTags(newValue);
+  };
 
   if (!open) return null;
 
@@ -519,26 +539,22 @@ export default function PostFormClient({
                             freeSolo
                             options={availableTags}
                             value={selectedTags}
-                            onChange={(_, newValue) =>
-                              setSelectedTags(newValue)
-                            }
-                            getOptionLabel={(option) =>
-                              !option
-                                ? ""
-                                : typeof option === "string"
-                                  ? option
-                                  : option.name
-                            }
+                            onChange={handleTagsChange}
+                            getOptionLabel={getTagName}
                             isOptionEqualToValue={(option, value) => {
                               if (!option || !value) return false;
-                              const optName =
-                                typeof option === "string"
-                                  ? option
-                                  : option.name;
-                              const valName =
-                                typeof value === "string" ? value : value.name;
+                              const optName = getTagName(option);
+                              const valName = getTagName(value);
                               return optName === valName;
                             }}
+                            getOptionDisabled={(option) =>
+                              selectedTags.length >= MAX_TAGS &&
+                              !selectedTags.some(
+                                (selectedTag) =>
+                                  getTagName(selectedTag) ===
+                                  getTagName(option),
+                              )
+                            }
                             disableCloseOnSelect
                             openOnFocus
                             disabled={submitting}
@@ -559,11 +575,7 @@ export default function PostFormClient({
                                     checked={selected}
                                     style={{ marginRight: 8 }}
                                   />
-                                  {!option
-                                    ? ""
-                                    : typeof option === "string"
-                                      ? option
-                                      : option.name}
+                                  {getTagName(option)}
                                 </li>
                               );
                             }}
@@ -575,13 +587,7 @@ export default function PostFormClient({
                                 return (
                                   <Chip
                                     key={key}
-                                    label={
-                                      !option
-                                        ? ""
-                                        : typeof option === "string"
-                                          ? option
-                                          : option.name
-                                    }
+                                    label={getTagName(option)}
                                     size="small"
                                     {...tagProps}
                                   />
@@ -601,8 +607,12 @@ export default function PostFormClient({
                             タグを選択するか、新しいタグ名を入力して Enter
                             キーで追加できます（最大32文字）。
                           </FormHelperText>
+                          <FormHelperText sx={{ fontSize: 18 }}>
+                            例: ねこ、外、公園、おねむ、最大{MAX_TAGS}つ
+                          </FormHelperText>
                         </Box>
 
+                        <Divider></Divider>
                         <Box
                           sx={{
                             display: "flex",
