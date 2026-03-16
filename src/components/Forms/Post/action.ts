@@ -3,18 +3,27 @@
 import fs from "node:fs";
 import prisma from "@/lib/prisma";
 
+const MAX_TAGS = 5;
+
+// タグの取得（名前順）
+export const getTags = async (): Promise<{ id: string; name: string }[]> => {
+  return await prisma.tags.findMany({ orderBy: { name: "asc" } });
+};
+
 export const createPost = async ({
   title,
   content,
   image,
   userId,
   isSalesApplication,
+  tagNames = [],
 }: {
   title: string;
   content: string;
   image: File;
   userId: string;
   isSalesApplication: boolean;
+  tagNames?: string[];
 }) => {
   try {
     const dir = `${process.cwd()}/public/img/posts`;
@@ -29,6 +38,11 @@ export const createPost = async ({
       fs.writeFileSync(filepath, buffer);
     }
 
+    // タグ名は最大32文字に切り詰め、重複を除去し、5件までに制限する
+    const validTagNames = [
+      ...new Set(tagNames.map((n) => n.trim().slice(0, 32)).filter(Boolean)),
+    ].slice(0, MAX_TAGS);
+
     const imageUrl = `/api/post_images/${filename}`;
 
     await prisma.post.create({
@@ -38,6 +52,19 @@ export const createPost = async ({
         imageUrl,
         isSalesApplication,
         authorId: userId,
+        tags:
+          validTagNames.length > 0
+            ? {
+                create: validTagNames.map((name) => ({
+                  tag: {
+                    connectOrCreate: {
+                      where: { name },
+                      create: { name },
+                    },
+                  },
+                })),
+              }
+            : undefined,
       },
     });
 

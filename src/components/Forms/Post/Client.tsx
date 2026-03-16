@@ -1,11 +1,15 @@
 "use client";
 
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CloseIcon from "@mui/icons-material/Close";
 import {
+  Autocomplete,
   Backdrop,
   Box,
   Button,
   Checkbox,
+  Chip,
   CircularProgress,
   FormHelperText,
   IconButton,
@@ -24,7 +28,17 @@ import {
   useRef,
   useState,
 } from "react";
-import { createPost } from "./action";
+import { createPost, getTags } from "./action";
+
+type Tag = { id: string; name: string };
+
+const MAX_TAGS = 5;
+const MAX_TAG_LENGTH = 32;
+// * Tagの値が文字列かオブジェクトかに関わらず、タグ名を取得するユーティリティ関数
+const getTagName = (tag: Tag | string | undefined) => {
+  if (!tag) return "";
+  return typeof tag === "string" ? tag : tag.name;
+};
 
 export enum PostFormStep {
   TitleAndDescription = 1,
@@ -67,11 +81,40 @@ export default function PostFormClient({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<(Tag | string)[]>([]);
+  const [tagInputValue, setTagInputValue] = useState("");
   const [salesAgreementChecked, setSalesAgreementChecked] = useState<boolean>(
-    isSalesApplication ? false : true,
+    !isSalesApplication,
   );
   const [tosChecked, setTosChecked] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getTags()
+      .then((tags) => {
+        if (!isMounted) return;
+        setAvailableTags(tags);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (!isMounted) return;
+        enqueueSnackbar(
+          "タグ候補の取得に失敗しました。時間をおいて再度お試しください。",
+          {
+            variant: "error",
+          },
+        );
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [enqueueSnackbar]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -126,7 +169,45 @@ export default function PostFormClient({
     }
   })();
 
-  const { enqueueSnackbar } = useSnackbar();
+  // * タグの選択肢が最大数に達している場合、未選択のタグを選択できないようにするロジック
+  const handleTagsChange = (_: unknown, newValue: (Tag | string)[]) => {
+    if (newValue.length > MAX_TAGS) {
+      enqueueSnackbar(`タグは最大${MAX_TAGS}件までです。`, {
+        variant: "warning",
+      });
+      return;
+    }
+
+    const tooLongTag = newValue.find(
+      (tag) => getTagName(tag).length > MAX_TAG_LENGTH,
+    );
+    if (tooLongTag) {
+      enqueueSnackbar(`タグは最大${MAX_TAG_LENGTH}文字までです。`, {
+        variant: "warning",
+      });
+      return;
+    }
+
+    setSelectedTags(newValue);
+  };
+
+  const handleTagInputChange = (
+    _: unknown,
+    newInputValue: string,
+    reason: string,
+  ) => {
+    if (reason === "input" && newInputValue.length > MAX_TAG_LENGTH) {
+      setTagInputValue(newInputValue.slice(0, MAX_TAG_LENGTH));
+      if (tagInputValue.length < MAX_TAG_LENGTH) {
+        enqueueSnackbar(`タグは最大${MAX_TAG_LENGTH}文字までです。`, {
+          variant: "warning",
+        });
+      }
+      return;
+    }
+
+    setTagInputValue(newInputValue);
+  };
 
   if (!open) return null;
 
@@ -143,12 +224,16 @@ export default function PostFormClient({
     setSubmitting(true);
     try {
       const compressedImage = await compressImage(image, 1024, 0.8);
+      const tagNames = selectedTags.map((t) =>
+        typeof t === "string" ? t : t.name,
+      );
       const success = await createPost({
         title: String(title),
         content: String(description),
         image: compressedImage,
         userId,
-        isSalesApplication: Boolean(salesAgreementChecked),
+        isSalesApplication: salesAgreementChecked,
+        tagNames,
       });
 
       if (success) {
@@ -499,6 +584,92 @@ export default function PostFormClient({
                         >
                           公開設定
                         </Typography>
+
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 1,
+                          }}
+                        >
+                          <Autocomplete
+                            multiple
+                            freeSolo
+                            options={availableTags}
+                            value={selectedTags}
+                            onChange={handleTagsChange}
+                            inputValue={tagInputValue}
+                            onInputChange={handleTagInputChange}
+                            getOptionLabel={getTagName}
+                            isOptionEqualToValue={(option, value) => {
+                              if (!option || !value) return false;
+                              const optName = getTagName(option);
+                              const valName = getTagName(value);
+                              return optName === valName;
+                            }}
+                            getOptionDisabled={(option) =>
+                              selectedTags.length >= MAX_TAGS &&
+                              !selectedTags.some(
+                                (selectedTag) =>
+                                  getTagName(selectedTag) ===
+                                  getTagName(option),
+                              )
+                            }
+                            disableCloseOnSelect
+                            openOnFocus
+                            disabled={submitting}
+                            renderOption={(props, option, { selected }) => {
+                              const { key, ...rest } =
+                                props as React.HTMLAttributes<HTMLLIElement> & {
+                                  key: React.Key;
+                                };
+                              return (
+                                <li key={key} {...rest}>
+                                  <Checkbox
+                                    icon={
+                                      <CheckBoxOutlineBlankIcon fontSize="small" />
+                                    }
+                                    checkedIcon={
+                                      <CheckBoxIcon fontSize="small" />
+                                    }
+                                    checked={selected}
+                                    style={{ marginRight: 8 }}
+                                  />
+                                  {getTagName(option)}
+                                </li>
+                              );
+                            }}
+                            renderTags={(value, getTagProps) =>
+                              value.map((option, index) => {
+                                const { key, ...tagProps } = getTagProps({
+                                  index,
+                                });
+                                return (
+                                  <Chip
+                                    key={key}
+                                    label={getTagName(option)}
+                                    size="small"
+                                    {...tagProps}
+                                  />
+                                );
+                              })
+                            }
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="タグ"
+                                placeholder="タグを選択または入力"
+                                variant="outlined"
+                              />
+                            )}
+                          />
+                          <FormHelperText>
+                            タグを選択するか、新しいタグ名を入力して Enter
+                            キーで追加できます（最大32文字）。 <br />
+                            例: ねこ、外、公園、おねむ など最大{MAX_TAGS}
+                            つまで。
+                          </FormHelperText>
+                        </Box>
 
                         <Box
                           sx={{

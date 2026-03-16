@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Chip, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -10,7 +10,10 @@ export default async function PostsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const post = await prisma.post.findUnique({ where: { id } });
+  const post = await prisma.post.findUnique({
+    where: { id },
+    include: { tags: { include: { tag: true } } },
+  });
   if (!post) return notFound();
   const user = await prisma.user.findUnique({ where: { id: post.authorId } });
 
@@ -23,6 +26,23 @@ export default async function PostsPage({
       <Typography variant="subtitle2" color="text.secondary">
         作成: {new Date(post.createdAt).toLocaleString()} ・ 更新:{" "}
         {new Date(post.updatedAt).toLocaleString()}
+      </Typography>
+
+      <Typography variant="body2" color="text.secondary">
+        タグ:{" "}
+        <Stack direction="row" spacing={1} sx={{ display: "inline-flex" }}>
+          {post.tags.length > 0
+            ? post.tags.map((t) => (
+                <Chip
+                  key={t.tag.id}
+                  label={t.tag.name}
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                />
+              ))
+            : "なし"}
+        </Stack>
       </Typography>
 
       <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
