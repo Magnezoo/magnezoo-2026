@@ -603,16 +603,14 @@ export default function PostFormClient({
                               />
                             )}
                           />
-                          <FormHelperText sx={{ fontSize: 15 }}>
+                          <FormHelperText>
                             タグを選択するか、新しいタグ名を入力して Enter
-                            キーで追加できます（最大32文字）。
-                          </FormHelperText>
-                          <FormHelperText sx={{ fontSize: 18 }}>
-                            例: ねこ、外、公園、おねむ、最大{MAX_TAGS}つ
+                            キーで追加できます（最大32文字）。 <br />
+                            例: ねこ、外、公園、おねむ など最大{MAX_TAGS}
+                            つまで。
                           </FormHelperText>
                         </Box>
 
-                        <Divider></Divider>
                         <Box
                           sx={{
                             display: "flex",
