@@ -84,7 +84,7 @@ export default function PostFormClient({
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
   const [selectedTags, setSelectedTags] = useState<(Tag | string)[]>([]);
   const [salesAgreementChecked, setSalesAgreementChecked] = useState<boolean>(
-    isSalesApplication ? false : true,
+    !isSalesApplication,
   );
   const [tosChecked, setTosChecked] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
