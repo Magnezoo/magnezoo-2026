@@ -29,11 +29,13 @@ export const createPost = async ({
       fs.writeFileSync(filepath, buffer);
     }
 
+    const imageUrl = `/api/post_images/${filename}`;
+
     await prisma.post.create({
       data: {
         title,
         description: content,
-        imageUrl: `https://magnezoo.unipro-n.com/api/post_images/${filename}`,
+        imageUrl,
         isSalesApplication,
         authorId: userId,
       },
