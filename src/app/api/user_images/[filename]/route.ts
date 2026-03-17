@@ -44,7 +44,9 @@ export const GET = async (
       return new Response("Image not found", { status: 404 });
     }
 
-    return new Response(`Error fetching image: ${(error as Error).message}`, {
+    console.error("Error fetching image:", error);
+
+    return new Response("Error fetching image", {
       status: 500,
     });
   }
