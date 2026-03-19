@@ -71,7 +71,7 @@ export const uploadProfileImage = async (
 
     fs.writeFileSync(filepath, buffer);
 
-    return { imageUrl: `/img/users/${filename}`, error: null };
+    return { imageUrl: `/api/user_images/${filename}`, error: null };
   } catch (error) {
     console.error("Failed to upload profile image:", error);
     return {
