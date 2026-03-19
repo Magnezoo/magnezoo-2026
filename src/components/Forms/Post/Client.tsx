@@ -265,9 +265,8 @@ export default function PostFormClient({
 
       if (success) {
         enqueueSnackbar("投稿が保存されました！", { variant: "success" });
-        // リセットしてからモーダルを閉じる
-        resetForm();
-        onClose();
+        // クローズ処理は一箇所に集約
+        handleCloseLocal();
       } else {
         enqueueSnackbar("投稿の保存に失敗しました。", { variant: "error" });
       }
