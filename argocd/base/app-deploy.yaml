@@ -25,7 +25,7 @@ spec:
           volumeMounts:
             - name: app-image-storage
               mountPath: /app/public/img/posts
-            - name: app-avater-storage
+            - name: app-avatar-storage
               mountPath: /app/public/img/users
           readinessProbe:
             httpGet:
@@ -41,6 +41,6 @@ spec:
         - name: app-image-storage
           persistentVolumeClaim:
             claimName: app-image-pvc
-        - name: app-avater-storage
+        - name: app-avatar-storage
           persistentVolumeClaim:
-            claimName: app-avater-pvc
+            claimName: app-avatar-pvc

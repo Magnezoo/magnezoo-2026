@@ -14,7 +14,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: app-avater-pvc
+  name: app-avatar-pvc
 spec:
   accessModes:
     - ReadWriteMany
