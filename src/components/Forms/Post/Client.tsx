@@ -118,6 +118,33 @@ export default function PostFormClient({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const resetForm = () => {
+    // revoke preview URL if exists
+    try {
+      if (preview?.url) URL.revokeObjectURL(preview.url);
+    } catch {}
+
+    setStep(PostFormStep.TitleAndDescription);
+    setTitle("");
+    setDescription("");
+    setImage(null);
+    if (fileInputRef.current) {
+      try {
+        // clear file input value
+        (fileInputRef.current as HTMLInputElement).value = "";
+      } catch {}
+    }
+    setSelectedTags([]);
+    setTagInputValue("");
+    setSalesAgreementChecked(!isSalesApplication);
+    setTosChecked(false);
+  };
+
+  const handleCloseLocal = () => {
+    resetForm();
+    onClose();
+  };
+
   const preview = ((): { url: string; name: string; size: number } | null => {
     if (!image) return null;
     return {
@@ -238,7 +265,8 @@ export default function PostFormClient({
 
       if (success) {
         enqueueSnackbar("投稿が保存されました！", { variant: "success" });
-        onClose();
+        // クローズ処理は一箇所に集約
+        handleCloseLocal();
       } else {
         enqueueSnackbar("投稿の保存に失敗しました。", { variant: "error" });
       }
@@ -267,7 +295,7 @@ export default function PostFormClient({
         top={0}
         left={0}
         zIndex={900}
-        onClick={onClose}
+        onClick={handleCloseLocal}
         height="100%"
         sx={{ p: { xs: 2, md: 10 }, backgroundColor: "rgba(0, 0, 0, 0.5)" }}
       >
@@ -402,7 +430,7 @@ export default function PostFormClient({
             </Backdrop>
             <Box sx={{ position: "absolute", top: 12, right: 12 }}>
               <IconButton
-                onClick={onClose}
+                onClick={handleCloseLocal}
                 aria-label="閉じる"
                 color="primary"
                 size="large"
