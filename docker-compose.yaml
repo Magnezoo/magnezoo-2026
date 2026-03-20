@@ -16,6 +16,16 @@ services:
       - 8080:8080
     depends_on:
       - postgres
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://magnezoo_user:securepassword@postgres:5432/magnezoo_db
+    depends_on:
+      - postgres
+    networks:
+      - magnezoo
 volumes:
   db_data:
 
