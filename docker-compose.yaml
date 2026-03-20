@@ -10,12 +10,16 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql
+    networks:
+      - magnezoo
   adminer:
     image: adminer
     ports:
       - 8080:8080
     depends_on:
       - postgres
+    networks:
+      - magnezoo
   app:
     build: .
     ports:
