@@ -17,6 +17,11 @@ export const GET = async (
     return new Response("Invalid filename", { status: 400 });
   }
 
+  // Not Allow other directory traversal characters like / or \ to prevent path traversal
+  if (filename.includes("/") || filename.includes("\\")) {
+    return new Response("Invalid filename", { status: 400 });
+  }
+
   // Allowed extensions
   const fileType = filename.split(".").pop()?.toLowerCase();
   if (

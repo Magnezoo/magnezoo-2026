@@ -11,42 +11,47 @@ export const GET = async (
     return new Response("Image URL is required", { status: 400 });
   }
 
-  // Only allow safe filename characters.
+  // Basic allowlist for filenames: only letters, numbers, dot, underscore, hyphen
   const allowRegex = /^[a-zA-Z0-9._-]+$/;
   if (!allowRegex.test(filename)) {
     return new Response("Invalid filename", { status: 400 });
   }
 
+  // Not Allow other directory traversal characters like / or \ to prevent path traversal
+  if (filename.includes("/") || filename.includes("\\")) {
+    return new Response("Invalid filename", { status: 400 });
+  }
+
+  // Allowed extensions
   const fileType = filename.split(".").pop()?.toLowerCase();
-  if (!fileType || !["jpg", "jpeg", "png", "gif", "webp"].includes(fileType)) {
+  if (
+    !fileType ||
+    !["jpg", "jpeg", "png", "gif", "webp", "heic"].includes(fileType)
+  ) {
     return new Response("Unsupported image format", { status: 400 });
   }
 
-  const usersDir = path.join(process.cwd(), "public", "img", "users");
-  const requestedPath = path.resolve(usersDir, filename);
-
-  // Prevent path traversal by ensuring resolved path stays under usersDir.
-  const relative = path.relative(usersDir, requestedPath);
-  if (relative.startsWith("..") || path.isAbsolute(relative)) {
-    return new Response("Access denied", { status: 403 });
-  }
-
   try {
+    const postsDir = path.join(process.cwd(), "public", "img", "users");
+    const requestedPath = path.resolve(postsDir, filename);
+
+    // Prevent path traversal: ensure the resolved path is inside postsDir
+    const relative = path.relative(postsDir, requestedPath);
+    if (relative.startsWith("..") || path.isAbsolute(relative)) {
+      return new Response("Access denied", { status: 403 });
+    }
+
     const file = await fs.readFile(requestedPath);
-    return new Response(file, {
-      headers: {
-        "Content-Type": `image/${fileType === "jpg" ? "jpeg" : fileType}`,
-      },
-    });
-  } catch (error) {
-    const nodeError = error as NodeJS.ErrnoException;
-    if (nodeError.code === "ENOENT") {
+    if (!file) {
       return new Response("Image not found", { status: 404 });
     }
 
-    console.error("Error fetching image:", error);
-
-    return new Response("Error fetching image", {
+    const blob = new Blob([file], { type: `image/${fileType}` });
+    return new Response(blob, {
+      headers: { "Content-Type": blob.type },
+    });
+  } catch (error) {
+    return new Response(`Error fetching image: ${(error as Error).message}`, {
       status: 500,
     });
   }
