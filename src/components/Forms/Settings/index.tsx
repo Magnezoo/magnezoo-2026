@@ -113,8 +113,9 @@ const SettingsForm = ({
         }
       }
 
-      // サイト上の表示名を更新
-      const nickNameResult = await updateNickName(nickName);
+      // サイト上の表示名を更新（トリムしてサーバとUIで同一の値を使う）
+      const trimmedNickName = nickName.trim();
+      const nickNameResult = await updateNickName(trimmedNickName);
       if (!nickNameResult.success) {
         setMessage(nickNameResult.error || "表示名の保存に失敗しました。");
         return;
@@ -135,7 +136,7 @@ const SettingsForm = ({
       }
 
       // 全て成功したら、保存済みの表示名を更新する（入力中だけでは反映しない）
-      setSavedNickName(nickName.trim());
+      setSavedNickName(trimmedNickName);
       setMessage("保存しました。");
       setSelectedFile(null);
       router.refresh();

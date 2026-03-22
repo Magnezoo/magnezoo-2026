@@ -13,16 +13,17 @@ export const setSlackSetting = async ({
   nickName: string;
   isDisplayName: boolean;
 }) => {
-  // Slack設定は必ず表示名として保持
-  await prisma.slacks.upsert({
-    where: { userId },
-    update: { name, isDisplayname: isDisplayName },
-    create: { userId, name, isDisplayname: isDisplayName },
-  });
+  // Slack設定とサイト上の表示名を原子性を持って保存
+  await prisma.$transaction(async (tx) => {
+    await tx.slacks.upsert({
+      where: { userId },
+      update: { name, isDisplayname: isDisplayName },
+      create: { userId, name, isDisplayname: isDisplayName },
+    });
 
-  // サイト上の表示名としてnickNameを保存
-  await prisma.user.update({
-    where: { id: userId },
-    data: { nickName },
+    await tx.user.update({
+      where: { id: userId },
+      data: { nickName },
+    });
   });
 };
