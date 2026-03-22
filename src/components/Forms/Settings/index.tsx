@@ -15,11 +15,17 @@ import { useEffect, useRef, useState } from "react";
 import DeleteAccountButton from "@/components/Buttons/Settings";
 import DeleteAccountDialog from "@/components/Dialogs/Settings";
 import { authClient } from "@/lib/auth-client";
-import { banSelfAccount, updateSlacksName, uploadProfileImage } from "./action";
+import {
+  banSelfAccount,
+  updateNickName,
+  updateSlacksName,
+  uploadProfileImage,
+} from "./action";
 import FileUpload from "./FileUpload";
 
 type SettingsFormProps = {
   initialName: string;
+  initialNickName: string;
   initialImage: string | null;
   initialSlackName: string;
   initialSlackDisplayName: boolean;
@@ -34,6 +40,7 @@ const ALLOWED_MIME_TYPES = new Set([
 
 const SettingsForm = ({
   initialName,
+  initialNickName,
   initialImage,
   initialSlackName,
   initialSlackDisplayName,
@@ -42,6 +49,8 @@ const SettingsForm = ({
   const saveLockRef = useRef(false);
   const deleteLockRef = useRef(false);
   const [slackName, setSlackName] = useState(initialSlackName);
+  const [nickName, setNickName] = useState(initialNickName);
+  const [savedNickName, setSavedNickName] = useState<string>(initialNickName);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -104,6 +113,13 @@ const SettingsForm = ({
         }
       }
 
+      // サイト上の表示名を更新
+      const nickNameResult = await updateNickName(nickName);
+      if (!nickNameResult.success) {
+        setMessage(nickNameResult.error || "表示名の保存に失敗しました。");
+        return;
+      }
+
       // Slack情報を更新
       if (initialSlackName) {
         // Slack登録済みの場合のみ実行
@@ -118,6 +134,8 @@ const SettingsForm = ({
         }
       }
 
+      // 全て成功したら、保存済みの表示名を更新する（入力中だけでは反映しない）
+      setSavedNickName(nickName.trim());
       setMessage("保存しました。");
       setSelectedFile(null);
       router.refresh();
@@ -167,7 +185,20 @@ const SettingsForm = ({
           から応募してください。
         </Typography>
       )}
+      {!savedNickName && (
+        <Typography variant="caption" color="error">
+          サイト上の表示名が設定されていません。
+        </Typography>
+      )}
       <Box>
+        <TextField
+          label="サイト上での表示名"
+          value={nickName}
+          onChange={(event) => setNickName(event.target.value)}
+          fullWidth
+          helperText="Slack名とは別です。"
+          sx={{ mb: 2 }}
+        />
         <TextField
           label="Slackのアカウント名"
           value={slackName}
@@ -193,10 +224,10 @@ const SettingsForm = ({
           </Typography>
           <Avatar
             src={previewUrl}
-            alt={initialName || "ユーザー"}
+            alt={savedNickName || initialName || "ユーザー"}
             sx={{ width: 96, height: 96, bgcolor: "orange" }}
           >
-            {initialName?.charAt(0) || "U"}
+            {(savedNickName || initialName)?.charAt(0) || "U"}
           </Avatar>
         </div>
         <FileUpload

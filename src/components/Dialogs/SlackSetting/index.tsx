@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
   MenuItem,
   Select,
   TextField,
@@ -26,6 +27,7 @@ export default function SlackSettingDialog({
 }) {
   const [name, setName] = React.useState("");
   const [isDisplayName, setIsDisplayName] = React.useState("0");
+  const [nickName, setNickName] = React.useState("");
 
   return (
     <Dialog
@@ -36,16 +38,31 @@ export default function SlackSettingDialog({
         await setSlackSetting({
           userId,
           name,
+          nickName,
           isDisplayName: isDisplayName === "1",
         });
         onClose();
       }}
     >
-      <DialogTitle>Slack設定</DialogTitle>
+      <DialogTitle>名前の設定</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Slackのアカウント名を設定する必要があります。
+          サイト上で表示される名前を自由に設定できます。
         </DialogContentText>
+        <TextField
+          label="サイト上での表示名"
+          fullWidth
+          margin="normal"
+          name="nick_name"
+          value={nickName}
+          onChange={(e) => setNickName(e.target.value)}
+        />
+        <Divider sx={{ my: 2 }} />
+
+        <DialogContentText>
+          Slackのアカウント名を設定してください。これはサイトの表示名とは別です。
+        </DialogContentText>
+
         <TextField
           label="Slackアカウント名"
           fullWidth

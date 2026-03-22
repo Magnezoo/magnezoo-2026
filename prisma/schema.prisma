@@ -45,6 +45,8 @@ model User {
   banExpires DateTime?
   slacks     Slacks[]
 
+  nickName String?
+
   @@unique([email])
   @@map("user")
 }
