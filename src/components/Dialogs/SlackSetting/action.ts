@@ -23,7 +23,7 @@ export const setSlackSetting = async ({
 
     await tx.user.update({
       where: { id: userId },
-      data: { nickName },
+      data: { nickName: nickName.trim() },
     });
   });
 };
