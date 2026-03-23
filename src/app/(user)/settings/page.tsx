@@ -39,6 +39,7 @@ export default async function SettingsPage() {
       <div className="mt-6">
         <SettingsForm
           initialName={user.name ?? ""}
+          initialNickName={user.nickName ?? ""}
           initialImage={user.image ?? null}
           initialSlackName={slacks?.name ?? ""}
           initialSlackDisplayName={slacks?.isDisplayname ?? false}

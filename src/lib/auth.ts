@@ -8,6 +8,14 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
+  user: {
+    additionalFields: {
+      nickName: {
+        type: "string",
+        required: false,
+      },
+    },
+  },
   plugins: [
     genericOAuth({
       config: [
@@ -48,6 +56,7 @@ export const auth = betterAuth({
     }),
     admin({
       // アカウントがBANされたときのメッセージ（自己BANも含む）
+      // 日本語にすると、謎のバグの関係でエラーになるため英語で記載。
       bannedUserMessage:
         "Your account has been deleted. (This message will also appear if you deleted it yourself.) To create a new account, please contact 'Akatsuki Yuito' on Slack.",
     }),

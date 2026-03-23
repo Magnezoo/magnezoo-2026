@@ -82,6 +82,40 @@ export const uploadProfileImage = async (
 };
 
 /**
+ * サイト上の表示名(nickName)を更新する
+ */
+export const updateNickName = async (
+  nickName: string,
+): Promise<{ success: boolean; error: string | null }> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    const userId = session?.user.id;
+    if (!userId) {
+      return { success: false, error: "認証が必要です。" };
+    }
+    if (!nickName.trim()) {
+      return {
+        success: false,
+        error: "サイト上での表示名を入力してください。",
+      };
+    }
+    await prisma.user.update({
+      where: { id: userId },
+      data: { nickName: nickName.trim() },
+    });
+    return { success: true, error: null };
+  } catch (error) {
+    console.error("Failed to update nickName:", error);
+    return {
+      success: false,
+      error: "サイト上での表示名の保存に失敗しました。",
+    };
+  }
+};
+
+/**
  * ユーザーのSlack表示名を更新する
  * @param userId - ユーザーID
  * @param slackName - 新しいSlack表示名
