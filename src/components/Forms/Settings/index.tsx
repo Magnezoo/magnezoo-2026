@@ -5,6 +5,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -55,6 +57,9 @@ const SettingsForm = ({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isDisplayName, setIsDisplayName] = useState(
+    initialSlackDisplayName ? "1" : "0",
+  );
   const [message, setMessage] = useState<string | null>(null);
 
   const [previewUrl, setPreviewUrl] = useState(initialImage || "");
@@ -126,7 +131,7 @@ const SettingsForm = ({
         // Slack登録済みの場合のみ実行
         const slackResult = await updateSlacksName(
           slackName,
-          initialSlackDisplayName,
+          isDisplayName === "1",
         );
 
         if (!slackResult.success) {
@@ -200,6 +205,7 @@ const SettingsForm = ({
           helperText="Slack名とは別です。"
           sx={{ mb: 2 }}
         />
+        <Divider sx={{ mb: 4 }} />
         <TextField
           label="Slackのアカウント名"
           value={slackName}
@@ -211,6 +217,35 @@ const SettingsForm = ({
         <Typography variant="caption" color="textSecondary" className="mb-2">
           Slackのアカウント名は、応募するときに入力したSlackの氏名, 表示名です。
         </Typography>
+        {initialSlackName && (
+          <Select
+            sx={{ mt: 2 }}
+            defaultValue={"0"}
+            name="is_display_name"
+            value={isDisplayName}
+            onChange={(e) => setIsDisplayName(e.target.value as string)}
+            fullWidth
+          >
+            <MenuItem value="1">
+              <Typography>表示名</Typography>
+              <Typography
+                variant="caption"
+                sx={{ ml: 1, color: "text.secondary" }}
+              >
+                Slackのプロフィールの表示名です。
+              </Typography>
+            </MenuItem>
+            <MenuItem value="0">
+              <Typography>氏名</Typography>
+              <Typography
+                variant="caption"
+                sx={{ ml: 1, color: "text.secondary" }}
+              >
+                Slackのプロフィールの氏名欄です。表示名が他の方と被る可能性がある方はこちらを選択してください。
+              </Typography>
+            </MenuItem>
+          </Select>
+        )}
       </Box>
 
       <Typography variant="h3" gutterBottom>
