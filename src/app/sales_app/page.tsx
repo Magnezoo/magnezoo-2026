@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import Link from "next/link";
 import PostButton from "@/components/Buttons/Post";
-import SlackSttingsGuard from "@/components/Dialogs/SlackSetting/Guard";
+import SlackSttingsGuard from "@/components/Dialogs/NameSettingGuard/Guard";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 

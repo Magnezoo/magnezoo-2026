@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import SlackSettingDialog from ".";
+import NameSettingGuard from ".";
 
 export default function SlackSttingsGuard({
   isNeed,
@@ -11,7 +11,7 @@ export default function SlackSttingsGuard({
 }) {
   const [open, setOpen] = useState(isNeed);
   return (
-    <SlackSettingDialog
+    <NameSettingGuard
       userId={userId}
       open={open}
       onClose={() => {
