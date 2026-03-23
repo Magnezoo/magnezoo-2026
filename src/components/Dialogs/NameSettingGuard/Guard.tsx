@@ -5,9 +5,20 @@ import NameSettingDialog from ".";
 export default function NameSettingGuard({
   isNeed,
   userId,
+  currentName,
+  currentSlack,
 }: {
   isNeed: boolean;
   userId: string;
+  currentName?: string | null;
+  currentSlack?: {
+    userId: string;
+    name: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isDisplayname: boolean;
+  } | null;
 }) {
   const [open, setOpen] = useState(isNeed);
   return (
@@ -17,6 +28,8 @@ export default function NameSettingGuard({
       onClose={() => {
         setOpen(false);
       }}
+      currentName={currentName}
+      currentSlack={currentSlack}
     />
   );
 }

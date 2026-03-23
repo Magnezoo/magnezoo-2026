@@ -20,14 +20,27 @@ export default function NameSettingDialog({
   userId,
   open,
   onClose,
+  currentName,
+  currentSlack,
 }: {
   userId: string;
   open: boolean;
   onClose: () => void;
+  currentName?: string | null;
+  currentSlack?: {
+    userId: string;
+    name: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isDisplayname: boolean;
+  } | null;
 }) {
-  const [name, setName] = React.useState("");
-  const [isDisplayName, setIsDisplayName] = React.useState("0");
-  const [nickName, setNickName] = React.useState("");
+  const [name, setName] = React.useState(currentSlack?.name || "");
+  const [isDisplayName, setIsDisplayName] = React.useState(
+    currentSlack?.isDisplayname ? "1" : "0",
+  );
+  const [nickName, setNickName] = React.useState(currentName || "");
 
   return (
     <Dialog
