@@ -16,7 +16,7 @@ import {
 import React from "react";
 import { setSlackSetting } from "./action";
 
-export default function NameSettingGuard({
+export default function NameSettingDialog({
   userId,
   open,
   onClose,

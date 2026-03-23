@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import Link from "next/link";
 import PostButton from "@/components/Buttons/Post";
-import SlackSttingsGuard from "@/components/Dialogs/NameSettingGuard/Guard";
+import NameSettingGuard from "@/components/Dialogs/NameSettingGuard/Guard";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
@@ -35,6 +35,8 @@ export default async function SalesAppCampainPage() {
   const slack = session?.user?.id
     ? await prisma.slacks.findUnique({ where: { userId: session.user.id } })
     : null;
+  const nickname = session?.user.nickName;
+  const isNeedGuard = !!session && (!slack || !nickname);
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#FFEECE] font-sans text-black py-10 overflow-hidden">
       {/* 幾何学的な背景アニメーション */}
@@ -192,7 +194,7 @@ export default async function SalesAppCampainPage() {
           </p>
         </div>
         {session && (
-          <SlackSttingsGuard isNeed={!slack} userId={session?.user?.id} />
+          <NameSettingGuard isNeed={isNeedGuard} userId={session?.user?.id} />
         )}
       </main>
       <footer>
