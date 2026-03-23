@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import NameSettingDialog from ".";
+import NameSettingDialog from "./Dialog";
 
-export default function NameSettingGuard({
+export default function NameSettingGuardClient({
   isNeed,
   userId,
   currentName,
