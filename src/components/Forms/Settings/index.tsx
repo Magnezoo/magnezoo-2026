@@ -7,12 +7,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
 import DeleteAccountButton from "@/components/Buttons/Settings";
 import DeleteAccountDialog from "@/components/Dialogs/Settings";
@@ -60,7 +60,8 @@ const SettingsForm = ({
   const [isDisplayName, setIsDisplayName] = useState(
     initialSlackDisplayName ? "1" : "0",
   );
-  const [message, setMessage] = useState<string | null>(null);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [previewUrl, setPreviewUrl] = useState(initialImage || "");
 
@@ -79,8 +80,9 @@ const SettingsForm = ({
   const handleFileSelect = (file: File) => {
     if (!ALLOWED_MIME_TYPES.has(file.type)) {
       setSelectedFile(null);
-      setMessage(
+      enqueueSnackbar(
         "対応していない画像形式です。JPEG/PNG/WebP/GIFを選択してください。",
+        { variant: "error" },
       );
       return;
     }
@@ -100,7 +102,10 @@ const SettingsForm = ({
       if (selectedFile) {
         const uploaded = await uploadProfileImage(selectedFile);
         if (uploaded.error || !uploaded.imageUrl) {
-          setMessage(uploaded.error || "画像アップロードに失敗しました。");
+          enqueueSnackbar(
+            uploaded.error || "画像アップロードに失敗しました。",
+            { variant: "error" },
+          );
           return;
         }
         imageUrl = uploaded.imageUrl;
@@ -113,7 +118,10 @@ const SettingsForm = ({
         });
 
         if (result.error) {
-          setMessage("保存に失敗しました。時間をおいて再度お試しください。");
+          enqueueSnackbar(
+            "保存に失敗しました。時間をおいて再度お試しください。",
+            { variant: "error" },
+          );
           return;
         }
       }
@@ -122,7 +130,12 @@ const SettingsForm = ({
       const trimmedNickName = nickName.trim();
       const nickNameResult = await updateNickName(trimmedNickName);
       if (!nickNameResult.success) {
-        setMessage(nickNameResult.error || "表示名の保存に失敗しました。");
+        enqueueSnackbar(
+          nickNameResult.error || "表示名の保存に失敗しました。",
+          {
+            variant: "error",
+          },
+        );
         return;
       }
 
@@ -135,19 +148,24 @@ const SettingsForm = ({
         );
 
         if (!slackResult.success) {
-          setMessage(slackResult.error || "Slack設定の保存に失敗しました。");
+          enqueueSnackbar(
+            slackResult.error || "Slack設定の保存に失敗しました。",
+            {
+              variant: "error",
+            },
+          );
           return;
         }
       }
 
       // 全て成功したら、保存済みの表示名を更新する（入力中だけでは反映しない）
       setSavedNickName(trimmedNickName);
-      setMessage("保存しました。");
+      enqueueSnackbar("保存しました。", { variant: "success" });
       setSelectedFile(null);
       router.refresh();
     } catch (error) {
       console.error(error);
-      setMessage("保存中にエラーが発生しました。");
+      enqueueSnackbar("保存中にエラーが発生しました。", { variant: "error" });
     } finally {
       saveLockRef.current = false;
       setSaving(false);
@@ -164,7 +182,9 @@ const SettingsForm = ({
     try {
       const result = await banSelfAccount();
       if (!result.success) {
-        setMessage(result.error || "アカウント削除に失敗しました。");
+        enqueueSnackbar(result.error || "アカウント削除に失敗しました。", {
+          variant: "error",
+        });
         return;
       }
 
@@ -173,7 +193,9 @@ const SettingsForm = ({
       router.push("/");
     } catch (error) {
       console.error(error);
-      setMessage("アカウント削除中にエラーが発生しました。");
+      enqueueSnackbar("アカウント削除中にエラーが発生しました。", {
+        variant: "error",
+      });
     } finally {
       deleteLockRef.current = false;
       setDeleting(false);
@@ -308,13 +330,6 @@ const SettingsForm = ({
         loading={deleting}
         onClose={() => setDeleteDialogOpen(false)}
         onConfirm={handleDeleteAccount}
-      />
-
-      <Snackbar
-        open={Boolean(message)}
-        autoHideDuration={2500}
-        onClose={() => setMessage(null)}
-        message={message}
       />
     </Stack>
   );
