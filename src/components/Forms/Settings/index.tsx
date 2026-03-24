@@ -5,12 +5,14 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
-import Snackbar from "@mui/material/Snackbar";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
 import DeleteAccountButton from "@/components/Buttons/Settings";
 import DeleteAccountDialog from "@/components/Dialogs/Settings";
@@ -55,7 +57,11 @@ const SettingsForm = ({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [isDisplayName, setIsDisplayName] = useState(
+    initialSlackDisplayName ? "1" : "0",
+  );
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [previewUrl, setPreviewUrl] = useState(initialImage || "");
 
@@ -74,8 +80,9 @@ const SettingsForm = ({
   const handleFileSelect = (file: File) => {
     if (!ALLOWED_MIME_TYPES.has(file.type)) {
       setSelectedFile(null);
-      setMessage(
+      enqueueSnackbar(
         "対応していない画像形式です。JPEG/PNG/WebP/GIFを選択してください。",
+        { variant: "error" },
       );
       return;
     }
@@ -95,7 +102,10 @@ const SettingsForm = ({
       if (selectedFile) {
         const uploaded = await uploadProfileImage(selectedFile);
         if (uploaded.error || !uploaded.imageUrl) {
-          setMessage(uploaded.error || "画像アップロードに失敗しました。");
+          enqueueSnackbar(
+            uploaded.error || "画像アップロードに失敗しました。",
+            { variant: "error" },
+          );
           return;
         }
         imageUrl = uploaded.imageUrl;
@@ -108,7 +118,10 @@ const SettingsForm = ({
         });
 
         if (result.error) {
-          setMessage("保存に失敗しました。時間をおいて再度お試しください。");
+          enqueueSnackbar(
+            "保存に失敗しました。時間をおいて再度お試しください。",
+            { variant: "error" },
+          );
           return;
         }
       }
@@ -117,7 +130,12 @@ const SettingsForm = ({
       const trimmedNickName = nickName.trim();
       const nickNameResult = await updateNickName(trimmedNickName);
       if (!nickNameResult.success) {
-        setMessage(nickNameResult.error || "表示名の保存に失敗しました。");
+        enqueueSnackbar(
+          nickNameResult.error || "表示名の保存に失敗しました。",
+          {
+            variant: "error",
+          },
+        );
         return;
       }
 
@@ -126,23 +144,28 @@ const SettingsForm = ({
         // Slack登録済みの場合のみ実行
         const slackResult = await updateSlacksName(
           slackName,
-          initialSlackDisplayName,
+          isDisplayName === "1",
         );
 
         if (!slackResult.success) {
-          setMessage(slackResult.error || "Slack設定の保存に失敗しました。");
+          enqueueSnackbar(
+            slackResult.error || "Slack設定の保存に失敗しました。",
+            {
+              variant: "error",
+            },
+          );
           return;
         }
       }
 
       // 全て成功したら、保存済みの表示名を更新する（入力中だけでは反映しない）
       setSavedNickName(trimmedNickName);
-      setMessage("保存しました。");
+      enqueueSnackbar("保存しました。", { variant: "success" });
       setSelectedFile(null);
       router.refresh();
     } catch (error) {
       console.error(error);
-      setMessage("保存中にエラーが発生しました。");
+      enqueueSnackbar("保存中にエラーが発生しました。", { variant: "error" });
     } finally {
       saveLockRef.current = false;
       setSaving(false);
@@ -159,7 +182,9 @@ const SettingsForm = ({
     try {
       const result = await banSelfAccount();
       if (!result.success) {
-        setMessage(result.error || "アカウント削除に失敗しました。");
+        enqueueSnackbar(result.error || "アカウント削除に失敗しました。", {
+          variant: "error",
+        });
         return;
       }
 
@@ -168,7 +193,9 @@ const SettingsForm = ({
       router.push("/");
     } catch (error) {
       console.error(error);
-      setMessage("アカウント削除中にエラーが発生しました。");
+      enqueueSnackbar("アカウント削除中にエラーが発生しました。", {
+        variant: "error",
+      });
     } finally {
       deleteLockRef.current = false;
       setDeleting(false);
@@ -200,6 +227,7 @@ const SettingsForm = ({
           helperText="Slack名とは別です。"
           sx={{ mb: 2 }}
         />
+        <Divider sx={{ mb: 4 }} />
         <TextField
           label="Slackのアカウント名"
           value={slackName}
@@ -211,6 +239,35 @@ const SettingsForm = ({
         <Typography variant="caption" color="textSecondary" className="mb-2">
           Slackのアカウント名は、応募するときに入力したSlackの氏名, 表示名です。
         </Typography>
+        {initialSlackName && (
+          <Select
+            sx={{ mt: 2 }}
+            defaultValue={"0"}
+            name="is_display_name"
+            value={isDisplayName}
+            onChange={(e) => setIsDisplayName(e.target.value as string)}
+            fullWidth
+          >
+            <MenuItem value="1">
+              <Typography>表示名</Typography>
+              <Typography
+                variant="caption"
+                sx={{ ml: 1, color: "text.secondary" }}
+              >
+                Slackのプロフィールの表示名です。
+              </Typography>
+            </MenuItem>
+            <MenuItem value="0">
+              <Typography>氏名</Typography>
+              <Typography
+                variant="caption"
+                sx={{ ml: 1, color: "text.secondary" }}
+              >
+                Slackのプロフィールの氏名欄です。表示名が他の方と被る可能性がある方はこちらを選択してください。
+              </Typography>
+            </MenuItem>
+          </Select>
+        )}
       </Box>
 
       <Typography variant="h3" gutterBottom>
@@ -273,13 +330,6 @@ const SettingsForm = ({
         loading={deleting}
         onClose={() => setDeleteDialogOpen(false)}
         onConfirm={handleDeleteAccount}
-      />
-
-      <Snackbar
-        open={Boolean(message)}
-        autoHideDuration={2500}
-        onClose={() => setMessage(null)}
-        message={message}
       />
     </Stack>
   );
