@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import NameSettingGuard from "@/components/Dialogs/NameSettingGuard";
+import Header from "@/components/Header";
+import MUIWrapper from "@/components/MUIWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +35,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <MUIWrapper>
+          <Header />
+          {children}
+        </MUIWrapper>
         <NameSettingGuard />
       </body>
       <GoogleTagManager gtmId={"GTM-MR2QPRG5"} />

@@ -29,22 +29,24 @@ export default async function SettingsPage() {
   });
 
   return (
-    <div>
-      <Typography variant="h2" gutterBottom>
-        個人設定
-      </Typography>
-      <Typography variant="subtitle1" className="text-gray-600" gutterBottom>
-        アカウント情報を編集します。
-      </Typography>
-      <div className="mt-6">
-        <SettingsForm
-          initialName={user.name ?? ""}
-          initialNickName={user.nickName ?? ""}
-          initialImage={user.image ?? null}
-          initialSlackName={slacks?.name ?? ""}
-          initialSlackDisplayName={slacks?.isDisplayname ?? false}
-        />
+    <main className="max-w-5xl px-6 mx-auto mt-12 grid place-content-center">
+      <div>
+        <Typography variant="h2" gutterBottom>
+          個人設定
+        </Typography>
+        <Typography variant="subtitle1" className="text-gray-600" gutterBottom>
+          アカウント情報を編集します。
+        </Typography>
+        <div className="mt-6">
+          <SettingsForm
+            initialName={user.name ?? ""}
+            initialNickName={user.nickName ?? ""}
+            initialImage={user.image ?? null}
+            initialSlackName={slacks?.name ?? ""}
+            initialSlackDisplayName={slacks?.isDisplayname ?? false}
+          />
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
