@@ -47,7 +47,7 @@ export default function ResolvedPostsPage({ searchParams }: Props) {
 
   return (
     <>
-      <Grid container spacing={2} justifyContent="center">
+      <Grid container spacing={2} justifyContent="center" columns={3}>
         {posts.map((post, index) => (
           <PostCard
             post={post}
