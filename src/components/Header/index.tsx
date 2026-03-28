@@ -37,7 +37,7 @@ export default function ButtonAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="inherit">
+      <AppBar color="inherit" variant="elevation" elevation={1}>
         <Toolbar>
           <Link href="/" className="no-underline text-inherit grow">
             <Image src="/img/logotype.png" alt="Logo" width={180} height={50} />

@@ -1,7 +1,6 @@
 import { Alert, Link as MUILink } from "@mui/material";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import Link from "next/link";
 import PostButton from "@/components/Buttons/Post";
 import { auth } from "@/lib/auth";
 
@@ -210,21 +209,6 @@ export default async function SalesAppCampainPage() {
           </p>
         </div>
       </main>
-      <footer>
-        <p className="mt-12 text-xs text-zinc-400 text-center">
-          &copy; 2026 Magnezoo 製作委員会 All rights reserved. Server provided
-          by{" "}
-          <Link
-            href="https://uniproject.jp"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:opacity-80 transition-opacity"
-          >
-            デジタル創作サークルUniProject
-          </Link>
-          .
-        </p>
-      </footer>
     </div>
   );
 }

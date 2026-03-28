@@ -29,7 +29,7 @@ export default async function SettingsPage() {
   });
 
   return (
-    <main className="max-w-5xl px-6 mx-auto mt-12 grid place-content-center">
+    <main className="max-w-5xl px-6 mx-auto mt-12 grid place-content-center py-10">
       <div>
         <Typography variant="h2" gutterBottom>
           個人設定
