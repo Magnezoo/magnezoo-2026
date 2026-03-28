@@ -1,20 +1,8 @@
-import { GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import NameSettingGuard from "@/components/Dialogs/NameSettingGuard";
 import Header from "@/components/Header";
 import MUIWrapper from "@/components/MUIWrapper";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: {
@@ -31,17 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <MUIWrapper>
-          <Header />
-          {children}
-        </MUIWrapper>
-        <NameSettingGuard />
-      </body>
-      <GoogleTagManager gtmId={"GTM-MR2QPRG5"} />
-    </html>
+    <MUIWrapper>
+      <Header />
+      {children}
+      <NameSettingGuard />
+    </MUIWrapper>
   );
 }
