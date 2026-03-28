@@ -22,12 +22,13 @@ export default function PostImageField({
   }, [image, existingImageUrl]);
 
   useEffect(() => {
+    // image から生成された object URL のみをクリーンアップ
+    if (!image) return;
+    const objectUrl = URL.createObjectURL(image);
     return () => {
-      if (previewUrl && previewUrl !== existingImageUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
+      URL.revokeObjectURL(objectUrl);
     };
-  }, [previewUrl, existingImageUrl]);
+  }, [image]);
 
   return (
     <Box>

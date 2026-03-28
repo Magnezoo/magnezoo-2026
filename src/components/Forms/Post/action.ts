@@ -124,14 +124,27 @@ export const updatePost = async ({
     let imageUrl: string | undefined;
 
     if (image) {
+      // file-typeで拡張子を判定し、パストラバーサル等のリスクを排除
+      const { fileTypeFromBuffer } = await import("file-type");
+      const MIME_TO_EXT: Record<string, string> = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/gif": "gif",
+        "image/webp": "webp",
+      };
       const dir = `${process.cwd()}/public/img/posts`;
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
-      const filename = `${Date.now()}-${image.name}`;
-      const filepath = `${dir}/${filename}`;
-
       const buffer = Buffer.from(await image.arrayBuffer());
+      const fileType = await fileTypeFromBuffer(buffer);
+      if (!fileType || !MIME_TO_EXT[fileType.mime]) {
+        console.error("Invalid image type:", fileType?.mime);
+        return false;
+      }
+      const ext = MIME_TO_EXT[fileType.mime];
+      const filename = `${Date.now()}.${ext}`;
+      const filepath = `${dir}/${filename}`;
       fs.writeFileSync(filepath, buffer);
       imageUrl = `/api/post_images/${filename}`;
 
