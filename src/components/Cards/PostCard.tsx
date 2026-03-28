@@ -27,6 +27,10 @@ export default function PostCard({
   currentUserId: string | null;
   index?: number;
 }) {
+  const firstSlack =
+    post.author.slacks && post.author.slacks.length > 0
+      ? post.author.slacks[0]
+      : undefined;
   const windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
   const windowSizePrefix =
     windowWidth >= 1200 ? "large" : windowWidth >= 900 ? "medium" : "small";
@@ -93,15 +97,13 @@ export default function PostCard({
                   }}
                 >
                   {post.author.nickName?.charAt(0) ||
-                    (post.author.slacks[0].isDisplayname
-                      ? post.author.slacks[0].name.charAt(0)
+                    (firstSlack?.isDisplayname
+                      ? firstSlack.name.charAt(0)
                       : null)}
                 </Avatar>
                 <Typography variant="subtitle2" color="text.secondary">
                   {post.author.nickName ||
-                    (post.author.slacks[0].isDisplayname
-                      ? post.author.slacks[0].name
-                      : "匿名")}
+                    (firstSlack?.isDisplayname ? firstSlack.name : "匿名")}
                 </Typography>
               </Stack>
               <Typography variant="body2" color="text.secondary">
@@ -114,6 +116,7 @@ export default function PostCard({
               postId={post.id}
               currentVoteCount={post.votes.length}
               isVoted={post.votes.some((vote) => vote.userId === currentUserId)}
+              currentUserId={currentUserId}
               disabled={!currentUserId}
             />
           </CardActions>

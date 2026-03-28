@@ -19,31 +19,30 @@ export default function ResolvedPostsPage({ searchParams }: Props) {
   const session = use(auth.api.getSession({ headers: headerStore }));
   const currentUser = session?.user;
 
-  const [count, posts] = use(
-    Promise.all([
-      prisma.post.count(),
-      prisma.post.findMany({
-        include: {
-          author: {
-            include: {
-              slacks: {
-                select: { name: true, isDisplayname: true },
-              },
-            },
-          },
-          votes: {
-            select: { userId: true },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-        take: pageSize,
-        skip: (page - 1) * pageSize,
-      }),
-    ]),
-  );
+  const count = use(prisma.post.count());
 
   const totalPages = Math.max(1, Math.ceil(count / pageSize));
   const currentPage = Math.min(page, totalPages);
+
+  const posts = use(
+    prisma.post.findMany({
+      include: {
+        author: {
+          include: {
+            slacks: {
+              select: { name: true, isDisplayname: true },
+            },
+          },
+        },
+        votes: {
+          select: { userId: true },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      take: pageSize,
+      skip: (currentPage - 1) * pageSize,
+    }),
+  );
 
   return (
     <>

@@ -2,18 +2,21 @@
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { Avatar, Stack, Typography } from "@mui/material";
+import { Avatar, Stack, Tooltip, Typography } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import { useState } from "react";
+import { toggleVote } from "./action";
 
 export default function VoteButton({
   postId,
   currentVoteCount,
+  currentUserId,
   isVoted,
   disabled = false,
 }: {
   postId: string;
   currentVoteCount: number;
+  currentUserId: string | null;
   isVoted: boolean;
   disabled?: boolean;
 }) {
@@ -22,32 +25,50 @@ export default function VoteButton({
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      <button
-        type="button"
-        onClick={() => {
-          const newVoteCount = isVotedState ? voteCount - 1 : voteCount + 1;
-          setVoteCount(newVoteCount);
-          setIsVotedState(!isVotedState);
-        }}
-        disabled={disabled}
-        className={"cursor-pointer"}
+      <Tooltip
+        title={
+          currentUserId
+            ? isVotedState
+              ? "いいねを取り消す"
+              : "いいねする"
+            : "いいねするにはログインが必要です"
+        }
+        placement="top"
       >
-        <Avatar
-          sx={{
-            bgcolor: "white",
-            border: "1px solid",
-            borderColor: "divider",
-            width: 32,
-            height: 32,
-          }}
+        <button
+          type="button"
+          onClick={
+            currentUserId
+              ? async () => {
+                  const newVoteCount = isVotedState
+                    ? voteCount - 1
+                    : voteCount + 1;
+                  await toggleVote({ postId, currentUserId });
+                  setVoteCount(newVoteCount);
+                  setIsVotedState(!isVotedState);
+                }
+              : undefined
+          }
+          disabled={disabled || !currentUserId}
+          className={"cursor-pointer"}
         >
-          {isVotedState ? (
-            <FavoriteIcon sx={{ color: pink[300] }} />
-          ) : (
-            <FavoriteBorderIcon color="disabled" />
-          )}
-        </Avatar>
-      </button>
+          <Avatar
+            sx={{
+              bgcolor: "white",
+              border: "1px solid",
+              borderColor: "divider",
+              width: 32,
+              height: 32,
+            }}
+          >
+            {isVotedState ? (
+              <FavoriteIcon sx={{ color: pink[300] }} />
+            ) : (
+              <FavoriteBorderIcon color="disabled" />
+            )}
+          </Avatar>
+        </button>
+      </Tooltip>
       <Typography variant="body2" color="gray">
         {voteCount} いいね
       </Typography>

@@ -8,9 +8,11 @@ import {
 export default function Pagination({
   totalPages,
   currentPage,
+  currentQueries = {},
 }: {
   totalPages: number;
   currentPage: number;
+  currentQueries?: { [key: string]: string };
 }) {
   return (
     <MUIPagination
@@ -20,7 +22,7 @@ export default function Pagination({
       renderItem={(item) => (
         <PaginationItem
           component={Link}
-          href={`?page=${item.page}`}
+          href={`?page=${item.page}${currentQueries && `&${new URLSearchParams(currentQueries).toString()}`}`}
           {...item}
         />
       )}
