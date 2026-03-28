@@ -43,7 +43,7 @@ export default function VoteButton({
                   const newVoteCount = isVotedState
                     ? voteCount - 1
                     : voteCount + 1;
-                  await toggleVote({ postId, currentUserId });
+                  await toggleVote({ postId });
                   setVoteCount(newVoteCount);
                   setIsVotedState(!isVotedState);
                 }
