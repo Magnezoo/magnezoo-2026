@@ -74,7 +74,7 @@ export default function UsersDatagrid({
               key={"view-detail"}
               icon={<VisibilityIcon />}
               label="View"
-              onClick={() => router.push(`/dashboard/users/${id}`)}
+              onClick={() => router.push(`/admin/users/${id}`)}
             />,
           );
           if (canDelete) {
