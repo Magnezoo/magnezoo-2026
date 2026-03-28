@@ -132,64 +132,62 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
           </Tooltip>
         </Stack>
 
-        <form onSubmit={handleSubmit}>
-          <Stack spacing={4}>
-            <PostTitleDescFields
-              title={title}
-              setTitle={setTitle}
-              description={description}
-              setDescription={setDescription}
+        <Stack spacing={4} component={"form"} onSubmit={handleSubmit}>
+          <PostTitleDescFields
+            title={title}
+            setTitle={setTitle}
+            description={description}
+            setDescription={setDescription}
+            disabled={submitting}
+          />
+
+          <PostImageField
+            image={image}
+            setImage={setImage}
+            existingImageUrl={post.imageUrl}
+            disabled={submitting}
+          />
+
+          <PostTagField
+            availableTags={availableTags}
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            disabled={submitting}
+          />
+
+          <PostPublicationFields
+            isSalesApplication={post.isSalesApplication}
+            salesAgreementChecked={salesAgreementChecked}
+            setSalesAgreementChecked={setSalesAgreementChecked}
+            tosChecked={tosChecked}
+            setTosChecked={setTosChecked}
+            disabled={true}
+          />
+
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              justifyContent: "flex-end",
+              mt: 2,
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={() => router.back()}
               disabled={submitting}
-            />
-
-            <PostImageField
-              image={image}
-              setImage={setImage}
-              existingImageUrl={post.imageUrl}
-              disabled={submitting}
-            />
-
-            <PostTagField
-              availableTags={availableTags}
-              selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
-              disabled={submitting}
-            />
-
-            <PostPublicationFields
-              isSalesApplication={post.isSalesApplication}
-              salesAgreementChecked={salesAgreementChecked}
-              setSalesAgreementChecked={setSalesAgreementChecked}
-              tosChecked={tosChecked}
-              setTosChecked={setTosChecked}
-              disabled={true}
-            />
-
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                justifyContent: "flex-end",
-                mt: 2,
-              }}
             >
-              <Button
-                variant="outlined"
-                onClick={() => router.back()}
-                disabled={submitting}
-              >
-                キャンセル
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={submitting || !tosChecked}
-              >
-                {submitting ? "保存中..." : "変更を保存"}
-              </Button>
-            </Box>
-          </Stack>
-        </form>
+              キャンセル
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={submitting || !tosChecked}
+            >
+              {submitting ? "保存中..." : "変更を保存"}
+            </Button>
+          </Box>
+        </Stack>
       </Paper>
 
       <Backdrop open={submitting} sx={{ zIndex: 1300 }}>
