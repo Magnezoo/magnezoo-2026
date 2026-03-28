@@ -10,7 +10,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -39,11 +39,9 @@ export default function ButtonAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="inherit">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link href="/" className="no-underline text-inherit">
-              ここにロゴが入る
-            </Link>
-          </Typography>
+          <Link href="/" className="no-underline text-inherit grow">
+            <Image src="/img/logotype.png" alt="Logo" width={180} height={50} />
+          </Link>
           <IconButton
             size="large"
             edge="end"
