@@ -13,17 +13,21 @@ import Image from "next/image";
 import type { Post, Slacks, User } from "@/generated/prisma/client";
 import VoteButton from "../Buttons/Vote";
 
+export interface UserWithSlacks extends User {
+  slacks: Omit<Slacks, "userId" | "id" | "createdAt" | "updatedAt">[];
+}
+
+export interface PostWithAutherAndVotes extends Post {
+  author: UserWithSlacks;
+  votes: { userId: string }[];
+}
+
 export default function PostCard({
   post,
   currentUserId,
   index,
 }: {
-  post: {
-    author: User & {
-      slacks: Omit<Slacks, "userId" | "id" | "createdAt" | "updatedAt">[];
-    };
-    votes: { userId: string }[];
-  } & Post;
+  post: PostWithAutherAndVotes;
   currentUserId: string | null;
   index?: number;
 }) {

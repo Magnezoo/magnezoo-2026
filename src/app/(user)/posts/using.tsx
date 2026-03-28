@@ -1,8 +1,7 @@
-import { Grid } from "@mui/material";
 import { headers } from "next/headers";
 import { use } from "react";
 import Pagination from "@/components/Buttons/Pagenation";
-import PostCard from "@/components/Cards/PostCard";
+import PostsList from "@/components/Lists/Post";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
@@ -46,16 +45,7 @@ export default function ResolvedPostsPage({ searchParams }: Props) {
 
   return (
     <>
-      <Grid container spacing={2} justifyContent="center" columns={3}>
-        {posts.map((post, index) => (
-          <PostCard
-            post={post}
-            key={post.id}
-            index={index}
-            currentUserId={currentUser?.id || null}
-          />
-        ))}
-      </Grid>
+      <PostsList posts={posts} currentUserId={currentUser?.id || null} />
 
       <Pagination totalPages={totalPages} currentPage={currentPage} />
     </>
