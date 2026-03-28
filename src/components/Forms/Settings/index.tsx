@@ -14,7 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
-import DeleteAccountButton from "@/components/Buttons/Settings";
+import DeleteAccountButton from "@/components/Buttons/Settings/DeleteAccount";
 import DeleteAccountDialog from "@/components/Dialogs/Settings";
 import { authClient } from "@/lib/auth-client";
 import {
