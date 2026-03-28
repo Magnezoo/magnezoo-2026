@@ -20,8 +20,8 @@ import PostImageField from "@/components/admin/PostEditor/PostImageField";
 import PostPublicationFields from "@/components/admin/PostEditor/PostPublicationFields";
 import PostTagField from "@/components/admin/PostEditor/PostTagField";
 import PostTitleDescFields from "@/components/admin/PostEditor/PostTitleDescFields";
-import { authClient } from "@/lib/auth-client";
 import { getTags, updatePost } from "@/components/Forms/Post/action";
+import { authClient } from "@/lib/auth-client";
 
 type Tag = { id: string; name: string };
 type PostWithTags = {
@@ -60,7 +60,9 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
 
     const { data: session } = await authClient.getSession();
     if (!session?.user.id) {
-      enqueueSnackbar("ログインセッションが見つかりません", { variant: "error" });
+      enqueueSnackbar("ログインセッションが見つかりません", {
+        variant: "error",
+      });
       return;
     }
 

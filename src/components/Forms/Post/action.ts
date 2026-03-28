@@ -115,7 +115,9 @@ export const updatePost = async ({
     const isAuthor = existingPost.authorId === userId;
 
     if (!isAdmin && !isAuthor) {
-      console.warn(`Unauthorized update attempt by user ${userId} on post ${id}`);
+      console.warn(
+        `Unauthorized update attempt by user ${userId} on post ${id}`,
+      );
       return false;
     }
 
