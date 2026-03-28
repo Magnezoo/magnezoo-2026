@@ -16,11 +16,11 @@ import {
 import { useRouter } from "next/navigation";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import { getTags, updatePost } from "@/components/Forms/Post/action";
-import PostTitleDescFields from "@/components/admin/PostEditor/PostTitleDescFields";
 import PostImageField from "@/components/admin/PostEditor/PostImageField";
-import PostTagField from "@/components/admin/PostEditor/PostTagField";
 import PostPublicationFields from "@/components/admin/PostEditor/PostPublicationFields";
+import PostTagField from "@/components/admin/PostEditor/PostTagField";
+import PostTitleDescFields from "@/components/admin/PostEditor/PostTitleDescFields";
+import { getTags, updatePost } from "@/components/Forms/Post/action";
 
 type Tag = { id: string; name: string };
 type PostWithTags = {
@@ -146,7 +146,14 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
               disabled={submitting}
             />
 
-            <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", mt: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                justifyContent: "flex-end",
+                mt: 2,
+              }}
+            >
               <Button
                 variant="outlined"
                 onClick={() => router.back()}

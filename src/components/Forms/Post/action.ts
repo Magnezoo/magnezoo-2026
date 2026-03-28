@@ -91,7 +91,7 @@ export const updatePost = async ({
   tagNames?: string[];
 }) => {
   try {
-    let imageUrl: string | undefined = undefined;
+    let imageUrl: string | undefined;
 
     if (image) {
       const dir = `${process.cwd()}/public/img/posts`;

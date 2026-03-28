@@ -2,7 +2,14 @@
 
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import { Autocomplete, Box, Checkbox, Chip, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Checkbox,
+  Chip,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
@@ -36,7 +43,8 @@ export default function PostTagField({
       if (!currentName) return acc;
 
       const isDuplicate = acc.some(
-        (item) => getTagName(item).trim().toLowerCase() === currentName.toLowerCase(),
+        (item) =>
+          getTagName(item).trim().toLowerCase() === currentName.toLowerCase(),
       );
 
       if (!isDuplicate) {
@@ -101,7 +109,8 @@ export default function PostTagField({
           <TextField {...params} label="タグ" placeholder="5つまで追加可能" />
         )}
         renderOption={(props, option, { selected }) => {
-          const { key, ...rest } = props as React.HTMLAttributes<HTMLLIElement> & { key: React.Key };
+          const { key, ...rest } =
+            props as React.HTMLAttributes<HTMLLIElement> & { key: React.Key };
           return (
             <li key={key} {...rest}>
               <Checkbox
@@ -117,7 +126,14 @@ export default function PostTagField({
         renderValue={(value, getItemProps) =>
           value.map((option, index) => {
             const { key, ...itemProps } = getItemProps({ index });
-            return <Chip key={key} label={getTagName(option)} size="small" {...itemProps} />;
+            return (
+              <Chip
+                key={key}
+                label={getTagName(option)}
+                size="small"
+                {...itemProps}
+              />
+            );
           })
         }
         disabled={disabled}
