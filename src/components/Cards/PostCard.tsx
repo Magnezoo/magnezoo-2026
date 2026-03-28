@@ -72,7 +72,7 @@ export default function PostCard({
                     : null)}
               </Avatar>
               <Typography variant="subtitle2" color="text.secondary">
-                {post.author.name ||
+                {post.author.nickName ||
                   (post.author.slacks[0].isDisplayname
                     ? post.author.slacks[0].name
                     : "匿名")}
