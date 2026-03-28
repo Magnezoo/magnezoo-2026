@@ -72,7 +72,6 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
       });
 
       if (ok) {
-        enqueueSnackbar("投稿を更新しました", { variant: "success" });
         router.push(`/admin/posts/${post.id}`);
         router.refresh();
       } else {
