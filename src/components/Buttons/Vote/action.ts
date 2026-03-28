@@ -4,36 +4,41 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-export const toggleVote = async ({ postId }: { postId: string }) => {
+export const toggleVote = async ({
+  postId,
+  newState,
+}: {
+  postId: string;
+  newState: boolean;
+}) => {
   const session = await auth.api.getSession({ headers: await headers() });
   const userId = session?.user.id;
   if (!userId) {
     throw new Error("User not authenticated");
   }
   try {
-    // 既に投票しているか確認
-    const existingVote = await prisma.vote.findUnique({
-      where: {
-        userId_postId: {
-          userId,
-          postId,
-        },
-      },
-    });
+    // トランザクションで投票の切り替えとカウントの更新を行う
+    const result = await prisma.$transaction(
+      async (tx) => {
+        if (newState) {
+          // いいねを追加
+          await tx.vote.upsert({
+            where: { userId_postId: { postId, userId } },
+            update: {},
+            create: { postId, userId },
+          });
+        } else {
+          // いいねを削除
+          await tx.vote.deleteMany({
+            where: { postId, userId },
+          });
+        }
 
-    if (existingVote) {
-      // 投票を削除（いいねを取り消す）
-      await prisma.vote.delete({
-        where: { userId_postId: { userId, postId } },
-      });
-      return { liked: false };
-    } else {
-      // 投票を作成（いいねする）
-      await prisma.vote.create({
-        data: { postId, userId },
-      });
-      return { liked: true };
-    }
+        return newState;
+      },
+      { timeout: 10000 },
+    );
+    return result;
   } catch (error) {
     console.error("Error toggling vote:", error);
     throw new Error("Failed to toggle vote");

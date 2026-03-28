@@ -40,12 +40,12 @@ export default function VoteButton({
           onClick={
             currentUserId
               ? async () => {
-                  const newVoteCount = isVotedState
-                    ? voteCount - 1
-                    : voteCount + 1;
-                  await toggleVote({ postId });
-                  setVoteCount(newVoteCount);
-                  setIsVotedState(!isVotedState);
+                  const result = await toggleVote({
+                    postId,
+                    newState: !isVotedState,
+                  });
+                  setIsVotedState(result);
+                  setVoteCount((voteCount) => voteCount + (result ? 1 : -1));
                 }
               : undefined
           }
