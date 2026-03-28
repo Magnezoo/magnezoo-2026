@@ -74,3 +74,70 @@ export const createPost = async ({
     return false;
   }
 };
+
+export const updatePost = async ({
+  id,
+  title,
+  content,
+  image,
+  isSalesApplication,
+  tagNames = [],
+}: {
+  id: string;
+  title: string;
+  content: string;
+  image?: File | null;
+  isSalesApplication: boolean;
+  tagNames?: string[];
+}) => {
+  try {
+    let imageUrl: string | undefined = undefined;
+
+    if (image) {
+      const dir = `${process.cwd()}/public/img/posts`;
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      const filename = `${Date.now()}-${image.name}`;
+      const filepath = `${dir}/${filename}`;
+
+      const buffer = Buffer.from(await image.arrayBuffer());
+      fs.writeFileSync(filepath, buffer);
+      imageUrl = `/api/post_images/${filename}`;
+    }
+
+    const validTagNames = [
+      ...new Set(tagNames.map((n) => n.trim().slice(0, 32)).filter(Boolean)),
+    ].slice(0, MAX_TAGS);
+
+    await prisma.post.update({
+      where: { id },
+      data: {
+        title,
+        description: content,
+        isSalesApplication,
+        ...(imageUrl ? { imageUrl } : {}),
+        tags: {
+          deleteMany: {},
+          create: validTagNames.map((name) => ({
+            tag: {
+              connectOrCreate: {
+                where: { name },
+                create: { name },
+              },
+            },
+          })),
+        },
+      },
+    });
+
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath(`/admin/posts/${id}`);
+    revalidatePath(`/admin/posts`);
+
+    return true;
+  } catch (error) {
+    console.error("Error updating post:", error);
+    return false;
+  }
+};

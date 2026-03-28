@@ -18,7 +18,7 @@ export default async function PostsPage({
   const user = await prisma.user.findUnique({ where: { id: post.authorId } });
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} maxWidth="md" mx="auto">
       <Typography variant="h4" component="h1">
         {post.title}
       </Typography>

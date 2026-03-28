@@ -1,9 +1,9 @@
 "use client";
 
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SaveIcon from "@mui/icons-material/Save";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Button, darken } from "@mui/material";
 import {
   DataGrid,
@@ -68,9 +68,9 @@ export default function PostsDatagrid({
           actions.push(
             <GridActionsCellItem
               key={"view-detail"}
-              icon={<VisibilityIcon />}
-              label="View"
-              onClick={() => router.push(`/admin/posts/${id}`)}
+              icon={<EditIcon />}
+              label="Edit"
+              onClick={() => router.push(`/admin/posts/${id}/edit`)}
             />,
           );
           if (canDelete) {
