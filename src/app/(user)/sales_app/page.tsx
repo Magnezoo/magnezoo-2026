@@ -1,4 +1,4 @@
-import { Link as MUILink } from "@mui/material";
+import { Alert, Link as MUILink } from "@mui/material";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import Link from "next/link";
@@ -78,6 +78,27 @@ export default async function SalesAppCampainPage() {
             </span>
           </p>
         </Section>
+
+        <Alert
+          severity={"warning"}
+          sx={{
+            backgroundColor: "white",
+            border: "2px solid #E48B00",
+            color: "black",
+            fontWeight: "bold",
+            margin: "20px auto",
+            fontSize: "1rem",
+            display: "flex",
+            flexDirection: "column",
+          }}
+          icon={false}
+        >
+          応募期間は2026年3月27日(金) 23:59をもちまして終了いたしました。
+          <br />
+          たくさんのご応募誠にありがとうございました！
+          <br />
+          選定された方については、4/10(金)までに順次ご連絡いたしますので、今しばらくお待ちください。
+        </Alert>
 
         <Section title="写真の応募方法">
           <p className="mb-4">
