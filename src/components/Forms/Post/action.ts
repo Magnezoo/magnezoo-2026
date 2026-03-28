@@ -2,6 +2,7 @@
 
 import fs from "node:fs";
 import { revalidatePath } from "next/cache";
+import { ulid } from "ulid";
 import prisma from "@/lib/prisma";
 
 const MAX_TAGS = 5;
@@ -143,7 +144,7 @@ export const updatePost = async ({
         return false;
       }
       const ext = MIME_TO_EXT[fileType.mime];
-      const filename = `${Date.now()}.${ext}`;
+      const filename = `${Date.now()}-${ulid()}.${ext}`;
       const filepath = `${dir}/${filename}`;
       fs.writeFileSync(filepath, buffer);
       imageUrl = `/api/post_images/${filename}`;

@@ -4,6 +4,7 @@ import fs from "node:fs";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { ulid } from "ulid";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_MIME_TYPES = new Map<string, string>([
@@ -66,7 +67,7 @@ export const uploadProfileImage = async (
 
     // 拡張子はサーバー側で確定（MIME タイプから取得）
     const extension = ALLOWED_MIME_TYPES.get(image.type);
-    const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.${extension}`;
+    const filename = `${Date.now()}-${ulid()}.${extension}`;
     const filepath = `${dir}/${filename}`;
 
     fs.writeFileSync(filepath, buffer);

@@ -32,7 +32,8 @@
     "react-dom": "^19.2.4",
     "remark-gfm": "^4.0.1",
     "remark-toc": "^9.0.0",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "ulid": "^3.0.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.9",
