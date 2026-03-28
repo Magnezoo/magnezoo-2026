@@ -174,7 +174,7 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
       </Paper>
 
       <Backdrop open={submitting} sx={{ zIndex: 1300 }}>
-        <Stack alignItems="center" spacing={2}>
+        <Stack alignItems="center" spacing={2} color="#fff">
           <CircularProgress color="inherit" />
           <Typography>保存中…</Typography>
         </Stack>
