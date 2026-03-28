@@ -1,3 +1,4 @@
+"use client";
 import {
   Avatar,
   Box,
@@ -25,6 +26,25 @@ export default function PostCard({
   currentUserId: string | null;
   index?: number;
 }) {
+  const windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+  const windowSizePrefix =
+    windowWidth >= 1200 ? "large" : windowWidth >= 900 ? "medium" : "small";
+  const optimizedDescription =
+    windowSizePrefix === "small"
+      ? post.description.length > 30
+        ? `${post.description.slice(0, 30)}...`
+        : post.description
+      : post.description.length > 59
+        ? `${post.description.slice(0, 58)}...`
+        : post.description;
+  const optimizedTitle =
+    windowSizePrefix === "small"
+      ? post.title.length > 20
+        ? `${post.title.slice(0, 20)}...`
+        : post.title
+      : post.title.length > 34
+        ? `${post.title.slice(0, 33)}...`
+        : post.title;
   return (
     <Card
       variant="outlined"
@@ -32,6 +52,7 @@ export default function PostCard({
         width: "100%",
         maxWidth: 450,
         marginBottom: 2,
+        minHeight: { md: 455 },
       }}
     >
       <Box
@@ -57,7 +78,7 @@ export default function PostCard({
         />
         <CardContent sx={{ flexGrow: 1 }}>
           <Stack spacing={1}>
-            <Typography variant="h5">{post.title}</Typography>
+            <Typography variant="h5">{optimizedTitle}</Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Avatar
                 src={post.author.image || undefined}
@@ -79,9 +100,7 @@ export default function PostCard({
               </Typography>
             </Stack>
             <Typography variant="body2" color="text.secondary">
-              {post.description.length > 30
-                ? `${post.description.slice(0, 30)}...`
-                : post.description}
+              {optimizedDescription}
             </Typography>
           </Stack>
         </CardContent>
