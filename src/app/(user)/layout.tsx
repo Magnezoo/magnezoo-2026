@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "../globals.css";
+import { Stack } from "@mui/material";
+import Link from "next/link";
 import NameSettingGuard from "@/components/Dialogs/NameSettingGuard";
 import Header from "@/components/Header";
 import MUIWrapper from "@/components/MUIWrapper";
-import Link from "next/link";
-import { Stack } from "@mui/material";
 
 export const metadata: Metadata = {
   title: {
