@@ -2,7 +2,12 @@ import { Stack, Typography } from "@mui/material";
 import { Suspense } from "react";
 import ResolvedPostsPage from "./using";
 
-export default function PostsPage() {
+export default async function PostsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ page?: string; pageSize?: string }>;
+}) {
+  const resolvedSearchParams = await searchParams;
   return (
     <Stack
       component={"main"}
@@ -13,7 +18,8 @@ export default function PostsPage() {
     >
       <Typography variant="h3">投稿一覧</Typography>
       <Suspense fallback={<Typography>Loading...</Typography>}>
-        <ResolvedPostsPage />
+        {/* Pass searchParams so the server component can paginate */}
+        <ResolvedPostsPage searchParams={resolvedSearchParams} />
       </Suspense>
     </Stack>
   );
