@@ -131,7 +131,12 @@ export default function PostsDatagrid({
         width: 400,
         editable: canUpdate,
       },
-      { field: "imageUrl", headerName: "画像URL", width: 250 },
+      {
+        field: "imageUrl",
+        headerName: "画像URL",
+        width: 250,
+        editable: canUpdate,
+      },
       {
         field: "isSalesApplication",
         headerName: "販売申請",
