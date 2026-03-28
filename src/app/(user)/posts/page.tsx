@@ -17,6 +17,9 @@ export default async function PostsPage({
       py={10}
       px={2}
       spacing={5}
+      sx={{
+        backgroundColor: "#FFEECE",
+      }}
     >
       <Stack alignItems="center" spacing={1}>
         <Typography variant="h3">うちの子一覧</Typography>
