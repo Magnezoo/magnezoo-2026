@@ -30,7 +30,7 @@ export default function PostCard({
       variant="outlined"
       sx={{
         width: "100%",
-        maxWidth: 300,
+        maxWidth: 450,
         marginBottom: 2,
       }}
     >
