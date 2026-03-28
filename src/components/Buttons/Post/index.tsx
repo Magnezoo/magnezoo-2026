@@ -8,45 +8,59 @@ export default function PostButton({
   className,
   userId,
   path,
+  isSalesApplication = false,
+  disabled = false,
 }: {
   className?: string;
   userId?: string;
   path?: string;
+  isSalesApplication?: boolean;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      {userId ? (
-        <>
-          <PostForm
-            isSalesApplication
-            userId={userId}
-            open={open}
-            onClose={() => {
-              setOpen(false);
-            }}
-          />
+      {!disabled ? (
+        userId ? (
+          <>
+            <PostForm
+              isSalesApplication={isSalesApplication}
+              userId={userId}
+              open={open}
+              onClose={() => {
+                setOpen(false);
+              }}
+            />
+            <button
+              onClick={() => setOpen(true)}
+              className={`${className}`}
+              id="post_btn"
+              type="button"
+            >
+              投稿する
+            </button>
+          </>
+        ) : (
           <button
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              redirect(
+                `/signin${path ? `?redirect_to=${encodeURIComponent(path)}` : ""}`,
+              );
+            }}
             className={`${className}`}
-            id="post_btn"
             type="button"
           >
-            投稿する
+            ログインして投稿する
           </button>
-        </>
+        )
       ) : (
         <button
-          onClick={() => {
-            redirect(
-              `/signin${path ? `?redirect_to=${encodeURIComponent(path)}` : ""}`,
-            );
-          }}
-          className={`${className}`}
+          disabled
+          className={`${className} opacity-50 cursor-not-allowed`}
           type="button"
         >
-          ログインして投稿する
+          応募期間は終了しました
         </button>
       )}
     </>
