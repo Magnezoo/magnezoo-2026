@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 export default function PostImageField({
   image,
@@ -15,15 +15,19 @@ export default function PostImageField({
   disabled: boolean;
 }) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const previewUrl = image ? URL.createObjectURL(image) : existingImageUrl;
+
+  const previewUrl = useMemo(() => {
+    if (image) return URL.createObjectURL(image);
+    return existingImageUrl;
+  }, [image, existingImageUrl]);
 
   useEffect(() => {
     return () => {
-      if (image && previewUrl && !existingImageUrl) {
+      if (previewUrl && previewUrl !== existingImageUrl) {
         URL.revokeObjectURL(previewUrl);
       }
     };
-  }, [image, previewUrl, existingImageUrl]);
+  }, [previewUrl, existingImageUrl]);
 
   return (
     <Box>

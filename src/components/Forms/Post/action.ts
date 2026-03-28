@@ -1,6 +1,7 @@
 "use server";
 
 import fs from "node:fs";
+import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 
 const MAX_TAGS = 5;
@@ -68,6 +69,9 @@ export const createPost = async ({
       },
     });
 
+    revalidatePath("/admin/posts");
+    revalidatePath("/posts");
+
     return true;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -82,6 +86,7 @@ export const updatePost = async ({
   image,
   isSalesApplication,
   tagNames = [],
+  userId,
 }: {
   id: string;
   title: string;
@@ -89,8 +94,31 @@ export const updatePost = async ({
   image?: File | null;
   isSalesApplication: boolean;
   tagNames?: string[];
+  userId: string;
 }) => {
   try {
+    const [existingPost, user] = await Promise.all([
+      prisma.post.findUnique({
+        where: { id },
+        select: { authorId: true, imageUrl: true },
+      }),
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: { role: true },
+      }),
+    ]);
+
+    if (!existingPost || !user) return false;
+
+    // 認可チェック: 管理者であるか、投稿の所有者である場合のみ許可
+    const isAdmin = user.role === "admin";
+    const isAuthor = existingPost.authorId === userId;
+
+    if (!isAdmin && !isAuthor) {
+      console.warn(`Unauthorized update attempt by user ${userId} on post ${id}`);
+      return false;
+    }
+
     let imageUrl: string | undefined;
 
     if (image) {
@@ -104,6 +132,18 @@ export const updatePost = async ({
       const buffer = Buffer.from(await image.arrayBuffer());
       fs.writeFileSync(filepath, buffer);
       imageUrl = `/api/post_images/${filename}`;
+
+      // 古い画像ファイルを削除
+      if (existingPost?.imageUrl) {
+        const oldFilename = existingPost.imageUrl.replace(
+          "/api/post_images/",
+          "",
+        );
+        const oldFilepath = `${dir}/${oldFilename}`;
+        if (fs.existsSync(oldFilepath)) {
+          fs.unlinkSync(oldFilepath);
+        }
+      }
     }
 
     const validTagNames = [
@@ -131,9 +171,10 @@ export const updatePost = async ({
       },
     });
 
-    const { revalidatePath } = await import("next/cache");
     revalidatePath(`/admin/posts/${id}`);
-    revalidatePath(`/admin/posts`);
+    revalidatePath("/admin/posts");
+    revalidatePath(`/posts/${id}`);
+    revalidatePath("/posts");
 
     return true;
   } catch (error) {

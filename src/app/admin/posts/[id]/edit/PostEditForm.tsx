@@ -20,6 +20,7 @@ import PostImageField from "@/components/admin/PostEditor/PostImageField";
 import PostPublicationFields from "@/components/admin/PostEditor/PostPublicationFields";
 import PostTagField from "@/components/admin/PostEditor/PostTagField";
 import PostTitleDescFields from "@/components/admin/PostEditor/PostTitleDescFields";
+import { authClient } from "@/lib/auth-client";
 import { getTags, updatePost } from "@/components/Forms/Post/action";
 
 type Tag = { id: string; name: string };
@@ -56,6 +57,13 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const { data: session } = await authClient.getSession();
+    if (!session?.user.id) {
+      enqueueSnackbar("ログインセッションが見つかりません", { variant: "error" });
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -69,6 +77,7 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
         image,
         isSalesApplication: salesAgreementChecked,
         tagNames,
+        userId: session.user.id,
       });
 
       if (ok) {
@@ -99,11 +108,20 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
             <IconButton
               size="small"
               onClick={() => {
-                navigator.clipboard.writeText(post.id);
-                enqueueSnackbar("IDをコピーしました", {
-                  variant: "info",
-                  autoHideDuration: 2000,
-                });
+                navigator.clipboard
+                  .writeText(post.id)
+                  .then(() => {
+                    enqueueSnackbar("IDをコピーしました", {
+                      variant: "info",
+                      autoHideDuration: 2000,
+                    });
+                  })
+                  .catch((err) => {
+                    console.error("Failed to copy ID:", err);
+                    enqueueSnackbar("コピーに失敗しました", {
+                      variant: "error",
+                    });
+                  });
               }}
               sx={{ p: 0.5 }}
             >
@@ -142,7 +160,7 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
               setSalesAgreementChecked={setSalesAgreementChecked}
               tosChecked={tosChecked}
               setTosChecked={setTosChecked}
-              disabled={submitting}
+              disabled={true}
             />
 
             <Box
