@@ -63,7 +63,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          provenance: false
+          provenance: true
           cache-from: type=registry,ref=registry.uniproject.jp/nnn/magnezoo:buildcache
           cache-to: type=registry,ref=registry.uniproject.jp/nnn/magnezoo:buildcache,mode=max
 
