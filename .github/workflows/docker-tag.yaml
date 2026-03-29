@@ -65,7 +65,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           provenance: false
           cache-from: type=registry,ref=registry.uniproject.jp/nnn/magnezoo:buildcache
-          cache-to: type=registry,ref=registry.uniproject.jp/nnn/magnezoo:buildcache,mode=min
+          cache-to: type=registry,ref=registry.uniproject.jp/nnn/magnezoo:buildcache,mode=max
 
       - name: Sign Docker images with GitHub OIDC (cosign keyless)
         env:
