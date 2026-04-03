@@ -4,8 +4,10 @@ import {
   Button,
   Card,
   CardContent,
+  Divider,
   Stack,
   SvgIcon,
+  TextField,
   Typography,
 } from "@mui/material";
 import { sendGTMEvent } from "@next/third-parties/google";
@@ -137,6 +139,47 @@ export default function SignInPageClient({
                   : `${p.label}のアカウントでサインイン`}
               </Button>
             ))}
+            <Divider sx={{ my: 2 }}>卒業された管理者の方はこちら</Divider>
+            <Stack
+              direction={"column"}
+              spacing={1}
+              alignItems={"center"}
+              component={"form"}
+              action={async (formdata: FormData) => {
+                await authClient.signIn.email({
+                  email: formdata.get("email") as string,
+                  password: formdata.get("password") as string,
+                  callbackURL: redirectUri,
+                });
+              }}
+            >
+              <TextField
+                label="メールアドレス"
+                name="email"
+                variant="outlined"
+                size="small"
+                required
+                type="email"
+                sx={{ width: "100%" }}
+              />
+              <TextField
+                label="パスワード"
+                name="password"
+                variant="outlined"
+                size="small"
+                type="password"
+                required
+                sx={{ width: "100%" }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                type="submit"
+              >
+                サインイン
+              </Button>
+            </Stack>
           </Stack>
         </CardContent>
       </Card>
