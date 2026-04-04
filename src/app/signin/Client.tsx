@@ -146,11 +146,21 @@ export default function SignInPageClient({
               alignItems={"center"}
               component={"form"}
               action={async (formdata: FormData) => {
-                await authClient.signIn.email({
-                  email: formdata.get("email") as string,
-                  password: formdata.get("password") as string,
-                  callbackURL: redirectUri,
-                });
+                try {
+                  await authClient.signIn.email({
+                    email: formdata.get("email") as string,
+                    password: formdata.get("password") as string,
+                    callbackURL: "/admin",
+                  });
+                  enqueueSnackbar("サインインに成功しました", {
+                    variant: "success",
+                  });
+                } catch (error) {
+                  console.log(error);
+                  enqueueSnackbar("サインインに失敗しました", {
+                    variant: "error",
+                  });
+                }
               }}
             >
               <TextField
