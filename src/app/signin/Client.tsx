@@ -147,6 +147,7 @@ export default function SignInPageClient({
               component={"form"}
               action={async (formdata: FormData) => {
                 try {
+                  // Email / PWでアクセスする卒業生においては、/adminへのリダイレクトとする
                   await authClient.signIn.email({
                     email: formdata.get("email") as string,
                     password: formdata.get("password") as string,
