@@ -17,14 +17,21 @@ export default function NewUserPage() {
         spacing={2}
         component={"form"}
         action={async (formdata: FormData) => {
-          authClient.admin.createUser({
-            name: formdata.get("name") as string,
-            email: formdata.get("email") as string,
-            password: formdata.get("password") as string,
-            role: "admin",
-          });
-          enqueueSnackbar("ユーザーが作成されました", { variant: "success" });
-          router.push("/admin/users");
+          try {
+            await authClient.admin.createUser({
+              name: formdata.get("name") as string,
+              email: formdata.get("email") as string,
+              password: formdata.get("password") as string,
+              role: "admin",
+            });
+            enqueueSnackbar("ユーザーが作成されました", { variant: "success" });
+            router.push("/admin/users");
+          } catch (error) {
+            console.log(error);
+            enqueueSnackbar("ユーザーの作成に失敗しました", {
+              variant: "error",
+            });
+          }
         }}
       >
         <TextField name="name" label="名前" fullWidth required />
