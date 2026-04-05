@@ -35,9 +35,9 @@ export default function ResolvedPostsPage({ searchParams }: Props) {
         },
         votes: {
           where: {
-            isSalesApplication: false,
+            isSalesApplication: true,
           },
-          select: { userId: true },
+          select: { userId: true, salesType: true, isSalesApplication: true },
         },
       },
       orderBy: { createdAt: "desc" },
@@ -48,7 +48,11 @@ export default function ResolvedPostsPage({ searchParams }: Props) {
 
   return (
     <>
-      <PostsList posts={posts} currentUserId={currentUser?.id || null} />
+      <PostsList
+        posts={posts}
+        currentUserId={currentUser?.id || null}
+        isSalesApplicationVoting
+      />
 
       <Pagination totalPages={totalPages} currentPage={currentPage} />
     </>

@@ -1,15 +1,20 @@
 "use server";
 
 import { headers } from "next/headers";
+import type { SalesType } from "@/generated/prisma/browser";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
 export const toggleVote = async ({
   postId,
   newState,
+  isSalesApplication = false,
+  salesType = "NONE",
 }: {
   postId: string;
   newState: boolean;
+  isSalesApplication?: boolean;
+  salesType?: SalesType | null;
 }) => {
   const session = await auth.api.getSession({ headers: await headers() });
   const userId = session?.user.id;
@@ -21,17 +26,55 @@ export const toggleVote = async ({
     const result = await prisma.$transaction(
       async (tx) => {
         if (newState) {
-          // いいねを追加
-          await tx.vote.upsert({
-            where: { userId_postId: { postId, userId } },
-            update: {},
-            create: { postId, userId },
-          });
+          if (isSalesApplication && salesType) {
+            await tx.vote.upsert({
+              where: {
+                userId_postId_isSalesApplication_salesType: {
+                  userId,
+                  postId,
+                  isSalesApplication,
+                  salesType,
+                },
+              },
+              update: {},
+              create: { postId, userId, isSalesApplication, salesType },
+            });
+          } else {
+            // いいねを追加
+            await tx.vote.upsert({
+              where: {
+                userId_postId_isSalesApplication_salesType: {
+                  postId,
+                  userId,
+                  isSalesApplication,
+                  salesType: "NONE",
+                },
+              },
+              update: {},
+              create: { postId, userId },
+            });
+          }
         } else {
-          // いいねを削除
-          await tx.vote.deleteMany({
-            where: { postId, userId },
-          });
+          if (isSalesApplication && salesType) {
+            // セールス応募の投票を削除
+            await tx.vote.deleteMany({
+              where: {
+                userId,
+                postId,
+                isSalesApplication,
+                salesType,
+              },
+            });
+          } else {
+            // いいねを削除
+            await tx.vote.deleteMany({
+              where: {
+                userId,
+                postId,
+                isSalesApplication: false,
+              },
+            });
+          }
         }
 
         return newState;
