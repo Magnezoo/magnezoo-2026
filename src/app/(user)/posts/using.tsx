@@ -11,7 +11,7 @@ export default function ResolvedPostsPage({ searchParams }: Props) {
   const page = Math.max(1, parseInt(searchParams?.page || "1", 10) || 1);
   const pageSize = Math.max(
     1,
-    parseInt(searchParams?.pageSize || "10", 10) || 10,
+    Math.min(50, parseInt(searchParams?.pageSize || "10", 10) || 10),
   );
 
   const headerStore = use(headers());
