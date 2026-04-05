@@ -9,7 +9,7 @@ export const toggleVote = async ({
   postId,
   newState,
   isSalesApplication = false,
-  salesType = null,
+  salesType = "NONE",
 }: {
   postId: string;
   newState: boolean;
@@ -43,10 +43,11 @@ export const toggleVote = async ({
             // いいねを追加
             await tx.vote.upsert({
               where: {
-                userId_postId_isSalesApplication: {
+                userId_postId_isSalesApplication_salesType: {
                   postId,
                   userId,
                   isSalesApplication,
+                  salesType: "NONE",
                 },
               },
               update: {},
