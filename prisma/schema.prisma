@@ -141,9 +141,10 @@ model TagsPosts {
 }
 
 model Vote {
-  userId             String  @map("user_id")
-  postId             String  @map("post_id") @db.Uuid
-  isSalesApplication Boolean @default(false)
+  userId             String     @map("user_id")
+  postId             String     @map("post_id") @db.Uuid
+  isSalesApplication Boolean    @default(false)
+  salesType          SalesType?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
@@ -163,4 +164,10 @@ model Slacks {
 
   @@index([userId])
   @@map("slacks")
+}
+
+enum SalesType {
+  ACRIL_KEYCHAIN
+  BADGE
+  STICKER
 }
