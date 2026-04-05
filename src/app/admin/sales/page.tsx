@@ -23,13 +23,10 @@ export default async function PostsPage({
       py={10}
       px={2}
       spacing={5}
-      sx={{
-        backgroundColor: "#FFEECE",
-      }}
     >
       <Stack alignItems="center" spacing={1}>
-        <Typography variant="h3">うちの子一覧</Typography>
-        <Typography variant={"body1"}>気になる投稿を探してみよう！</Typography>
+        <Typography variant="h3">物販用写真の選定</Typography>
+        <Typography variant={"body1"}>物販用の写真を選びましょう</Typography>
       </Stack>
       <Suspense fallback={<Typography>Loading...</Typography>}>
         {/* Pass searchParams so the server component can paginate */}
