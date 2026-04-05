@@ -1,15 +1,20 @@
 "use server";
 
 import { headers } from "next/headers";
+import type { SalesType } from "@/generated/prisma/browser";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
 export const toggleVote = async ({
   postId,
   newState,
+  isSalesApplication = false,
+  salesType = null,
 }: {
   postId: string;
   newState: boolean;
+  isSalesApplication?: boolean;
+  salesType?: SalesType | null;
 }) => {
   const session = await auth.api.getSession({ headers: await headers() });
   const userId = session?.user.id;
@@ -23,14 +28,22 @@ export const toggleVote = async ({
         if (newState) {
           // いいねを追加
           await tx.vote.upsert({
-            where: { userId_postId: { postId, userId } },
+            where: {
+              userId_postId: { postId, userId },
+              isSalesApplication,
+              salesType,
+            },
             update: {},
-            create: { postId, userId },
+            create: { postId, userId, isSalesApplication, salesType },
           });
         } else {
           // いいねを削除
           await tx.vote.deleteMany({
-            where: { postId, userId },
+            where: {
+              userId_postId: { postId, userId },
+              isSalesApplication,
+              salesType,
+            },
           });
         }
 

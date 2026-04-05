@@ -6,6 +6,7 @@ import { Avatar, Stack, Tooltip, Typography } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
+import type { SalesType } from "@/generated/prisma/client";
 import { toggleVote } from "./action";
 
 export default function VoteButton({
@@ -14,16 +15,22 @@ export default function VoteButton({
   currentUserId,
   isVoted,
   disabled = false,
+  isSalesApplication = false,
+  salesType = null,
 }: {
   postId: string;
   currentVoteCount: number;
   currentUserId: string | null;
   isVoted: boolean;
   disabled?: boolean;
+  isSalesApplication?: boolean;
+  salesType?: SalesType | null;
 }) {
   const [voteCount, setVoteCount] = useState(currentVoteCount);
   const [isVotedState, setIsVotedState] = useState(isVoted);
   const { enqueueSnackbar } = useSnackbar();
+
+  const voteLabel = isSalesApplication ? "投票" : "いいね";
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
@@ -31,9 +38,9 @@ export default function VoteButton({
         title={
           currentUserId
             ? isVotedState
-              ? "いいねを取り消す"
-              : "いいねする"
-            : "いいねするにはログインが必要です"
+              ? `${voteLabel}を取り消す`
+              : `${voteLabel}する`
+            : `${voteLabel}するにはログインが必要です`
         }
         placement="top"
       >
@@ -46,6 +53,8 @@ export default function VoteButton({
                     const result = await toggleVote({
                       postId,
                       newState: !isVotedState,
+                      isSalesApplication,
+                      salesType,
                     });
                     setIsVotedState(result);
                     setVoteCount((voteCount) => voteCount + (result ? 1 : -1));
@@ -80,7 +89,7 @@ export default function VoteButton({
         </button>
       </Tooltip>
       <Typography variant="body2" color="gray">
-        {voteCount} いいね
+        {voteCount} {isSalesApplication ? "票" : "いいね"}
       </Typography>
     </Stack>
   );

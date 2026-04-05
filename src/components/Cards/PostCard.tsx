@@ -10,7 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import Image from "next/image";
-import type { Post, Slacks, User } from "@/generated/prisma/client";
+import {
+  type Post,
+  SalesType,
+  type Slacks,
+  type User,
+} from "@/generated/prisma/client";
 import VoteButton from "../Buttons/Vote";
 
 export interface UserWithSlacks extends User {
@@ -19,17 +24,23 @@ export interface UserWithSlacks extends User {
 
 export interface PostWithAutherAndVotes extends Post {
   author: UserWithSlacks;
-  votes: { userId: string }[];
+  votes: {
+    userId: string;
+    isSalesApplication?: boolean;
+    salesType?: SalesType | null;
+  }[];
 }
 
 export default function PostCard({
   post,
   currentUserId,
   index,
+  isSalesApplicationVoting = false,
 }: {
   post: PostWithAutherAndVotes;
   currentUserId: string | null;
   index?: number;
+  isSalesApplicationVoting?: boolean;
 }) {
   const firstSlack =
     post.author.slacks && post.author.slacks.length > 0
@@ -116,13 +127,65 @@ export default function PostCard({
             </Stack>
           </CardContent>
           <CardActions sx={{ p: 1.5 }}>
-            <VoteButton
-              postId={post.id}
-              currentVoteCount={post.votes.length}
-              isVoted={post.votes.some((vote) => vote.userId === currentUserId)}
-              currentUserId={currentUserId}
-              disabled={!currentUserId}
-            />
+            {isSalesApplicationVoting ? (
+              Object.values(SalesType).map((type) => (
+                <>
+                  {type === SalesType.ACRIL_KEYCHAIN ? (
+                    <Typography
+                      key={`${type}-label`}
+                      variant="body2"
+                      color="gray"
+                      sx={{ minWidth: 80 }}
+                    >
+                      アクリルキーホルダー
+                    </Typography>
+                  ) : type === SalesType.BADGE ? (
+                    <Typography
+                      key={`${type}-label`}
+                      variant="body2"
+                      color="gray"
+                      sx={{ minWidth: 80 }}
+                    >
+                      バッジ
+                    </Typography>
+                  ) : (
+                    type === SalesType.STICKER && (
+                      <Typography
+                        key={`${type}-label`}
+                        variant="body2"
+                        color="gray"
+                        sx={{ minWidth: 80 }}
+                      >
+                        キーホルダー
+                      </Typography>
+                    )
+                  )}
+                  <VoteButton
+                    key={type}
+                    postId={post.id}
+                    currentVoteCount={post.votes.length}
+                    isVoted={post.votes.some(
+                      (vote) => vote.userId === currentUserId,
+                    )}
+                    currentUserId={currentUserId}
+                    disabled={!currentUserId}
+                    isSalesApplication={isSalesApplicationVoting}
+                    salesType={type}
+                  />
+                </>
+              ))
+            ) : (
+              <VoteButton
+                postId={post.id}
+                currentVoteCount={post.votes.length}
+                isVoted={post.votes.some(
+                  (vote) => vote.userId === currentUserId,
+                )}
+                currentUserId={currentUserId}
+                disabled={!currentUserId}
+                isSalesApplication={isSalesApplicationVoting}
+              />
+            )}
           </CardActions>
         </Box>
       </Card>
