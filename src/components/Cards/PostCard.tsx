@@ -38,7 +38,7 @@ export interface PostWithAutherAndVotes extends Post {
 const salesTypeLabels: Record<SalesType, string> = {
   ACRYLIC_KEYCHAIN: "アクリルキーホルダー",
   BADGE: "バッジ",
-  STICKER: "キーホルダー",
+  STICKER: "ステッカー",
 };
 
 export default function PostCard({
