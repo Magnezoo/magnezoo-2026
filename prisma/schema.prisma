@@ -168,7 +168,7 @@ model Slacks {
 }
 
 enum SalesType {
-  ACRIL_KEYCHAIN
+  ACRYLIC_KEYCHAIN
   BADGE
   STICKER
 }
