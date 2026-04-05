@@ -36,6 +36,7 @@ export interface PostWithAutherAndVotes extends Post {
 
 // ラベルはマップ管理
 const salesTypeLabels: Record<SalesType, string> = {
+  NONE: "なし",
   ACRYLIC_KEYCHAIN: "アクリルキーホルダー",
   BADGE: "バッジ",
   STICKER: "ステッカー",
@@ -128,6 +129,8 @@ export default function PostCard({
             {isSalesApplicationVoting ? (
               <Stack spacing={1}>
                 {Object.values(SalesType).map((type) => {
+                  if (type === SalesType.NONE) return null;
+
                   const votes = post.votes.filter(
                     (v) => v.isSalesApplication && v.salesType === type,
                   );

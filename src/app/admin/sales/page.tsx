@@ -1,5 +1,8 @@
 import { Stack, Typography } from "@mui/material";
+import { headers } from "next/headers";
+import { forbidden, unauthorized } from "next/navigation";
 import { Suspense } from "react";
+import { auth } from "@/lib/auth";
 import ResolvedPostsPage from "./using";
 
 export default async function PostsPage({
@@ -8,6 +11,9 @@ export default async function PostsPage({
   searchParams?: Promise<{ page?: string; pageSize?: string }>;
 }) {
   const resolvedSearchParams = await searchParams;
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) unauthorized();
+  if (session.user.role !== "admin") forbidden();
   return (
     <Stack
       component={"main"}

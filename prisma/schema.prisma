@@ -141,16 +141,15 @@ model TagsPosts {
 }
 
 model Vote {
-  userId             String     @map("user_id")
-  postId             String     @map("post_id") @db.Uuid
-  isSalesApplication Boolean    @default(false)
-  salesType          SalesType?
+  userId             String    @map("user_id")
+  postId             String    @map("post_id") @db.Uuid
+  isSalesApplication Boolean   @default(false)
+  salesType          SalesType
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  @@id([userId, postId, isSalesApplication])
-  @@unique([userId, postId, isSalesApplication, salesType])
+  @@id([userId, postId, isSalesApplication, salesType])
   @@map("vote")
 }
 
@@ -168,6 +167,7 @@ model Slacks {
 }
 
 enum SalesType {
+  NONE
   ACRYLIC_KEYCHAIN
   BADGE
   STICKER
