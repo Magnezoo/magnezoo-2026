@@ -34,6 +34,9 @@ export default function ResolvedPostsPage({ searchParams }: Props) {
           },
         },
         votes: {
+          where: {
+            isSalesApplication: false,
+          },
           select: { userId: true },
         },
       },

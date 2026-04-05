@@ -141,8 +141,9 @@ model TagsPosts {
 }
 
 model Vote {
-  userId String @map("user_id")
-  postId String @map("post_id") @db.Uuid
+  userId             String  @map("user_id")
+  postId             String  @map("post_id") @db.Uuid
+  isSalesApplication Boolean @default(false)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
