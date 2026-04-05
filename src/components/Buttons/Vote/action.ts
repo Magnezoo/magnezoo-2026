@@ -43,7 +43,11 @@ export const toggleVote = async ({
             // いいねを追加
             await tx.vote.upsert({
               where: {
-                userId_postId: { postId, userId },
+                userId_postId_isSalesApplication: {
+                  postId,
+                  userId,
+                  isSalesApplication,
+                },
               },
               update: {},
               create: { postId, userId },
