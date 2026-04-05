@@ -132,7 +132,7 @@ export default function PostCard({
                     (v) => v.isSalesApplication && v.salesType === type,
                   );
 
-                  const isVoted = post.votes.some(
+                  const isVoted = votes.some(
                     (v) => v.userId === currentUserId && v.salesType === type,
                   );
 
