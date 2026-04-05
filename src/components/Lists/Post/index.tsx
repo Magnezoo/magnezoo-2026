@@ -6,9 +6,11 @@ import PostCard, {
 export default function PostsList({
   posts,
   currentUserId,
+  isSalesApplicationVoting = false,
 }: {
   posts: PostWithAutherAndVotes[];
   currentUserId: string | null;
+  isSalesApplicationVoting?: boolean;
 }) {
   return (
     <Grid container spacing={2} justifyContent="center" columns={3}>
@@ -18,6 +20,7 @@ export default function PostsList({
           key={post.id}
           index={index}
           currentUserId={currentUserId}
+          isSalesApplicationVoting={isSalesApplicationVoting}
         />
       ))}
     </Grid>

@@ -26,25 +26,50 @@ export const toggleVote = async ({
     const result = await prisma.$transaction(
       async (tx) => {
         if (newState) {
-          // いいねを追加
-          await tx.vote.upsert({
-            where: {
-              userId_postId: { postId, userId },
-              isSalesApplication,
-              salesType,
-            },
-            update: {},
-            create: { postId, userId, isSalesApplication, salesType },
-          });
+          if (isSalesApplication && salesType) {
+            await tx.vote.upsert({
+              where: {
+                userId_postId_isSalesApplication_salesType: {
+                  userId,
+                  postId,
+                  isSalesApplication,
+                  salesType,
+                },
+              },
+              update: {},
+              create: { postId, userId, isSalesApplication, salesType },
+            });
+          } else {
+            // いいねを追加
+            await tx.vote.upsert({
+              where: {
+                userId_postId: { postId, userId },
+              },
+              update: {},
+              create: { postId, userId },
+            });
+          }
         } else {
-          // いいねを削除
-          await tx.vote.deleteMany({
-            where: {
-              userId_postId: { postId, userId },
-              isSalesApplication,
-              salesType,
-            },
-          });
+          if (isSalesApplication && salesType) {
+            // セールス応募の投票を削除
+            await tx.vote.deleteMany({
+              where: {
+                userId,
+                postId,
+                isSalesApplication,
+                salesType,
+              },
+            });
+          } else {
+            // いいねを削除
+            await tx.vote.deleteMany({
+              where: {
+                userId,
+                postId,
+                isSalesApplication: false,
+              },
+            });
+          }
         }
 
         return newState;
