@@ -2,9 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import SignInErrorDialog from "@/components/Dialogs/signin";
 
 const TARGET_DATE = new Date("2026-04-10T19:00:00");
 const EARLY_ACCESS_DATE = new Date("2026-02-25T09:00:00");
@@ -163,30 +161,9 @@ function SubscriptionModal({
 }
 
 export default function Home() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [openModal, setOpenModal] = useState<string | null>(null);
   const [now, setNow] = useState(() => new Date());
   const openedEvent = events.find((e) => e.id === openModal);
-
-  // URL クエリからサインインエラーを取得
-  const queryError =
-    searchParams.get("error") ||
-    searchParams.get("error_description") ||
-    searchParams.get("code") ||
-    searchParams.get("message");
-
-  const handleErrorDialogClose = () => {
-    // URL からエラーパラメータを削除
-    const params = new URLSearchParams(searchParams);
-    params.delete("error");
-    params.delete("error_description");
-    params.delete("code");
-    params.delete("message");
-
-    const newUrl = params.toString() ? `/?${params.toString()}` : "/";
-    router.replace(newUrl);
-  };
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -313,8 +290,6 @@ export default function Home() {
           eventType={openedEvent.eventType}
         />
       )}
-
-      <SignInErrorDialog error={queryError} onClose={handleErrorDialogClose} />
 
       <footer>
         <p className="mt-12 text-xs text-zinc-400 text-center">

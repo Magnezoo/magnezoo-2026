@@ -4,14 +4,16 @@ import {
   Button,
   Card,
   CardContent,
+  Divider,
   Stack,
   SvgIcon,
+  TextField,
   Typography,
 } from "@mui/material";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { redirect } from "next/navigation";
+import { useSnackbar } from "notistack";
 import { useState } from "react";
-import SignInErrorDialog from "@/components/Dialogs/signin";
 import { authClient } from "@/lib/auth-client";
 
 const providers = [
@@ -49,10 +51,9 @@ export default function SignInPageClient({
   redirectUri?: string;
 }) {
   const [loading, setLoading] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSignIn = async (providerId: string) => {
-    setError(null);
     setLoading(providerId);
     try {
       sendGTMEvent({ event: `signin`, account_provider: providerId });
@@ -61,10 +62,36 @@ export default function SignInPageClient({
         callbackURL: redirectUri,
       });
     } catch (e: unknown) {
+      const BANNED_ACCOUNT_MESSAGE =
+        "あなたのアカウントは削除されています。(自分で削除した場合もこのメッセージが表示されます)。再度アカウントを作成するには、Slackで「あかつきゆいと」にお問い合わせください。";
+      const mapAuthErrorMessage = (
+        raw: string | null | undefined,
+      ): string | null => {
+        if (!raw) {
+          return null;
+        }
+
+        const normalized = raw.toLowerCase();
+        const isBannedError =
+          normalized.includes("banned") ||
+          normalized.includes("user_banned") ||
+          normalized.includes("deleted");
+
+        if (isBannedError) {
+          return BANNED_ACCOUNT_MESSAGE;
+        }
+
+        return raw;
+      };
       if (e && typeof e === "object" && "message" in e) {
-        setError((e as Error).message);
+        const message = mapAuthErrorMessage(
+          typeof e.message === "string" ? e.message : null,
+        );
+        enqueueSnackbar(message || "An unknown error occurred.", {
+          variant: "error",
+        });
       } else {
-        setError(String(e));
+        enqueueSnackbar("An unknown error occurred.", { variant: "error" });
       }
     } finally {
       setLoading(null);
@@ -112,9 +139,59 @@ export default function SignInPageClient({
                   : `${p.label}のアカウントでサインイン`}
               </Button>
             ))}
+            <Divider sx={{ my: 2 }}>卒業された管理者の方はこちら</Divider>
+            <Stack
+              direction={"column"}
+              spacing={1}
+              alignItems={"center"}
+              component={"form"}
+              action={async (formdata: FormData) => {
+                try {
+                  // Email / PWでアクセスする卒業生においては、/adminへのリダイレクトとする
+                  await authClient.signIn.email({
+                    email: formdata.get("email") as string,
+                    password: formdata.get("password") as string,
+                    callbackURL: "/admin",
+                  });
+                  enqueueSnackbar("サインインに成功しました", {
+                    variant: "success",
+                  });
+                } catch (error) {
+                  console.log(error);
+                  enqueueSnackbar("サインインに失敗しました", {
+                    variant: "error",
+                  });
+                }
+              }}
+            >
+              <TextField
+                label="メールアドレス"
+                name="email"
+                variant="outlined"
+                size="small"
+                required
+                type="email"
+                sx={{ width: "100%" }}
+              />
+              <TextField
+                label="パスワード"
+                name="password"
+                variant="outlined"
+                size="small"
+                type="password"
+                required
+                sx={{ width: "100%" }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                type="submit"
+              >
+                サインイン
+              </Button>
+            </Stack>
           </Stack>
-
-          <SignInErrorDialog error={error} onClose={() => setError(null)} />
         </CardContent>
       </Card>
     </Box>
