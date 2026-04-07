@@ -25,6 +25,14 @@ export default function ResolvedPostsPage({
   const session = use(auth.api.getSession({ headers: headerStore }));
   const currentUser = session?.user;
 
+  if (filterByCurrentUser && !currentUser) {
+    return (
+      <Typography variant="body1" sx={{ mt: 5 }}>
+        ログインが必要です
+      </Typography>
+    );
+  }
+
   const where =
     filterByCurrentUser && currentUser ? { authorId: currentUser.id } : {};
 
@@ -66,7 +74,9 @@ export default function ResolvedPostsPage({
         </>
       ) : (
         <Typography variant="body1" sx={{ mt: 5 }}>
-          あなたは投稿していないようです
+          {filterByCurrentUser
+            ? "あなたは投稿していないようです"
+            : "表示する投稿がありません"}
         </Typography>
       )}
     </>
