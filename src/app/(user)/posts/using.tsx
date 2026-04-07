@@ -1,13 +1,20 @@
 import { headers } from "next/headers";
 import { use } from "react";
+import { Typography } from "@mui/material";
 import Pagination from "@/components/Buttons/Pagenation";
 import PostsList from "@/components/Lists/Post";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-type Props = { searchParams?: { page?: string; pageSize?: string } };
+type Props = {
+  searchParams?: { page?: string; pageSize?: string };
+  filterByCurrentUser?: boolean;
+};
 
-export default function ResolvedPostsPage({ searchParams }: Props) {
+export default function ResolvedPostsPage({
+  searchParams,
+  filterByCurrentUser,
+}: Props) {
   const page = Math.max(1, parseInt(searchParams?.page || "1", 10) || 1);
   const pageSize = Math.max(
     1,
@@ -18,13 +25,17 @@ export default function ResolvedPostsPage({ searchParams }: Props) {
   const session = use(auth.api.getSession({ headers: headerStore }));
   const currentUser = session?.user;
 
-  const count = use(prisma.post.count());
+  const where =
+    filterByCurrentUser && currentUser ? { authorId: currentUser.id } : {};
+
+  const count = use(prisma.post.count({ where }));
 
   const totalPages = Math.max(1, Math.ceil(count / pageSize));
   const currentPage = Math.min(page, totalPages);
 
   const posts = use(
     prisma.post.findMany({
+      where,
       include: {
         author: {
           include: {
@@ -48,9 +59,16 @@ export default function ResolvedPostsPage({ searchParams }: Props) {
 
   return (
     <>
-      <PostsList posts={posts} currentUserId={currentUser?.id || null} />
-
-      <Pagination totalPages={totalPages} currentPage={currentPage} />
+      {posts.length > 0 ? (
+        <>
+          <PostsList posts={posts} currentUserId={currentUser?.id || null} />
+          <Pagination totalPages={totalPages} currentPage={currentPage} />
+        </>
+      ) : (
+        <Typography variant="body1" sx={{ mt: 5 }}>
+          あなたは投稿していないようです
+        </Typography>
+      )}
     </>
   );
 }
