@@ -1,6 +1,6 @@
+import { Typography } from "@mui/material";
 import { headers } from "next/headers";
 import { use } from "react";
-import { Typography } from "@mui/material";
 import Pagination from "@/components/Buttons/Pagenation";
 import PostsList from "@/components/Lists/Post";
 import { auth } from "@/lib/auth";

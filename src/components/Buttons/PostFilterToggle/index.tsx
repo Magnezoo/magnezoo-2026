@@ -1,8 +1,8 @@
 "use client";
 
-import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import GroupsIcon from "@mui/icons-material/Groups";
 import PersonIcon from "@mui/icons-material/Person";
+import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function PostFilterToggle({
@@ -13,7 +13,8 @@ export default function PostFilterToggle({
   const router = useRouter();
   const pathname = usePathname();
 
-  const isMyPosts = pathname === "/posts/my" || pathname.startsWith("/posts/my/");
+  const isMyPosts =
+    pathname === "/posts/my" || pathname.startsWith("/posts/my/");
 
   const handleChange = (
     _event: React.MouseEvent<HTMLElement>,
