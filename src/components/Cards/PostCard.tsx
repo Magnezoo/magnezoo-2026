@@ -3,6 +3,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
@@ -13,6 +14,7 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   type Post,
   SalesType,
@@ -55,6 +57,7 @@ export default function PostCard({
 }) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
+  const router = useRouter();
 
   const firstSlack = post.author.slacks?.[0];
 
@@ -168,15 +171,30 @@ export default function PostCard({
                 })}
               </Stack>
             ) : (
-              <VoteButton
-                postId={post.id}
-                currentVoteCount={post.votes.length}
-                isVoted={post.votes.some(
-                  (v) => v.userId === currentUserId && !v.isSalesApplication,
-                )}
-                currentUserId={currentUserId}
-                disabled={!currentUserId}
-              />
+              <Stack
+                direction="row"
+                alignItems="center"
+                width={"100%"}
+                spacing={1}
+                justifyContent={"space-between"}
+              >
+                <VoteButton
+                  postId={post.id}
+                  currentVoteCount={post.votes.length}
+                  isVoted={post.votes.some(
+                    (v) => v.userId === currentUserId && !v.isSalesApplication,
+                  )}
+                  currentUserId={currentUserId}
+                  disabled={!currentUserId}
+                />
+                <Stack direction="row" spacing={1}>
+                  <Button href={`/posts/${post.id}/edit`}>編集する</Button>
+                  {/* TODO: Implement show details */}
+                  <Button onClick={() => router.push(`/posts/${post.id}`)}>
+                    詳細を見る
+                  </Button>
+                </Stack>
+              </Stack>
             )}
           </CardActions>
         </Box>
