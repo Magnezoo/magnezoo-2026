@@ -1,6 +1,8 @@
 import { Box, Stack, Typography } from "@mui/material";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 import PostFilterToggle from "@/components/Buttons/PostFilterToggle";
+import { auth } from "@/lib/auth";
 import ResolvedPostsPage from "../using";
 
 export default async function MyPostsPage({
@@ -9,6 +11,11 @@ export default async function MyPostsPage({
   searchParams?: Promise<{ page?: string; pageSize?: string }>;
 }) {
   const resolvedSearchParams = await searchParams;
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const currentUser = session?.user;
+
   return (
     <Stack
       component={"main"}
@@ -27,9 +34,11 @@ export default async function MyPostsPage({
         <Typography variant={"body1"}>自分が投稿した子たちです！</Typography>
       </Stack>
 
-      <Box>
-        <PostFilterToggle size="large" />
-      </Box>
+      {currentUser && (
+        <Box>
+          <PostFilterToggle size="large" />
+        </Box>
+      )}
 
       <Suspense fallback={<Typography>Loading...</Typography>}>
         <ResolvedPostsPage
