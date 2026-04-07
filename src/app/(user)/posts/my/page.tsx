@@ -3,9 +3,9 @@ import { headers } from "next/headers";
 import { Suspense } from "react";
 import PostFilterToggle from "@/components/Buttons/PostFilterToggle";
 import { auth } from "@/lib/auth";
-import ResolvedPostsPage from "./using";
+import ResolvedPostsPage from "../using";
 
-export default async function PostsPage({
+export default async function MyPostsPage({
   searchParams,
 }: {
   searchParams?: Promise<{ page?: string; pageSize?: string }>;
@@ -30,8 +30,8 @@ export default async function PostsPage({
       }}
     >
       <Stack alignItems="center" spacing={1}>
-        <Typography variant="h3">うちの子一覧</Typography>
-        <Typography variant={"body1"}>気になる投稿を探してみよう！</Typography>
+        <Typography variant="h3">自分の投稿一覧</Typography>
+        <Typography variant={"body1"}>自分が投稿した子たちです！</Typography>
       </Stack>
 
       {currentUser && (
@@ -41,8 +41,10 @@ export default async function PostsPage({
       )}
 
       <Suspense fallback={<Typography>Loading...</Typography>}>
-        {/* Pass searchParams so the server component can paginate */}
-        <ResolvedPostsPage searchParams={resolvedSearchParams} />
+        <ResolvedPostsPage
+          searchParams={resolvedSearchParams}
+          filterByCurrentUser
+        />
       </Suspense>
     </Stack>
   );
