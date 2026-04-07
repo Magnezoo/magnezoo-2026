@@ -1,4 +1,4 @@
-import PostDetailDialog from "@/components/Dialogs/Post";
+import PostDetailDialog from "@/components/Dialogs/PostDetail";
 
 export default async function Modal({
   params,
@@ -7,5 +7,5 @@ export default async function Modal({
 }) {
   const { id } = await params;
 
-  return <PostDetailDialog id={id} />;
+  return <PostDetailDialog type="id" id={id} />;
 }

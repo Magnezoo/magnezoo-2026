@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import { Suspense } from "react";
-import PostDetailDialog from "@/components/Dialogs/Post";
+import PostDetailDialog from "@/components/Dialogs/PostDetail";
 import ResolvedPostsPage from "../using";
 
 export default async function PostDetailPage({
