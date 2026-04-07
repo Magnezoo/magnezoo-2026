@@ -17,13 +17,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  detail,
 }: Readonly<{
   children: React.ReactNode;
+  detail: React.ReactNode;
 }>) {
   return (
     <MUIWrapper>
       <Header />
       {children}
+      {detail}
       <Stack
         component={"footer"}
         alignItems="center"

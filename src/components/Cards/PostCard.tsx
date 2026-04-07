@@ -189,7 +189,6 @@ export default function PostCard({
                 />
                 <Stack direction="row" spacing={1}>
                   <Button href={`/posts/${post.id}/edit`}>編集する</Button>
-                  {/* TODO: Implement show details */}
                   <Button onClick={() => router.push(`/posts/${post.id}`)}>
                     詳細を見る
                   </Button>
