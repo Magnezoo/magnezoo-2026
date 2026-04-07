@@ -30,6 +30,7 @@ export const auth = betterAuth({
           discoveryUrl:
             "https://accounts.google.com/.well-known/openid-configuration",
           scopes: ["openid", "profile", "email"],
+          prompt: "select_account consent",
           authorizationUrlParams: {
             hd: "n-jr.jp",
           },
@@ -41,6 +42,7 @@ export const auth = betterAuth({
           discoveryUrl:
             "https://accounts.google.com/.well-known/openid-configuration",
           scopes: ["openid", "profile", "email"],
+          prompt: "select_account consent",
           authorizationUrlParams: {
             hd: "nnn.ed.jp",
           },
@@ -52,6 +54,7 @@ export const auth = betterAuth({
           discoveryUrl:
             "https://accounts.google.com/.well-known/openid-configuration",
           scopes: ["openid", "profile", "email"],
+          prompt: "select_account consent",
           authorizationUrlParams: {
             hd: "nnn.ac.jp",
           },
