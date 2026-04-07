@@ -1,11 +1,12 @@
-import type { Post } from "@/generated/prisma/client";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import PostDetailDialogClient from "./Client";
+import PostDetailDialogClient, { type PostDetailData } from "./Client";
 
 interface PostDetailDialogProps {
   type: "id" | "post";
   id?: string;
-  post?: Post;
+  post?: PostDetailData;
   closeRedirectTo?: string;
 }
 
@@ -23,15 +24,41 @@ export default async function PostDetailDialog(props: PostDetailDialogProps) {
       : await prisma.post.findUnique({
           // biome-ignore lint/style/noNonNullAssertion: 上でnullチェックをしているため
           where: { id: props.id! },
+          include: {
+            author: {
+              include: {
+                slacks: {
+                  select: { name: true, isDisplayname: true },
+                },
+              },
+            },
+            votes: {
+              where: {
+                isSalesApplication: true,
+              },
+              select: {
+                userId: true,
+                salesType: true,
+                isSalesApplication: true,
+              },
+            },
+            tags: {
+              include: {
+                tag: true,
+              },
+            },
+          },
         });
   if (!post) {
     throw new Error("Post not found");
   }
+  const session = await auth.api.getSession({ headers: await headers() });
   return (
     <PostDetailDialogClient
       id={post.id}
       post={post}
       closeRedirectTo={closeRedirectTo}
+      currentUserId={session?.user.id}
     />
   );
 }

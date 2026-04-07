@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -22,6 +21,7 @@ import {
   type User,
 } from "@/generated/prisma/browser";
 import VoteButton from "../Buttons/Vote";
+import AuthorCard from "./AuthorCard";
 
 export interface UserWithSlacks extends User {
   slacks: Omit<Slacks, "userId" | "id" | "createdAt" | "updatedAt">[];
@@ -58,8 +58,6 @@ export default function PostCard({
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
-
-  const firstSlack = post.author.slacks?.[0];
 
   // 最適化（SSR安全）
   const optimizedDescription = isSmall
@@ -107,20 +105,7 @@ export default function PostCard({
             <Stack spacing={1}>
               <Typography variant="h5">{optimizedTitle}</Typography>
 
-              <Stack direction="row" alignItems="center" spacing={1}>
-                <Avatar
-                  src={post.author.image || undefined}
-                  sx={{ width: 24, height: 24 }}
-                >
-                  {post.author.nickName?.[0] ??
-                    (firstSlack?.isDisplayname ? firstSlack.name[0] : "?")}
-                </Avatar>
-
-                <Typography variant="subtitle2" color="text.secondary">
-                  {post.author.nickName ??
-                    (firstSlack?.isDisplayname ? firstSlack.name : "匿名")}
-                </Typography>
-              </Stack>
+              <AuthorCard user={post.author} />
 
               <Typography variant="body2" color="text.secondary">
                 {optimizedDescription}

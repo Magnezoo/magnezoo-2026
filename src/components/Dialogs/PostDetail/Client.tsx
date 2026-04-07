@@ -1,9 +1,13 @@
 "use client";
 
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, IconButton, Stack } from "@mui/material";
+import { Box, Chip, IconButton, Stack, Typography } from "@mui/material";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import type { Post } from "@/generated/prisma/client";
+import VoteButton from "@/components/Buttons/Vote";
+import AuthorCard from "@/components/Cards/AuthorCard";
+import type { PostWithAutherAndVotes } from "@/components/Cards/PostCard";
+import type { Tags, TagsPosts } from "@/generated/prisma/client";
 
 export enum PostFormStep {
   TitleAndDescription = 1,
@@ -11,10 +15,15 @@ export enum PostFormStep {
   PublicationSettings = 3,
 }
 
+export interface PostDetailData extends PostWithAutherAndVotes {
+  tags: ({ tag: Tags } & TagsPosts)[];
+}
+
 interface Props {
   id: string;
-  post: Post;
+  post: PostDetailData;
   closeRedirectTo?: string;
+  currentUserId?: string | null;
 }
 
 export default function PostDetailDialogClient(props: Props) {
@@ -60,9 +69,22 @@ export default function PostDetailDialogClient(props: Props) {
         }}
         onClick={(e) => e.stopPropagation()}
       >
+        <Image
+          src={props.post.imageUrl!}
+          alt={props.post.title}
+          width={400}
+          height={300}
+          style={{
+            overflow: "hidden",
+            width: "auto",
+            maxWidth: "1300px",
+            height: "100%",
+            borderRadius: 8,
+          }}
+        />
         <Stack
+          direction={{ xs: "column", md: "row" }}
           py={{ xs: 6, xl: 12 }}
-          px={{ xs: 3, xl: 10 }}
           gap={4}
           flex={1}
           sx={{
@@ -81,6 +103,42 @@ export default function PostDetailDialogClient(props: Props) {
               <CloseIcon />
             </IconButton>
           </Box>
+          <Stack
+            spacing={1}
+            flex={1}
+            mr={5}
+            ml={3}
+            sx={{
+              overflowY: { xs: "auto", md: "auto" },
+              maxHeight: { xs: "calc(100vh - 160px)", md: "none" },
+            }}
+          >
+            <Typography variant="h4">{props.post.title}</Typography>
+            <Typography variant="caption" color="text.secondary">
+              {props.post.createdAt
+                ? new Date(props.post.createdAt).toLocaleString()
+                : ""}
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap">
+              {props.post.tags.map((tag) => (
+                <Chip key={tag.tag.id} label={tag.tag.name} size={"small"} />
+              ))}
+            </Stack>
+            <AuthorCard user={props.post.author} avatarSize={32} />
+            <VoteButton
+              postId={props.post.id}
+              currentVoteCount={props.post.votes.length}
+              isVoted={props.post.votes.some(
+                (v) =>
+                  v.userId === props.currentUserId && !v.isSalesApplication,
+              )}
+              currentUserId={props.currentUserId || null}
+              disabled={!props.currentUserId}
+            />
+            <Typography variant="h6" component={"p"} color="text.secondary">
+              {props.post.description}
+            </Typography>
+          </Stack>
         </Stack>
       </Stack>
     </Stack>
