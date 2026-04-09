@@ -8,7 +8,7 @@ export default function AuthorCard({
   user: User & { slacks: { name: string; isDisplayname: boolean }[] };
   avatarSize?: number;
 }) {
-  const firstSlack = user.slacks?.[0];
+  const displaySlack = user.slacks?.find((slack) => slack.isDisplayname);
   return (
     <Stack direction="row" alignItems="center" spacing={1}>
       <Avatar
@@ -16,12 +16,12 @@ export default function AuthorCard({
         sx={{ width: avatarSize, height: avatarSize }}
       >
         {user.nickName?.[0] ??
-          (firstSlack?.isDisplayname ? firstSlack.name[0] : "?")}
+          (displaySlack?.isDisplayname ? displaySlack.name[0] : "?")}
       </Avatar>
 
       <Typography variant="subtitle2" color="text.secondary">
         {user.nickName ??
-          (firstSlack?.isDisplayname ? firstSlack.name : "匿名")}
+          (displaySlack?.isDisplayname ? displaySlack.name : "匿名")}
       </Typography>
     </Stack>
   );
