@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import PostDetailDialogClient, { type PostDetailData } from "./Client";
+import { notFound } from "next/navigation";
 
 interface PostDetailDialogProps {
   type: "id" | "post";
@@ -50,7 +51,7 @@ export default async function PostDetailDialog(props: PostDetailDialogProps) {
           },
         });
   if (!post) {
-    throw new Error("Post not found");
+    notFound();
   }
   const session = await auth.api.getSession({ headers: await headers() });
   return (

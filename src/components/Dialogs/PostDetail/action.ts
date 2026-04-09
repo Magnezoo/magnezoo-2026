@@ -4,8 +4,12 @@ import fs from "node:fs";
 import { revalidatePath } from "next/cache";
 import { ulid } from "ulid";
 import prisma from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { unauthorized } from "next/navigation";
 
 const MAX_TAGS = 5;
+const MAX_TAG_NAME_LENGTH = 20;
 
 // タグの取得（名前順）
 export const getTags = async (): Promise<{ id: string; name: string }[]> => {
@@ -16,33 +20,53 @@ export const createPost = async ({
   title,
   content,
   image,
-  userId,
   isSalesApplication,
   tagNames = [],
 }: {
   title: string;
   content: string;
   image: File;
-  userId: string;
   isSalesApplication: boolean;
   tagNames?: string[];
 }) => {
   try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session) unauthorized();
+    const userId = session.user.id;
+
     const dir = `${process.cwd()}/public/img/posts`;
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-    const filename = `${Date.now()}-${image?.name}`;
+    const filename = `${Date.now()}-${ulid()}`;
     const filepath = `${dir}/${filename}`;
 
     if (image) {
+      if (image.size > 5 * 1024 * 1024) {
+        throw new Error("Image size exceeds 5MB");
+      }
+      const { fileTypeFromBuffer } = await import("file-type");
+      const MIME_TO_EXT: Record<string, string> = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/gif": "gif",
+        "image/webp": "webp",
+      };
       const buffer = Buffer.from(await image.arrayBuffer());
+      const fileType = await fileTypeFromBuffer(buffer);
+      if (!fileType || !MIME_TO_EXT[fileType.mime]) {
+        throw new Error("Invalid image type");
+      }
       fs.writeFileSync(filepath, buffer);
     }
 
     // タグ名は最大32文字に切り詰め、重複を除去し、5件までに制限する
     const validTagNames = [
-      ...new Set(tagNames.map((n) => n.trim().slice(0, 32)).filter(Boolean)),
+      ...new Set(
+        tagNames
+          .map((n) => n.trim().slice(0, MAX_TAG_NAME_LENGTH))
+          .filter(Boolean),
+      ),
     ].slice(0, MAX_TAGS);
 
     const imageUrl = `/api/post_images/${filename}`;
