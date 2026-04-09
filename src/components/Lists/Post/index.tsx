@@ -13,7 +13,14 @@ export default function PostsList({
   isSalesApplicationVoting?: boolean;
 }) {
   return (
-    <Grid container spacing={2} justifyContent="center" columns={3}>
+    <Grid
+      container
+      spacing={2}
+      justifyContent="center"
+      columns={6}
+      sx={{ width: "100%" }}
+      maxWidth={{ xs: "100%", md: "1400px" }}
+    >
       {posts.map((post, index) => (
         <PostCard
           post={post}
