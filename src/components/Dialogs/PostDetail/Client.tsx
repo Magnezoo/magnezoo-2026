@@ -49,6 +49,7 @@ export default function PostDetailDialogClient(props: Props) {
         justifyContent: "center",
         alignItems: "center",
         p: { xs: 1, md: 4 },
+        overflowY: "scroll",
       }}
     >
       <Box
@@ -62,10 +63,9 @@ export default function PostDetailDialogClient(props: Props) {
             lg: "95vw",
           },
           mt: { xs: 20, md: 5 },
-          height: { xs: "100vh", md: "85vh" },
+          height: { xs: "auto", md: "85vh" },
           backgroundColor: "#fff",
           borderRadius: { xs: 0, md: 2 },
-          overflow: "hidden",
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
         }}
@@ -74,7 +74,8 @@ export default function PostDetailDialogClient(props: Props) {
         <Box
           sx={{
             width: { xs: "100%", md: "70%" },
-            height: { xs: "40vh", md: "100%" },
+            height: { xs: "60%", md: "100%" },
+            minHeight: 300,
             position: "relative",
           }}
           onClick={() => setOpenLightbox(true)}
@@ -93,8 +94,7 @@ export default function PostDetailDialogClient(props: Props) {
         <Stack
           sx={{
             width: { xs: "100%", md: "30%" },
-            height: "100%",
-            overflowY: "auto",
+            height: { xs: "40%", md: "100%" },
           }}
         >
           {/* 閉じるボタン（sticky） */}
