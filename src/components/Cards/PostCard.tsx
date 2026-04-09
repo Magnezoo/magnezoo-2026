@@ -77,7 +77,7 @@ export default function PostCard({
 
   return (
     <Grid
-      size={{ xs: 3, md: 1 }}
+      size={{ xs: 6, md: 4, lg: 2 }}
       sx={{ display: "flex", justifyContent: "center" }}
     >
       <Card
@@ -90,15 +90,28 @@ export default function PostCard({
         }}
       >
         <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-          <Image
-            src={post.imageUrl}
-            alt={post.title}
-            width={600}
-            height={300}
-            style={{ width: "100%", aspectRatio: "16/9" }}
-            fetchPriority={index !== undefined && index < 5 ? "high" : "auto"}
-            loading={index !== undefined && index < 5 ? "eager" : "lazy"}
-          />
+          <Box
+            sx={{
+              width: "100%",
+              aspectRatio: "16 / 9", // カードの見た目を固定
+              position: "relative",
+              overflow: "hidden", // はみ出し防止
+              borderTopLeftRadius: 4,
+              borderTopRightRadius: 4,
+            }}
+          >
+            <Image
+              src={post.imageUrl}
+              alt={post.title}
+              fill
+              style={{
+                objectFit: "cover", // ← これが超重要
+              }}
+              sizes="(max-width: 768px) 100vw, 450px"
+              fetchPriority={index !== undefined && index < 5 ? "high" : "auto"}
+              loading={index !== undefined && index < 5 ? "eager" : "lazy"}
+            />
+          </Box>
 
           <CardContent sx={{ flexGrow: 1 }}>
             <Stack spacing={1}>
