@@ -48,7 +48,8 @@ export default function VoteButton({
           type="button"
           onClick={
             currentUserId
-              ? async () => {
+              ? async (e) => {
+                  e.stopPropagation();
                   try {
                     const result = await toggleVote({
                       postId,
@@ -66,7 +67,7 @@ export default function VoteButton({
                     return;
                   }
                 }
-              : undefined
+              : (e) => e.stopPropagation()
           }
           disabled={disabled || !currentUserId}
           className={"cursor-pointer"}
