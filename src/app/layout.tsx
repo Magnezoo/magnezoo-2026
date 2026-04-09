@@ -2,7 +2,6 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,6 +20,35 @@ export const metadata: Metadata = {
   },
   description:
     "Magnezooは、みんなのウチの子（ペットやキャラクターなど）を投稿して競う楽しいコンテストサイトです。かわいい、面白い、個性的なウチの子たちが大集合！ユーザーはお気に入りのウチの子に投票したり、コメントを残したりできます。さあ、あなたのウチの子も参加してみませんか？",
+  openGraph: {
+    title: "Magnezoo - みんなのウチの子決定戦！",
+    description:
+      "Magnezooは、みんなのウチの子（ペットやキャラクターなど）を投稿して競う楽しいコンテストサイトです。かわいい、面白い、個性的なウチの子たちが大集合！ユーザーはお気に入りのウチの子に投票したり、コメントを残したりできます。さあ、あなたのウチの子も参加してみませんか？",
+    url: "https://magnezoo.com",
+    siteName: "Magnezoo",
+    images: [
+      {
+        url: "https://magnezoo.com/kv_net.png",
+        width: 1200,
+        height: 630,
+        alt: "Magnezoo OGP Image",
+      },
+    ],
+    locale: "ja_JP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Magnezoo - みんなのウチの子決定戦！",
+    description:
+      "Magnezooは、みんなのウチの子（ペットやキャラクターなど）を投稿して競う楽しいコンテストサイトです。かわいい、面白い、個性的なウチの子たちが大集合！ユーザーはお気に入りのウチの子に投票したり、コメントを残したりできます。さあ、あなたのウチの子も参加してみませんか？",
+    images: [
+      {
+        url: "https://magnezoo.com/kv_net.png",
+        alt: "Magnezoo Twitter Card Image",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
