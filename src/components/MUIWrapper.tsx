@@ -7,6 +7,12 @@ import { SnackbarProvider } from "notistack";
 const theme = createTheme({
   palette: {
     mode: "light",
+    text: {
+      primary: "#707070",
+    },
+  },
+  typography: {
+    fontFamily: ["a-otf-ud-shin-maru-go-pr6n"].join(","),
   },
 });
 

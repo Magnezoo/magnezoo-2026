@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
+import "./user.css";
 import { Stack } from "@mui/material";
 import Link from "next/link";
 import NameSettingGuard from "@/components/Dialogs/NameSettingGuard";

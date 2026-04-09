@@ -19,7 +19,7 @@ export default function AuthorCard({
           (displaySlack?.isDisplayname ? displaySlack.name[0] : "?")}
       </Avatar>
 
-      <Typography variant="subtitle2" color="text.secondary">
+      <Typography variant="subtitle2" color="text.secondary" fontWeight={"600"}>
         {user.nickName ??
           (displaySlack?.isDisplayname ? displaySlack.name : "匿名")}
       </Typography>

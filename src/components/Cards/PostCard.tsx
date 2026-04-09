@@ -118,7 +118,9 @@ export default function PostCard({
 
           <CardContent sx={{ flexGrow: 1 }}>
             <Stack spacing={1}>
-              <Typography variant="h5">{optimizedTitle}</Typography>
+              <Typography variant="h5" fontWeight={600}>
+                {optimizedTitle}
+              </Typography>
 
               <AuthorCard user={post.author} />
 
