@@ -37,7 +37,7 @@ export default async function PostDetailPage({
           <ResolvedPostsPage searchParams={resolvedSearchParams} />
         </Suspense>
       </Stack>
-      <PostDetailDialog type="id" id={id} />
+      <PostDetailDialog type="id" id={id} closeRedirectTo="/posts" />
     </>
   );
 }
