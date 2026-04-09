@@ -23,8 +23,10 @@ export default function PostFilterToggle({
     if (newValue !== null) {
       if (newValue === "my") {
         router.push("/posts/my");
+        router.refresh();
       } else {
         router.push("/posts");
+        router.refresh();
       }
     }
   };
