@@ -1,5 +1,6 @@
 import { Button, Stack, Typography } from "@mui/material";
 import { headers } from "next/headers";
+import PostButton from "@/components/Buttons/Post";
 import { auth } from "@/lib/auth";
 import { HeroImageClient } from "./Client";
 import { ResolvedPickupPosts, ResolvedRecentPosts } from "./Resolved";
@@ -36,6 +37,12 @@ export default async function HomePage() {
           <strong>ウチの子のかわいい写真や特徴</strong>
           を投稿して、他のユーザーと共有しましょう！
         </Typography>
+        <Stack alignItems="left">
+          <PostButton
+            userId={session?.user.id}
+            className="bg-white border-2 border-black text-black font-bold py-4 px-12 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all duration-200 text-lg cursor-pointer"
+          />
+        </Stack>
       </Stack>
       <Stack id="pickup" width={"100%"} maxWidth={1200}>
         <Typography variant="h4" align="left" mt={10} mb={5} fontWeight="bold">
