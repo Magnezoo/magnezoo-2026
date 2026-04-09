@@ -19,7 +19,7 @@ export default function PostListTitle({
       {isMobile ? null : (
         <Image
           src="/img/char1.png"
-          alt="Character 1"
+          alt="テーマキャラクター1"
           width={CharactorSize}
           height={CharactorSize}
         />
@@ -31,7 +31,7 @@ export default function PostListTitle({
       {isMobile ? null : (
         <Image
           src="/img/char2.png"
-          alt="Character 2"
+          alt="テーマキャラクター2"
           width={CharactorSize}
           height={CharactorSize}
         />
