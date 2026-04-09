@@ -106,21 +106,12 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
   };
 
   const handleDelete = async () => {
-    const { data: session } = await authClient.getSession();
-    if (!session?.user.id) {
-      enqueueSnackbar("ログインセッションが見つかりません", {
-        variant: "error",
-      });
-      return;
-    }
-
     setSubmitting(true);
     setDeleteDialogOpen(false);
 
     try {
       const ok = await deletePost({
         id: post.id,
-        userId: session.user.id,
       });
 
       if (ok) {

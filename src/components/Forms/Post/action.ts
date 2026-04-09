@@ -1,8 +1,11 @@
 "use server";
 
 import fs from "node:fs";
+import path from "node:path";
+import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { ulid } from "ulid";
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
 const MAX_TAGS = 5;
@@ -209,21 +212,19 @@ export const updatePost = async ({
   }
 };
 
-export const deletePost = async ({
-  id,
-  userId,
-}: {
-  id: string;
-  userId: string;
-}) => {
+export const deletePost = async ({ id }: { id: string }) => {
   try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    const currentUserId = session?.user.id;
+    if (!currentUserId) return false;
+
     const [existingPost, user] = await Promise.all([
       prisma.post.findUnique({
         where: { id },
         select: { authorId: true, imageUrl: true },
       }),
       prisma.user.findUnique({
-        where: { id: userId },
+        where: { id: currentUserId },
         select: { role: true },
       }),
     ]);
@@ -232,11 +233,11 @@ export const deletePost = async ({
 
     // 認可チェック: 管理者であるか、投稿の所有者である場合のみ許可
     const isAdmin = user.role === "admin";
-    const isAuthor = existingPost.authorId === userId;
+    const isAuthor = existingPost.authorId === currentUserId;
 
     if (!isAdmin && !isAuthor) {
       console.warn(
-        `Unauthorized delete attempt by user ${userId} on post ${id}`,
+        `Unauthorized delete attempt by user ${currentUserId} on post ${id}`,
       );
       return false;
     }
@@ -251,11 +252,24 @@ export const deletePost = async ({
 
     // DBからの削除が成功した後に、画像ファイルを削除
     if (existingPost.imageUrl) {
-      const dir = `${process.cwd()}/public/img/posts`;
-      const filename = existingPost.imageUrl.replace("/api/post_images/", "");
-      const filepath = `${dir}/${filename}`;
-      if (fs.existsSync(filepath)) {
-        fs.unlinkSync(filepath);
+      const dir = path.join(process.cwd(), "public", "img", "posts");
+      const raw = existingPost.imageUrl.replace("/api/post_images/", "");
+      const filename = path.basename(raw);
+
+      if (filename === raw) {
+        const filepath = path.join(dir, filename);
+        try {
+          if (fs.existsSync(filepath)) {
+            fs.unlinkSync(filepath);
+          }
+        } catch (e) {
+          console.warn("Post deleted but image cleanup failed:", e);
+        }
+      } else {
+        console.warn(
+          "Skipped deleting unexpected image path:",
+          existingPost.imageUrl,
+        );
       }
     }
 
