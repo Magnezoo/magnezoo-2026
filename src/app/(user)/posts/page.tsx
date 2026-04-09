@@ -1,7 +1,9 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { headers } from "next/headers";
+
 import { Suspense } from "react";
 import PostFilterToggle from "@/components/Buttons/PostFilterToggle";
+import PostListTitle from "@/components/Title/PostListTitle";
 import { auth } from "@/lib/auth";
 import ResolvedPostsPage from "./using";
 
@@ -29,12 +31,10 @@ export default async function PostsPage({
         backgroundColor: "#FFEECE",
       }}
     >
-      <Stack alignItems="center" spacing={1}>
-        <Typography variant="h3" fontWeight={600}>
-          うちの子一覧
-        </Typography>
-        <Typography variant={"body1"}>気になる投稿を探してみよう！</Typography>
-      </Stack>
+      <PostListTitle
+        title="うちの子一覧"
+        subtitle="気になる投稿を探してみよう！"
+      />
 
       {currentUser && (
         <Box>
