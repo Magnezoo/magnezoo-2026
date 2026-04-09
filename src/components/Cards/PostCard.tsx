@@ -94,6 +94,7 @@ export default function PostCard({
       >
         <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
           <Box
+            onClick={() => router.push(`/posts/${post.id}`)}
             sx={{
               width: "100%",
               aspectRatio: "16 / 9", // カードの見た目を固定
@@ -101,6 +102,7 @@ export default function PostCard({
               overflow: "hidden", // はみ出し防止
               borderTopLeftRadius: 4,
               borderTopRightRadius: 4,
+              cursor: "pointer",
             }}
           >
             <Image
@@ -191,12 +193,25 @@ export default function PostCard({
                 />
                 <Stack direction="row" spacing={1}>
                   {isAdmin && (
-                    <Button href={`/admin/posts/${post.id}`}>管理画面へ</Button>
+                    <Button
+                      href={`/admin/posts/${post.id}`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      管理画面へ
+                    </Button>
                   )}
                   {currentUserId === post.author.id && (
-                    <Button href={`/posts/${post.id}/edit`}>編集する</Button>
+                    <Button
+                      href={`/posts/${post.id}/edit`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      編集する
+                    </Button>
                   )}
-                  <Button onClick={() => router.push(`/posts/${post.id}`)}>
+                  <Button
+                    onClick={() => router.push(`/posts/${post.id}`)}
+                    variant="contained"
+                  >
                     詳細を見る
                   </Button>
                 </Stack>
