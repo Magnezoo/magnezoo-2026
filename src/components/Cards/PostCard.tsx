@@ -49,11 +49,13 @@ export default function PostCard({
   currentUserId,
   index,
   isSalesApplicationVoting = false,
+  isAdmin = false,
 }: {
   post: PostWithAutherAndVotes;
   currentUserId: string | null;
   index?: number;
   isSalesApplicationVoting?: boolean;
+  isAdmin?: boolean;
 }) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
@@ -173,6 +175,9 @@ export default function PostCard({
                   disabled={!currentUserId}
                 />
                 <Stack direction="row" spacing={1}>
+                  {isAdmin && (
+                    <Button href={`/admin/posts/${post.id}`}>管理画面へ</Button>
+                  )}
                   <Button href={`/posts/${post.id}/edit`}>編集する</Button>
                   <Button onClick={() => router.push(`/posts/${post.id}`)}>
                     詳細を見る
