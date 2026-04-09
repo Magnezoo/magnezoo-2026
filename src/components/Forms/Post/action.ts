@@ -28,24 +28,34 @@ export const createPost = async ({
   tagNames?: string[];
 }) => {
   try {
+    // file-typeで拡張子を判定し、パストラバーサル等のリスクを排除
+    const { fileTypeFromBuffer } = await import("file-type");
+    const MIME_TO_EXT: Record<string, string> = {
+      "image/jpeg": "jpg",
+      "image/png": "png",
+      "image/gif": "gif",
+      "image/webp": "webp",
+    };
     const dir = `${process.cwd()}/public/img/posts`;
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-    const filename = `${Date.now()}-${image?.name}`;
-    const filepath = `${dir}/${filename}`;
-
-    if (image) {
-      const buffer = Buffer.from(await image.arrayBuffer());
-      fs.writeFileSync(filepath, buffer);
+    const buffer = Buffer.from(await image.arrayBuffer());
+    const fileType = await fileTypeFromBuffer(buffer);
+    if (!fileType || !MIME_TO_EXT[fileType.mime]) {
+      console.error("Invalid image type:", fileType?.mime);
+      return false;
     }
+    const ext = MIME_TO_EXT[fileType.mime];
+    const filename = `${Date.now()}-${ulid()}.${ext}`;
+    const filepath = `${dir}/${filename}`;
+    fs.writeFileSync(filepath, buffer);
+    const imageUrl = `/api/post_images/${filename}`;
 
     // タグ名は最大32文字に切り詰め、重複を除去し、5件までに制限する
     const validTagNames = [
       ...new Set(tagNames.map((n) => n.trim().slice(0, 32)).filter(Boolean)),
     ].slice(0, MAX_TAGS);
-
-    const imageUrl = `/api/post_images/${filename}`;
 
     await prisma.post.create({
       data: {
