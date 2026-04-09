@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  Avatar,
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
@@ -13,6 +13,7 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   type Post,
   SalesType,
@@ -20,6 +21,7 @@ import {
   type User,
 } from "@/generated/prisma/browser";
 import VoteButton from "../Buttons/Vote";
+import AuthorCard from "./AuthorCard";
 
 export interface UserWithSlacks extends User {
   slacks: Omit<Slacks, "userId" | "id" | "createdAt" | "updatedAt">[];
@@ -47,16 +49,17 @@ export default function PostCard({
   currentUserId,
   index,
   isSalesApplicationVoting = false,
+  isAdmin = false,
 }: {
   post: PostWithAutherAndVotes;
   currentUserId: string | null;
   index?: number;
   isSalesApplicationVoting?: boolean;
+  isAdmin?: boolean;
 }) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
-
-  const firstSlack = post.author.slacks?.[0];
+  const router = useRouter();
 
   // 最適化（SSR安全）
   const optimizedDescription = isSmall
@@ -117,20 +120,7 @@ export default function PostCard({
             <Stack spacing={1}>
               <Typography variant="h5">{optimizedTitle}</Typography>
 
-              <Stack direction="row" alignItems="center" spacing={1}>
-                <Avatar
-                  src={post.author.image || undefined}
-                  sx={{ width: 24, height: 24 }}
-                >
-                  {post.author.nickName?.[0] ??
-                    (firstSlack?.isDisplayname ? firstSlack.name[0] : "?")}
-                </Avatar>
-
-                <Typography variant="subtitle2" color="text.secondary">
-                  {post.author.nickName ??
-                    (firstSlack?.isDisplayname ? firstSlack.name : "匿名")}
-                </Typography>
-              </Stack>
+              <AuthorCard user={post.author} />
 
               <Typography variant="body2" color="text.secondary">
                 {optimizedDescription}
@@ -181,15 +171,34 @@ export default function PostCard({
                 })}
               </Stack>
             ) : (
-              <VoteButton
-                postId={post.id}
-                currentVoteCount={post.votes.length}
-                isVoted={post.votes.some(
-                  (v) => v.userId === currentUserId && !v.isSalesApplication,
-                )}
-                currentUserId={currentUserId}
-                disabled={!currentUserId}
-              />
+              <Stack
+                direction="row"
+                alignItems="center"
+                width={"100%"}
+                spacing={1}
+                justifyContent={"space-between"}
+              >
+                <VoteButton
+                  postId={post.id}
+                  currentVoteCount={post.votes.length}
+                  isVoted={post.votes.some(
+                    (v) => v.userId === currentUserId && !v.isSalesApplication,
+                  )}
+                  currentUserId={currentUserId}
+                  disabled={!currentUserId}
+                />
+                <Stack direction="row" spacing={1}>
+                  {isAdmin && (
+                    <Button href={`/admin/posts/${post.id}`}>管理画面へ</Button>
+                  )}
+                  {!isAdmin && currentUserId === post.author.id && (
+                    <Button href={`/posts/${post.id}/edit`}>編集する</Button>
+                  )}
+                  <Button onClick={() => router.push(`/posts/${post.id}`)}>
+                    詳細を見る
+                  </Button>
+                </Stack>
+              </Stack>
             )}
           </CardActions>
         </Box>

@@ -1,9 +1,11 @@
 import { Grid } from "@mui/material";
+import { headers } from "next/headers";
 import PostCard, {
   type PostWithAutherAndVotes,
 } from "@/components/Cards/PostCard";
+import { auth } from "@/lib/auth";
 
-export default function PostsList({
+export default async function PostsList({
   posts,
   currentUserId,
   isSalesApplicationVoting = false,
@@ -12,6 +14,7 @@ export default function PostsList({
   currentUserId: string | null;
   isSalesApplicationVoting?: boolean;
 }) {
+  const session = await auth.api.getSession({ headers: await headers() });
   return (
     <Grid
       container
@@ -28,6 +31,7 @@ export default function PostsList({
           index={index}
           currentUserId={currentUserId}
           isSalesApplicationVoting={isSalesApplicationVoting}
+          isAdmin={session?.user.role === "admin" || false}
         />
       ))}
     </Grid>
