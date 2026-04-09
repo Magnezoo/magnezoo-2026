@@ -14,7 +14,7 @@ export default function PostFilterToggle({
   const pathname = usePathname();
 
   const isMyPosts =
-    pathname === "/posts-my" || pathname.startsWith("/posts-my/");
+    pathname === "/posts_my" || pathname.startsWith("/posts_my/");
 
   const handleChange = (
     _event: React.MouseEvent<HTMLElement>,
@@ -22,7 +22,7 @@ export default function PostFilterToggle({
   ) => {
     if (newValue !== null) {
       if (newValue === "my") {
-        router.push("/posts-my");
+        router.push("/posts_my");
         router.refresh();
       } else {
         router.push("/posts");
