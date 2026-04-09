@@ -12,8 +12,9 @@ export default function PostListTitle({
   title: string;
   subtitle: string;
 }) {
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  console.log("isMobile", isMobile);
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"), {
+    noSsr: true,
+  });
   return (
     <Stack direction={"row"} alignItems="center" spacing={4}>
       {isMobile ? null : (
