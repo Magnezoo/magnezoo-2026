@@ -118,7 +118,10 @@ export default function PostCard({
             />
           </Box>
 
-          <CardContent sx={{ flexGrow: 1 }}>
+          <CardContent
+            sx={{ flexGrow: 1, cursor: "pointer" }}
+            onClick={() => router.push(`/posts/${post.id}`)}
+          >
             <Stack spacing={1}>
               <Typography variant="h5" fontWeight={600}>
                 {optimizedTitle}
