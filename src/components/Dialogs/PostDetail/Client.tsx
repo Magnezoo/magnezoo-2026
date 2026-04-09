@@ -32,7 +32,11 @@ export default function PostDetailDialogClient(props: Props) {
   const router = useRouter();
 
   const handleClose = () => {
-    router.back();
+    if (props.closeRedirectTo) {
+      router.push(props.closeRedirectTo);
+    } else {
+      router.back();
+    }
   };
 
   const [openLightbox, setOpenLightbox] = useState(false);
@@ -68,6 +72,11 @@ export default function PostDetailDialogClient(props: Props) {
           borderRadius: { xs: 0, md: 2 },
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") {
+            handleClose();
+          }
         }}
       >
         {/* 画像エリア */}
