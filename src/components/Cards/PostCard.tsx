@@ -193,7 +193,7 @@ export default function PostCard({
                   {isAdmin && (
                     <Button href={`/admin/posts/${post.id}`}>管理画面へ</Button>
                   )}
-                  {!isAdmin && currentUserId === post.author.id && (
+                  {currentUserId === post.author.id && (
                     <Button href={`/posts/${post.id}/edit`}>編集する</Button>
                   )}
                   <Button onClick={() => router.push(`/posts/${post.id}`)}>
