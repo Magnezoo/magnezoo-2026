@@ -35,7 +35,7 @@ export default async function PostDetailDialog(props: PostDetailDialogProps) {
             },
             votes: {
               where: {
-                isSalesApplication: true,
+                isSalesApplication: false,
               },
               select: {
                 userId: true,
