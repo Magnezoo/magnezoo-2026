@@ -61,6 +61,7 @@ export default function PostDetailDialogClient(props: Props) {
             md: "1000px",
             lg: "95vw",
           },
+          mt: { xs: 20, md: 5 },
           height: { xs: "100vh", md: "85vh" },
           backgroundColor: "#fff",
           borderRadius: { xs: 0, md: 2 },
