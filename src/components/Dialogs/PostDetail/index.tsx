@@ -1,8 +1,8 @@
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import PostDetailDialogClient, { type PostDetailData } from "./Client";
-import { notFound } from "next/navigation";
 
 interface PostDetailDialogProps {
   type: "id" | "post";

@@ -1,8 +1,8 @@
+import { headers } from "next/headers";
 import { forbidden, notFound, unauthorized } from "next/navigation";
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import PostEditForm from "./PostEditForm";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 
 export default async function PostEditPage({
   params,
