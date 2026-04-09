@@ -7,9 +7,11 @@ export async function ResolvedPickupPosts({
   currentUserId: string | null;
 }) {
   const someMaximumNumber = await prisma.post.count();
+  const takeCount = 3;
+  const maxSkip = Math.max(0, someMaximumNumber - takeCount);
   const posts = await prisma.post.findMany({
-    take: 3,
-    skip: Math.floor(Math.random() * someMaximumNumber),
+    take: takeCount,
+    skip: Math.floor(Math.random() * (maxSkip + 1)),
     include: {
       author: {
         include: {
@@ -39,6 +41,9 @@ export async function ResolvedRecentPosts({
 }) {
   const posts = await prisma.post.findMany({
     take: 12,
+    orderBy: {
+      createdAt: "desc",
+    },
     include: {
       author: {
         include: {

@@ -7,6 +7,7 @@ import { ResolvedPickupPosts, ResolvedRecentPosts } from "./Resolved";
 
 export default async function HomePage() {
   const session = await auth.api.getSession({ headers: await headers() });
+  const maxWidth = 1400;
   return (
     <Stack
       component={"main"}
@@ -23,7 +24,7 @@ export default async function HomePage() {
       <Stack
         id="about"
         spacing={2}
-        maxWidth={1200}
+        maxWidth={maxWidth}
         width={"100%"}
         textAlign="left"
       >
@@ -44,13 +45,13 @@ export default async function HomePage() {
           />
         </Stack>
       </Stack>
-      <Stack id="pickup" width={"100%"} maxWidth={1200}>
+      <Stack id="pickup" width={"100%"} maxWidth={maxWidth}>
         <Typography variant="h4" align="left" mt={10} mb={5} fontWeight="bold">
           PickUp !
         </Typography>
         <ResolvedPickupPosts currentUserId={session?.user.id ?? null} />
       </Stack>
-      <Stack id="recent" width={"100%"} maxWidth={1200}>
+      <Stack id="recent" width={"100%"} maxWidth={maxWidth}>
         <Typography variant="h4" align="left" mt={10} mb={5} fontWeight="bold">
           最近のポスト
         </Typography>
