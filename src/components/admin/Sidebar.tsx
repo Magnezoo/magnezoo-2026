@@ -172,7 +172,7 @@ export default function Sidebar({ children, user }: Props) {
               >
                 <Avatar
                   sx={{ width: 32, height: 32, bgcolor: "orange" }}
-                  src={user.image!}
+                  src={user.image || undefined}
                 />
               </IconButton>
             </Tooltip>
