@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import PostCard, {
   type PostWithAutherAndVotes,
 } from "@/components/Cards/PostCard";
