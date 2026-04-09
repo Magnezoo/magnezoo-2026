@@ -7,6 +7,11 @@ import {
   Button,
   CircularProgress,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   Paper,
   Stack,
@@ -20,7 +25,11 @@ import PostImageField from "@/components/admin/PostEditor/PostImageField";
 import PostPublicationFields from "@/components/admin/PostEditor/PostPublicationFields";
 import PostTagField from "@/components/admin/PostEditor/PostTagField";
 import PostTitleDescFields from "@/components/admin/PostEditor/PostTitleDescFields";
-import { getTags, updatePost } from "@/components/Forms/Post/action";
+import {
+  deletePost,
+  getTags,
+  updatePost,
+} from "@/components/Forms/Post/action";
 import { authClient } from "@/lib/auth-client";
 
 type Tag = { id: string; name: string };
@@ -38,6 +47,7 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
   const { enqueueSnackbar } = useSnackbar();
   const [submitting, setSubmitting] = useState(false);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // Form State
   const [title, setTitle] = useState(post.title);
@@ -86,6 +96,38 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
         router.push(`/admin/posts/${post.id}`);
       } else {
         enqueueSnackbar("更新に失敗しました", { variant: "error" });
+      }
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar("エラーが発生しました", { variant: "error" });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    const { data: session } = await authClient.getSession();
+    if (!session?.user.id) {
+      enqueueSnackbar("ログインセッションが見つかりません", {
+        variant: "error",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    setDeleteDialogOpen(false);
+
+    try {
+      const ok = await deletePost({
+        id: post.id,
+        userId: session.user.id,
+      });
+
+      if (ok) {
+        enqueueSnackbar("投稿を削除しました", { variant: "success" });
+        router.push("/posts");
+      } else {
+        enqueueSnackbar("削除に失敗しました", { variant: "error" });
       }
     } catch (err) {
       console.error(err);
@@ -178,6 +220,15 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
             >
               キャンセル
             </Button>
+            <Box sx={{ flexGrow: 1 }} />
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => setDeleteDialogOpen(true)}
+              disabled={submitting}
+            >
+              投稿を削除
+            </Button>
             <Button
               type="submit"
               variant="contained"
@@ -187,6 +238,29 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
             </Button>
           </Box>
         </Stack>
+
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={() => !submitting && setDeleteDialogOpen(false)}
+        >
+          <DialogTitle>投稿の削除</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              本当に投稿を削除しますか？この操作は取り消せません。
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setDeleteDialogOpen(false)}
+              disabled={submitting}
+            >
+              キャンセル
+            </Button>
+            <Button onClick={handleDelete} color="error" disabled={submitting}>
+              {submitting ? "削除中..." : "削除する"}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Paper>
 
       <Backdrop open={submitting} sx={{ zIndex: 1300 }}>

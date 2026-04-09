@@ -208,3 +208,63 @@ export const updatePost = async ({
     return false;
   }
 };
+
+export const deletePost = async ({
+  id,
+  userId,
+}: {
+  id: string;
+  userId: string;
+}) => {
+  try {
+    const [existingPost, user] = await Promise.all([
+      prisma.post.findUnique({
+        where: { id },
+        select: { authorId: true, imageUrl: true },
+      }),
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: { role: true },
+      }),
+    ]);
+
+    if (!existingPost || !user) return false;
+
+    // 認可チェック: 管理者であるか、投稿の所有者である場合のみ許可
+    const isAdmin = user.role === "admin";
+    const isAuthor = existingPost.authorId === userId;
+
+    if (!isAdmin && !isAuthor) {
+      console.warn(
+        `Unauthorized delete attempt by user ${userId} on post ${id}`,
+      );
+      return false;
+    }
+
+    // 投稿の削除と画像ファイルの削除を、DBの削除が成功した場合のみ実行するように順序を調整
+    // (ファイルシステムはDBのトランザクションには含まれないため、DB削除を先行させる)
+    await prisma.$transaction(async (tx) => {
+      await tx.post.delete({
+        where: { id },
+      });
+    });
+
+    // DBからの削除が成功した後に、画像ファイルを削除
+    if (existingPost.imageUrl) {
+      const dir = `${process.cwd()}/public/img/posts`;
+      const filename = existingPost.imageUrl.replace("/api/post_images/", "");
+      const filepath = `${dir}/${filename}`;
+      if (fs.existsSync(filepath)) {
+        fs.unlinkSync(filepath);
+      }
+    }
+
+    revalidatePath("/admin/posts");
+    revalidatePath("/posts");
+
+    return true;
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    return false;
+  }
+};
