@@ -1,6 +1,8 @@
-import { notFound } from "next/navigation";
+import { forbidden, notFound, unauthorized } from "next/navigation";
 import prisma from "@/lib/prisma";
 import PostEditForm from "./PostEditForm";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export default async function PostEditPage({
   params,
@@ -19,7 +21,12 @@ export default async function PostEditPage({
     },
   });
 
-  if (!post) return notFound();
+  if (!post) notFound();
+
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session) unauthorized();
+  if (session.user.id !== post.authorId) forbidden();
 
   return <PostEditForm post={post} />;
 }
