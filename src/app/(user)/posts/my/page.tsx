@@ -1,8 +1,8 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { headers } from "next/headers";
-import Image from "next/image";
 import { Suspense } from "react";
 import PostFilterToggle from "@/components/Buttons/PostFilterToggle";
+import PostListTitle from "@/components/Title/PostListTitle";
 import { auth } from "@/lib/auth";
 import ResolvedPostsPage from "../using";
 
@@ -17,8 +17,6 @@ export default async function MyPostsPage({
   });
   const currentUser = session?.user;
 
-  const CharactorSize = 130;
-
   return (
     <Stack
       component={"main"}
@@ -32,24 +30,10 @@ export default async function MyPostsPage({
         backgroundColor: "#FFEECE",
       }}
     >
-      <Stack direction={"row"} alignItems="center" spacing={4}>
-        <Image
-          src="/img/char1.png"
-          alt="Character 1"
-          width={CharactorSize}
-          height={CharactorSize}
-        />
-        <Stack alignItems="center" spacing={1}>
-          <Typography variant="h3">自分の投稿一覧</Typography>
-          <Typography variant={"body1"}>自分が投稿した子たちです！</Typography>
-        </Stack>
-        <Image
-          src="/img/char2.png"
-          alt="Character 2"
-          width={CharactorSize}
-          height={CharactorSize}
-        />
-      </Stack>
+      <PostListTitle
+        title="自分の投稿一覧"
+        subtitle="自分が投稿した子たちです！"
+      />
 
       {currentUser && (
         <Box>
