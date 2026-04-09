@@ -3,3 +3,41 @@
   font-weight: 300;
   font-style: normal;
 }
+
+/* スクロールダウンの位置 */
+.scroll {
+  padding-top: 60px;
+  position: relative;
+  text-align: center;
+}
+/* 矢印のアニメーション部分 */
+.scroll::before {
+  animation: scroll 2s infinite;
+  border-bottom: 1px solid #000;
+  border-left: 1px solid #000;
+  content: "";
+  height: 20px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20px;
+}
+/* 矢印のアニメーション */
+@keyframes scroll {
+  0% {
+    opacity: 0;
+    transform: rotate(-45deg) translate(0, 0);
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+    transform: rotate(-45deg) translate(-20px, 20px);
+  }
+  100% {
+    opacity: 0;
+  }
+}
