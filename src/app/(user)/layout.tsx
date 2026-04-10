@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import "../globals.css";
 import "./user.css";
 import { Stack } from "@mui/material";
+import { headers } from "next/headers";
 import Link from "next/link";
 import NameSettingGuard from "@/components/Dialogs/NameSettingGuard";
 import Header from "@/components/Header";
 import MUIWrapper from "@/components/MUIWrapper";
 import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: {
@@ -26,8 +26,8 @@ export default async function RootLayout({
   detail: React.ReactNode;
 }>) {
   const session = await auth.api.getSession({
-        headers: await headers()
-    });
+    headers: await headers(),
+  });
   return (
     <MUIWrapper>
       <Header session={session?.session} />
