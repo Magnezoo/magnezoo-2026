@@ -24,11 +24,11 @@ export const metadata: Metadata = {
     title: "Magnezoo - みんなのウチの子決定戦！",
     description:
       "Magnezooは、みんなのウチの子（ペットやキャラクターなど）を投稿して競う楽しいコンテストサイトです。かわいい、面白い、個性的なウチの子たちが大集合！ユーザーはお気に入りのウチの子に投票したり、コメントを残したりできます。さあ、あなたのウチの子も参加してみませんか？",
-    url: "https://magnezoo.com",
+    url: "https://magnezoo.unipro-n.com",
     siteName: "Magnezoo",
     images: [
       {
-        url: "https://magnezoo.com/kv_net.png",
+        url: "https://magnezoo.unipro-n.com/img/kv_net.png",
         width: 1200,
         height: 630,
         alt: "Magnezoo OGP Image",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
       "Magnezooは、みんなのウチの子（ペットやキャラクターなど）を投稿して競う楽しいコンテストサイトです。かわいい、面白い、個性的なウチの子たちが大集合！ユーザーはお気に入りのウチの子に投票したり、コメントを残したりできます。さあ、あなたのウチの子も参加してみませんか？",
     images: [
       {
-        url: "https://magnezoo.com/kv_net.png",
+        url: "https://magnezoo.unipro-n.com/img/kv_net.png",
         alt: "Magnezoo Twitter Card Image",
       },
     ],
