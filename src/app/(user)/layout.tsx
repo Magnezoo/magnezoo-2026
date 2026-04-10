@@ -28,7 +28,7 @@ export default async function RootLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  const isAuthenticated = Boolean(session?.session);
+  const isAuthenticated = Boolean(session);
 
   return (
     <MUIWrapper>
