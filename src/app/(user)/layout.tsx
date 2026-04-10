@@ -25,10 +25,16 @@ export default async function RootLayout({
   children: React.ReactNode;
   detail: React.ReactNode;
 }>) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  const isAuthenticated = Boolean(session);
+  let isAuthenticated = false;
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    isAuthenticated = Boolean(session);
+  } catch (error) {
+    console.error("Failed to fetch session:", error);
+    isAuthenticated = false;
+  }
 
   return (
     <MUIWrapper>
