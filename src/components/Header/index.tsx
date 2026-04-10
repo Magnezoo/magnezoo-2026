@@ -1,6 +1,7 @@
 "use client";
 
 import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { styled } from "@mui/material";
@@ -16,8 +17,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { type Session } from "better-auth";
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar({
+  session,
+}: {
+  session: Session | undefined;
+}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
   const router = useRouter();
@@ -111,12 +117,25 @@ export default function ButtonAppBar() {
                 </ListItemIcon>
                 個人設定
               </MenuItem>
-              <MenuItem onClick={handleLogout}>
-                <ListItemIcon>
-                  <LogoutIcon fontSize="small" />
-                </ListItemIcon>
-                ログアウト
-              </MenuItem>
+              {session ? (
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" />
+                  </ListItemIcon>
+                  ログアウト
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  component={Link}
+                  href="/signin"
+                  onClick={handleCloseMenu}
+                >
+                  <ListItemIcon>
+                    <LoginIcon fontSize="small" />
+                  </ListItemIcon>
+                  ログイン
+                </MenuItem>
+              )}
             </Menu>
           </Toolbar>
         </AppBar>

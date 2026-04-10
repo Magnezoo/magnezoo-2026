@@ -6,6 +6,8 @@ import Link from "next/link";
 import NameSettingGuard from "@/components/Dialogs/NameSettingGuard";
 import Header from "@/components/Header";
 import MUIWrapper from "@/components/MUIWrapper";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: {
@@ -16,16 +18,19 @@ export const metadata: Metadata = {
     "Magnezooは、みんなのウチの子（ペットやキャラクターなど）を投稿して競う楽しいコンテストサイトです。かわいい、面白い、個性的なウチの子たちが大集合！ユーザーはお気に入りのウチの子に投票したり、コメントを残したりできます。さあ、あなたのウチの子も参加してみませんか？",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   detail,
 }: Readonly<{
   children: React.ReactNode;
   detail: React.ReactNode;
 }>) {
+  const session = await auth.api.getSession({
+        headers: await headers()
+    });
   return (
     <MUIWrapper>
-      <Header />
+      <Header session={session?.session} />
       {children}
       {detail}
       <Stack
