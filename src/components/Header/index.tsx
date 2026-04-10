@@ -12,7 +12,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
-import type { Session } from "better-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -20,9 +19,9 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 
 export default function ButtonAppBar({
-  session,
+  isAuthenticated,
 }: {
-  session: Session | undefined;
+  isAuthenticated: boolean;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
@@ -37,9 +36,15 @@ export default function ButtonAppBar({
   };
 
   const handleLogout = async () => {
-    await authClient.signOut();
-    handleCloseMenu();
-    router.push("/signin");
+    try {
+      await authClient.signOut();
+      router.push("/signin");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      alert("ログアウトに失敗しました。");
+    } finally {
+      handleCloseMenu();
+    }
   };
 
   const DrawerHeader = styled("div")(({ theme }) => ({
@@ -117,7 +122,7 @@ export default function ButtonAppBar({
                 </ListItemIcon>
                 個人設定
               </MenuItem>
-              {session ? (
+              {isAuthenticated ? (
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon>
                     <LogoutIcon fontSize="small" />
