@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { headers } from "next/headers";
 import { Suspense } from "react";
-import ResolvedPostsPage from "@/app/(user)/posts/using";
+import ResolvedPostsPage from "@/app/(user)/(posts)/posts/using";
 import PostFilterToggle from "@/components/Buttons/PostFilterToggle";
 import PostListTitle from "@/components/Title/PostListTitle";
 import { auth } from "@/lib/auth";
