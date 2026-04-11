@@ -112,23 +112,25 @@ export default function ButtonAppBar({
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
             >
-              <MenuItem
-                component={Link}
-                href="/settings"
-                onClick={handleCloseMenu}
-              >
-                <ListItemIcon>
-                  <SettingsIcon fontSize="small" />
-                </ListItemIcon>
-                個人設定
-              </MenuItem>
               {isAuthenticated ? (
-                <MenuItem onClick={handleLogout}>
-                  <ListItemIcon>
-                    <LogoutIcon fontSize="small" />
-                  </ListItemIcon>
-                  ログアウト
-                </MenuItem>
+                <>
+                  <MenuItem
+                    component={Link}
+                    href="/settings"
+                    onClick={handleCloseMenu}
+                  >
+                    <ListItemIcon>
+                      <SettingsIcon fontSize="small" />
+                    </ListItemIcon>
+                    個人設定
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>
+                    <ListItemIcon>
+                      <LogoutIcon fontSize="small" />
+                    </ListItemIcon>
+                    ログアウト
+                  </MenuItem>
+                </>
               ) : (
                 <MenuItem
                   component={Link}
