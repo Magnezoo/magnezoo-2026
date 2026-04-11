@@ -1,6 +1,5 @@
 import { Stack, Typography } from "@mui/material";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { Suspense } from "react";
 import PostDetailDialog from "@/components/Dialogs/PostDetail";
 import prisma from "@/lib/prisma";
@@ -36,12 +35,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: "投稿が見つかりませんでした",
       description: `投稿ID: ${id}の詳細ページは存在しません。`,
+      robots: "noindex, nofollow",
     };
   }
-  const header = await headers();
-  const protocol = header.get("x-forwarded-proto") || "http";
-  const host =
-    header.get("host") || header.get("x-forwarded-host") || "localhost:3000";
   const tags = post.tags.map((t) => t.tag.name);
   const authorName =
     post.author.nickName ||
@@ -50,11 +46,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     "匿名ユーザー";
   return {
     title: `${post.title}`,
-    description: `${post.description.slice(0, 100)}...`,
+    description: `${post.description.slice(0, 100)}${post.description.length > 100 ? "..." : ""}`,
     openGraph: {
       title: `${post.title}`,
-      description: `${post.description.slice(0, 100)}...`,
-      images: `${protocol}://${host}${post.imageUrl}`,
+      description: `${post.description.slice(0, 100)}${post.description.length > 100 ? "..." : ""}`,
+      images: `${process.env.BETTER_AUTH_URL}${post.imageUrl}`,
       type: "article",
       tags,
       authors: [authorName],
@@ -63,8 +59,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: `${post.title}`,
-      description: `${post.description.slice(0, 100)}...`,
-      images: `${protocol}://${host}${post.imageUrl}`,
+      description: `${post.description.slice(0, 100)}${post.description.length > 100 ? "..." : ""}`,
+      images: `${process.env.BETTER_AUTH_URL}${post.imageUrl}`,
     },
   };
 }
