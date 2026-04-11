@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import "../globals.css";
 import "./user.css";
 import { Stack } from "@mui/material";
+import { headers } from "next/headers";
 import Link from "next/link";
 import NameSettingGuard from "@/components/Dialogs/NameSettingGuard";
 import Header from "@/components/Header";
 import MUIWrapper from "@/components/MUIWrapper";
+import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: {
@@ -16,16 +18,27 @@ export const metadata: Metadata = {
     "Magnezooは、みんなのウチの子（ペットやキャラクターなど）を投稿して競う楽しいコンテストサイトです。かわいい、面白い、個性的なウチの子たちが大集合！ユーザーはお気に入りのウチの子に投票したり、コメントを残したりできます。さあ、あなたのウチの子も参加してみませんか？",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   detail,
 }: Readonly<{
   children: React.ReactNode;
   detail: React.ReactNode;
 }>) {
+  let isAuthenticated = false;
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    isAuthenticated = Boolean(session);
+  } catch (error) {
+    console.error("Failed to fetch session:", error);
+    isAuthenticated = false;
+  }
+
   return (
     <MUIWrapper>
-      <Header />
+      <Header isAuthenticated={isAuthenticated} />
       {children}
       {detail}
       <Stack

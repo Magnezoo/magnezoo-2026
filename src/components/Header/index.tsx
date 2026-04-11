@@ -1,5 +1,6 @@
 "use client";
 
+import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -17,7 +18,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar({
+  isAuthenticated,
+}: {
+  isAuthenticated: boolean;
+}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
   const router = useRouter();
@@ -31,9 +36,15 @@ export default function ButtonAppBar() {
   };
 
   const handleLogout = async () => {
-    await authClient.signOut();
-    handleCloseMenu();
-    router.push("/signin");
+    try {
+      await authClient.signOut();
+      router.push("/signin");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      alert("ログアウトに失敗しました。");
+    } finally {
+      handleCloseMenu();
+    }
   };
 
   const DrawerHeader = styled("div")(({ theme }) => ({
@@ -101,22 +112,37 @@ export default function ButtonAppBar() {
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
             >
-              <MenuItem
-                component={Link}
-                href="/settings"
-                onClick={handleCloseMenu}
-              >
-                <ListItemIcon>
-                  <SettingsIcon fontSize="small" />
-                </ListItemIcon>
-                個人設定
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>
-                <ListItemIcon>
-                  <LogoutIcon fontSize="small" />
-                </ListItemIcon>
-                ログアウト
-              </MenuItem>
+              {isAuthenticated ? (
+                <>
+                  <MenuItem
+                    component={Link}
+                    href="/settings"
+                    onClick={handleCloseMenu}
+                  >
+                    <ListItemIcon>
+                      <SettingsIcon fontSize="small" />
+                    </ListItemIcon>
+                    個人設定
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>
+                    <ListItemIcon>
+                      <LogoutIcon fontSize="small" />
+                    </ListItemIcon>
+                    ログアウト
+                  </MenuItem>
+                </>
+              ) : (
+                <MenuItem
+                  component={Link}
+                  href="/signin"
+                  onClick={handleCloseMenu}
+                >
+                  <ListItemIcon>
+                    <LoginIcon fontSize="small" />
+                  </ListItemIcon>
+                  ログイン
+                </MenuItem>
+              )}
             </Menu>
           </Toolbar>
         </AppBar>
