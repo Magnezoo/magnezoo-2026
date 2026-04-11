@@ -34,6 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) {
     return {
       title: "投稿が見つかりませんでした",
+      applicationName: "Magnezoo - みんなのウチの子決定戦！",
       description: `投稿ID: ${id}の詳細ページは存在しません。`,
       robots: "noindex, nofollow",
     };
@@ -45,10 +46,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     post.author.slacks[0]?.name ||
     "匿名ユーザー";
   return {
-    title: `${post.title}`,
+    title: `${post.title} - Magnezoo`,
+    applicationName: "Magnezoo - みんなのウチの子決定戦！",
     description: `${post.description.slice(0, 100)}${post.description.length > 100 ? "..." : ""}`,
     openGraph: {
-      title: `${post.title}`,
+      title: `${post.title} - Magnezoo`,
       description: `${post.description.slice(0, 100)}${post.description.length > 100 ? "..." : ""}`,
       images: `${process.env.BETTER_AUTH_URL}${post.imageUrl}`,
       type: "article",
@@ -58,7 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${post.title}`,
+      title: `${post.title} - Magnezoo`,
       description: `${post.description.slice(0, 100)}${post.description.length > 100 ? "..." : ""}`,
       images: `${process.env.BETTER_AUTH_URL}${post.imageUrl}`,
     },
