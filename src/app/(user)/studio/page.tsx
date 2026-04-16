@@ -1,0 +1,211 @@
+import { Alert, Link as MUILink } from "@mui/material";
+import type { Metadata } from "next";
+import { headers } from "next/headers";
+import PostButton from "@/components/Buttons/Post";
+import { auth } from "@/lib/auth";
+
+export const metadata: Metadata = {
+  title: "Magnezoo × 磁石祭2026 ライブスタジオ 連携企画！",
+  description:
+    "Magnezoo物販企画(仮)は、生徒から募集した「ウチの子（ペット）」の写真をもとに制作する、ネット企画Magnezoo！今年は何と、スタジオ企画と連携することになりました！",
+};
+
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="mb-10">
+      <div className="bg-white/90 rounded-2xl border border-[#E48B00]/20 px-10 py-10 text-black">
+        <h2 className="text-xl font-semibold! mb-4 text-[#E48B00]">{title}</h2>
+        <div>{children}</div>
+      </div>
+    </section>
+  );
+}
+
+export default async function SalesAppCampainPage() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  return (
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#FFEECE] font-sans text-black py-10 overflow-hidden">
+      {/* 幾何学的な背景アニメーション */}
+      <div className="animated-bg-circles" aria-hidden="true">
+        <div className="circle circle1" />
+        <div className="circle circle2" />
+        <div className="circle circle3" />
+        <div className="circle circle4" />
+        <div className="circle circle5" />
+      </div>
+      <main className="relative w-full max-w-4xl mx-auto px-2 text-center leading-relaxed z-10">
+        <header className="mb-8">
+          <div className="bg-white/95 rounded-2xl border border-[#E48B00]/20 px-10 py-8 mb-2">
+            <h1 className="text-2xl font-bold! mb-2 text-[#E48B00]">
+              スタジオ連携企画
+            </h1>
+            <h2 className="text-3xl font-bold! mb-0 text-[#E48B00]">
+              あなたの写真がスタジオに！？
+            </h2>
+          </div>
+        </header>
+
+        <Section title="企画概要">
+          <p className="mb-2 leading-normal [&_span]:inline-block max-w-xl mx-auto">
+            <span>
+              <span>
+                <span>Magnezooは、</span>
+                <span>生徒から募集した</span>
+              </span>
+              <span>
+                <span>「ウチの子（ペット）」の</span>
+                <span>写真をもとに</span>
+                <span>制作する、</span>
+              </span>
+              <span>
+                <span>ネット企画です。</span>
+              </span>
+              <span>
+                <span>今年はなんと、ライブスタジオと</span>
+                <span>「かわいい」をお届けします！</span>
+              </span>
+            </span>
+          </p>
+        </Section>
+
+        {/* ここから先 WIP */}
+        <Alert
+          severity={"warning"}
+          sx={{
+            backgroundColor: "white",
+            border: "2px solid #E48B00",
+            color: "black",
+            fontWeight: "bold",
+            margin: "20px auto",
+            fontSize: "1rem",
+            display: "flex",
+            flexDirection: "column",
+          }}
+          icon={false}
+        >
+          応募期間は2026年3月27日(金) 23:59をもちまして終了いたしました。
+          <br />
+          たくさんのご応募誠にありがとうございました！
+          <br />
+          選定された方については、4/10(金)までに順次ご連絡いたしますので、今しばらくお待ちください。
+        </Alert>
+
+        <Section title="写真の応募方法">
+          <p className="mb-4">
+            この企画は、
+            <br />
+            <span className="font-bold text-[#E48B00]">
+              生徒から募集した「ウチの子（ペット）」の写真をもとに制作されます。
+            </span>
+            <br />
+            応募方法は以下の通りです。
+          </p>
+          <ol className="list-inside list-none text-left mx-auto max-w-md space-y-4">
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
+              <span className="font-bold">1. 写真を撮る：</span>
+              <br />
+              あなたのウチの子（ペット等）のかわいい写真を撮影してください。
+              <br />
+              できるだけ高画質で、正方形にカットできるような構図が望ましいです。
+              <br />
+              <span className="font-bold text-[#E48B00]">
+                地域猫や犬カフェ・猫カフェ等の写真も歓迎します！
+              </span>
+            </li>
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
+              <span className="font-bold list-none">
+                2. 応募フォームに記入する：
+              </span>
+              <br />
+              以下の応募フォームに必要事項を記入してください。
+            </li>
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
+              <span className="font-bold list-none">
+                3. 写真をアップロードする：
+              </span>
+              <br />
+              応募フォーム内で、撮影した写真をアップロードしてください。
+            </li>
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
+              <span className="font-bold list-none">4. 送信する：</span>
+              <br />
+              すべての情報が入力されたら、応募フォームを送信してください。
+            </li>
+          </ol>
+          <p className="mt-6">
+            応募された写真は、企画チームによって選定され、商品化される可能性があります。
+            <br />
+            選ばれた方には、後日ご連絡いたします。
+          </p>
+        </Section>
+
+        <Section title="注意事項">
+          <ul className="list-disc list-outside text-left mx-auto max-w-md space-y-2">
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
+              応募は<span className="font-bold text-[#E48B00]">何回でもOK</span>
+              です！
+            </li>
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
+              写真はオリジナルのもので、他人の著作権を侵害しないものに限ります。
+              <ul className="list-[circle] ml-6 space-y-1">
+                <li>人が写っている写真は望ましくありません。</li>
+                <li>
+                  <span className="font-bold text-[#E48B00]">
+                    猫カフェや犬カフェ等の写真も歓迎します。
+                  </span>
+                  <br />
+                  ただし、他のお客さん等が写り込まないように注意してください。
+                </li>
+              </ul>
+            </li>
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
+              選ばれた写真は、商品化のために加工されることがあります。
+            </li>
+            <li className="md:whitespace-nowrap whitespace-break-spaces">
+              応募された写真は返却いたしませんので、ご了承ください。
+            </li>
+          </ul>
+        </Section>
+
+        <Section title="この企画に関するお問い合わせ">
+          <p>
+            企画に関するご質問やご不明点がある場合は、以下の方法でお問い合わせください。
+          </p>
+          <ul className="list-disc list-outside text-left mx-auto max-w-md space-y-2 mt-4">
+            <li>
+              企画全般: Slackにて @あかつきゆいと / @おは._.ゆーし にグループDM
+            </li>
+            <li>
+              法的な問題:{" "}
+              <MUILink href="/privacy" target="_blank">
+                プライバシー・ポリシー
+              </MUILink>
+              をご確認ください
+            </li>
+          </ul>
+        </Section>
+
+        <div className="flex flex-col items-center py-10">
+          <PostButton
+            userId={session?.user?.id}
+            isSalesApplication
+            path="/sales_app"
+            disabled
+            className="bg-white border-2 border-black text-black font-bold py-4 px-12 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all duration-200 text-lg cursor-pointer"
+          />
+        </div>
+        <div className="mt-12">
+          <p className="text-[#E48B00] text-2xl font-semibold tracking-wide">
+            みなさんのご応募をお待ちしております！
+          </p>
+        </div>
+      </main>
+    </div>
+  );
+}
