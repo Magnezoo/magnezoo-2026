@@ -1,4 +1,4 @@
-import { Alert, Link as MUILink } from "@mui/material";
+import { Link as MUILink } from "@mui/material";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import PostButton from "@/components/Buttons/Post";
@@ -19,9 +19,11 @@ function Section({
 }) {
   return (
     <section className="mb-10">
-      <div className="bg-white/90 rounded-2xl border border-[#E48B00]/20 px-10 py-10 text-black">
-        <h2 className="text-xl font-semibold! mb-4 text-[#E48B00]">{title}</h2>
-        <div>{children}</div>
+      <div className="bg-white/90 rounded-2xl border border-[#E48B00]/20 px-6 py-8 md:px-10 md:py-10 text-black shadow-sm">
+        <h2 className="text-xl font-semibold! mb-6 text-[#E48B00] border-b border-[#E48B00]/10 pb-2 inline-block">
+          {title}
+        </h2>
+        <div className="text-left md:text-center">{children}</div>
       </div>
     </section>
   );
@@ -29,8 +31,9 @@ function Section({
 
 export default async function SalesAppCampainPage() {
   const session = await auth.api.getSession({ headers: await headers() });
+
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#FFEECE] font-sans text-black py-10 overflow-hidden">
+    <div className="relative flex min-h-screen flex-col items-center bg-[#FFEECE] font-sans text-black py-10 overflow-x-hidden">
       {/* 幾何学的な背景アニメーション */}
       <div className="animated-bg-circles" aria-hidden="true">
         <div className="circle circle1" />
@@ -39,156 +42,125 @@ export default async function SalesAppCampainPage() {
         <div className="circle circle4" />
         <div className="circle circle5" />
       </div>
-      <main className="relative w-full max-w-4xl mx-auto px-2 text-center leading-relaxed z-10">
+
+      <main className="relative w-full max-w-4xl mx-auto px-4 text-center leading-relaxed z-10">
         <header className="mb-8">
-          <div className="bg-white/95 rounded-2xl border border-[#E48B00]/20 px-10 py-8 mb-2">
-            <h1 className="text-2xl font-bold! mb-2 text-[#E48B00]">
+          <div className="bg-white/95 rounded-2xl border border-[#E48B00]/20 px-6 py-8 md:px-10 shadow-md">
+            <p className="text-lg font-bold! text-[#E48B00] mb-1">
               スタジオ連携企画
-            </h1>
-            <h2 className="text-3xl font-bold! mb-0 text-[#E48B00]">
+            </p>
+            <h1 className="text-2xl md:text-4xl font-bold! text-[#E48B00] leading-tight">
               あなたの写真がスタジオに！？
-            </h2>
+            </h1>
           </div>
         </header>
 
         <Section title="企画概要">
-          <p className="mb-2 leading-normal [&_span]:inline-block max-w-xl mx-auto">
-            <span>
-              <span>
-                <span>Magnezooは、</span>
-                <span>生徒から募集した</span>
-              </span>
-              <span>
-                <span>「ウチの子（ペット）」の</span>
-                <span>写真をもとに</span>
-                <span>制作する、</span>
-              </span>
-              <span>
-                <span>ネット企画です。</span>
-              </span>
-              <span>
-                <span>今年はなんと、ライブスタジオと</span>
-                <span>「かわいい」をお届けします！</span>
-              </span>
-            </span>
-          </p>
+          <div className="max-w-2xl mx-auto space-y-2 text-lg">
+            <p className="flex flex-wrap justify-center gap-x-2">
+              <span>Magnezooは、</span>
+              <span>生徒から募集した</span>
+              <span>「ウチの子（ペット）」の</span>
+              <span>写真をもとに制作する</span>
+              <span>ネット企画です。</span>
+            </p>
+            <p className="font-bold text-[#E48B00] mt-4">
+              今年はなんと、ライブスタジオと協力して
+              <br className="hidden md:block" />
+              最高に「かわいい」時間をお届けします！
+            </p>
+          </div>
         </Section>
 
-        {/* ここから先 WIP */}
-        <Alert
-          severity={"warning"}
-          sx={{
-            backgroundColor: "white",
-            border: "2px solid #E48B00",
-            color: "black",
-            fontWeight: "bold",
-            margin: "20px auto",
-            fontSize: "1rem",
-            display: "flex",
-            flexDirection: "column",
-          }}
-          icon={false}
-        >
-          応募期間は2026年3月27日(金) 23:59をもちまして終了いたしました。
-          <br />
-          たくさんのご応募誠にありがとうございました！
-          <br />
-          選定された方については、4/10(金)までに順次ご連絡いたしますので、今しばらくお待ちください。
-        </Alert>
-
         <Section title="写真の応募方法">
-          <p className="mb-4">
-            この企画は、
-            <br />
-            <span className="font-bold text-[#E48B00]">
-              生徒から募集した「ウチの子（ペット）」の写真をもとに制作されます。
+          <p className="mb-6 text-center">
+            Magnezooに投稿された作品の中から、
+            <br className="hidden md:block" />
+            <span className="font-bold text-[#E48B00] text-lg">
+              ライブスタジオの幕間企画として紹介させていただきます！
             </span>
-            <br />
-            応募方法は以下の通りです。
           </p>
-          <ol className="list-inside list-none text-left mx-auto max-w-md space-y-4">
-            <li className="md:whitespace-nowrap whitespace-break-spaces">
-              <span className="font-bold">1. 写真を撮る：</span>
-              <br />
-              あなたのウチの子（ペット等）のかわいい写真を撮影してください。
-              <br />
-              できるだけ高画質で、正方形にカットできるような構図が望ましいです。
-              <br />
-              <span className="font-bold text-[#E48B00]">
-                地域猫や犬カフェ・猫カフェ等の写真も歓迎します！
+
+          <div className="grid gap-6 text-left max-w-xl mx-auto">
+            <div className="flex gap-4">
+              <span className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#E48B00] text-white font-bold">
+                1
               </span>
-            </li>
-            <li className="md:whitespace-nowrap whitespace-break-spaces">
-              <span className="font-bold list-none">
-                2. 応募フォームに記入する：
+              <div>
+                <p className="font-bold">写真を撮る</p>
+                <p className="text-sm text-gray-700">
+                  ペット等の写真を高画質かつ正方形にカットしやすい構図で撮影してください。地域猫やカフェの動物も歓迎！
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <span className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#E48B00] text-white font-bold">
+                2
               </span>
-              <br />
-              以下の応募フォームに必要事項を記入してください。
-            </li>
-            <li className="md:whitespace-nowrap whitespace-break-spaces">
-              <span className="font-bold list-none">
-                3. 写真をアップロードする：
+              <div>
+                <p className="font-bold">投稿ボタンを押す</p>
+                <p className="text-sm text-gray-700">
+                  ページ下部の「投稿する」ボタンから、必要事項を入力してください。
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <span className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#E48B00] text-white font-bold">
+                3
               </span>
-              <br />
-              応募フォーム内で、撮影した写真をアップロードしてください。
-            </li>
-            <li className="md:whitespace-nowrap whitespace-break-spaces">
-              <span className="font-bold list-none">4. 送信する：</span>
-              <br />
-              すべての情報が入力されたら、応募フォームを送信してください。
-            </li>
-          </ol>
-          <p className="mt-6">
-            応募された写真は、企画チームによって選定され、商品化される可能性があります。
-            <br />
-            選ばれた方には、後日ご連絡いたします。
-          </p>
+              <div>
+                <p className="font-bold">完了！</p>
+                <p className="text-sm text-gray-700">
+                  選定された写真は、スタジオでの紹介が行われます。お楽しみに！
+                </p>
+              </div>
+            </div>
+          </div>
         </Section>
 
         <Section title="注意事項">
-          <ul className="list-disc list-outside text-left mx-auto max-w-md space-y-2">
-            <li className="md:whitespace-nowrap whitespace-break-spaces">
+          <ul className="list-disc list-outside text-left mx-auto space-y-3 max-w-md">
+            <li>
               応募は<span className="font-bold text-[#E48B00]">何回でもOK</span>
-              です！
+              です。
             </li>
-            <li className="md:whitespace-nowrap whitespace-break-spaces">
-              写真はオリジナルのもので、他人の著作権を侵害しないものに限ります。
-              <ul className="list-[circle] ml-6 space-y-1">
-                <li>人が写っている写真は望ましくありません。</li>
-                <li>
-                  <span className="font-bold text-[#E48B00]">
-                    猫カフェや犬カフェ等の写真も歓迎します。
-                  </span>
-                  <br />
-                  ただし、他のお客さん等が写り込まないように注意してください。
-                </li>
+            <li>
+              写真はオリジナルのものに限ります。
+              <ul className="list-[circle] ml-6 mt-2 space-y-1 text-gray-600">
+                <li>人が大きく写り込んでいるものは避けてください。</li>
+                <li>他のお客さんが写らないよう配慮をお願いします。</li>
               </ul>
             </li>
-            <li className="md:whitespace-nowrap whitespace-break-spaces">
-              選ばれた写真は、商品化のために加工されることがあります。
-            </li>
-            <li className="md:whitespace-nowrap whitespace-break-spaces">
-              応募された写真は返却いたしませんので、ご了承ください。
-            </li>
+            <li>選ばれた写真は、紹介のために加工される場合があります。</li>
+            <li>応募後の写真は返却できませんのでご了承ください。</li>
           </ul>
         </Section>
 
-        <Section title="この企画に関するお問い合わせ">
-          <p>
-            企画に関するご質問やご不明点がある場合は、以下の方法でお問い合わせください。
-          </p>
-          <ul className="list-disc list-outside text-left mx-auto max-w-md space-y-2 mt-4">
-            <li>
-              企画全般: Slackにて @あかつきゆいと / @おは._.ゆーし にグループDM
-            </li>
-            <li>
-              法的な問題:{" "}
-              <MUILink href="/privacy" target="_blank">
-                プライバシー・ポリシー
+        <Section title="お問い合わせ">
+          <div className="max-w-xl mx-auto text-left space-y-4 text-sm md:text-base">
+            <div className="flex flex-col md:flex-row md:items-center gap-2">
+              <span className="font-bold md:w-24">企画全般:</span>
+              <span>
+                Slackにて{" "}
+                <code className="bg-gray-100 px-1 rounded">
+                  @あかつきゆいと
+                </code>{" "}
+                /{" "}
+                <code className="bg-gray-100 px-1 rounded">@おは._.ゆーし</code>{" "}
+                まで
+              </span>
+            </div>
+            <div className="flex flex-col md:flex-row md:items-center gap-2">
+              <span className="font-bold md:w-24">法的事項:</span>
+              <MUILink
+                href="/privacy"
+                target="_blank"
+                className="text-[#E48B00] underline"
+              >
+                プライバシー・ポリシーをご確認ください
               </MUILink>
-              をご確認ください
-            </li>
-          </ul>
+            </div>
+          </div>
         </Section>
 
         <div className="flex flex-col items-center py-10">
@@ -196,12 +168,10 @@ export default async function SalesAppCampainPage() {
             userId={session?.user?.id}
             isSalesApplication
             path="/sales_app"
-            disabled
-            className="bg-white border-2 border-black text-black font-bold py-4 px-12 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all duration-200 text-lg cursor-pointer"
+            disabled={false} // 公開時はfalseに
+            className="bg-white border-2 border-black text-black font-bold py-4 px-12 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all duration-200 text-xl cursor-pointer"
           />
-        </div>
-        <div className="mt-12">
-          <p className="text-[#E48B00] text-2xl font-semibold tracking-wide">
+          <p className="mt-8 text-[#E48B00] text-xl md:text-2xl font-semibold! tracking-wider animate-bounce">
             みなさんのご応募をお待ちしております！
           </p>
         </div>
