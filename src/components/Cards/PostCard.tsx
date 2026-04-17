@@ -202,7 +202,7 @@ export default function PostCard({
                     (v) => v.userId === currentUserId && !v.isSalesApplication,
                   )}
                   isStudio={post.isStudio}
-                  studioMgntNo={post.studioMgmtNo || undefined}
+                  studioMgmtNo={post.studioMgmtNo || undefined}
                   title={post.title}
                   currentUserId={currentUserId}
                   disabled={!currentUserId}

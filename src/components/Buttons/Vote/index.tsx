@@ -16,7 +16,7 @@ export default function VoteButton({
   currentUserId,
   isVoted,
   isStudio = false,
-  studioMgntNo = undefined,
+  studioMgmtNo = undefined,
   title = undefined,
   disabled = false,
   isSalesApplication = false,
@@ -27,7 +27,7 @@ export default function VoteButton({
   currentUserId: string | null;
   isVoted: boolean;
   isStudio?: boolean;
-  studioMgntNo?: number;
+  studioMgmtNo?: number;
   title?: string;
   disabled?: boolean;
   isSalesApplication?: boolean;
@@ -40,10 +40,10 @@ export default function VoteButton({
   const voteLabel = isSalesApplication ? "投票" : "いいね";
 
   const urlEncodedFormLabel =
-    studioMgntNo && isStudio ? encodeURIComponent(`「${title}」`) : undefined;
+    studioMgmtNo && isStudio ? encodeURIComponent(`「${title}」`) : undefined;
   const formURL =
-    studioMgntNo && isStudio
-      ? `https://docs.google.com/forms/d/e/1FAIpQLSc2Hf5Itzp7QZPdzNFRYIXUzeUYLm76YGQHeSzsbR5qFsMPIQ/viewform?usp=pp_url&entry.574807429=No.${studioMgntNo}+${urlEncodedFormLabel}`
+    studioMgmtNo && isStudio
+      ? `https://docs.google.com/forms/d/e/1FAIpQLSc2Hf5Itzp7QZPdzNFRYIXUzeUYLm76YGQHeSzsbR5qFsMPIQ/viewform?usp=pp_url&entry.574807429=No.${studioMgmtNo}+${urlEncodedFormLabel}`
       : `https://forms.gle/8NuR57dDeUKrGCfq8`;
 
   return (
