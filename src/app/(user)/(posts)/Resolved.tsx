@@ -6,7 +6,8 @@ export async function ResolvedPickupPosts({
 }: {
   currentUserId: string | null;
 }) {
-  const someMaximumNumber = await prisma.post.count();
+  const whereNonStudio = { isStudio: { equals: false } };
+  const someMaximumNumber = await prisma.post.count({ where: whereNonStudio });
   const takeCount = 3;
   const maxSkip = Math.max(0, someMaximumNumber - takeCount);
   const posts = await prisma.post.findMany({
@@ -27,6 +28,7 @@ export async function ResolvedPickupPosts({
         select: { userId: true },
       },
     },
+    where: whereNonStudio,
   });
   if (posts.length === 0) {
     return <div>投稿が見つかりませんでした。</div>;
