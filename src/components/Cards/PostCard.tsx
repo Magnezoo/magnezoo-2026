@@ -6,6 +6,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  Chip,
   Grid,
   Stack,
   Typography,
@@ -97,9 +98,9 @@ export default function PostCard({
             onClick={() => router.push(`/posts/${post.id}`)}
             sx={{
               width: "100%",
-              aspectRatio: "16 / 9", // カードの見た目を固定
+              aspectRatio: "16 / 9",
               position: "relative",
-              overflow: "hidden", // はみ出し防止
+              overflow: "hidden",
               borderTopLeftRadius: 4,
               borderTopRightRadius: 4,
               cursor: "pointer",
@@ -110,7 +111,7 @@ export default function PostCard({
               alt={post.title}
               fill
               style={{
-                objectFit: "cover", // ← これが超重要
+                objectFit: "cover",
               }}
               sizes="(max-width: 768px) 100vw, 450px"
               fetchPriority={index !== undefined && index < 5 ? "high" : "auto"}
@@ -123,6 +124,15 @@ export default function PostCard({
             onClick={() => router.push(`/posts/${post.id}`)}
           >
             <Stack spacing={1}>
+              {post.isStudio && (
+                <Stack direction={"row"}>
+                  <Chip
+                    size={"small"}
+                    label={`No. ${post.studioMgmtNo}`}
+                    sx={{ fontWeight: 800, border: 1 }}
+                  />
+                </Stack>
+              )}
               <Typography variant="h5" fontWeight={600}>
                 {optimizedTitle}
               </Typography>
@@ -191,6 +201,9 @@ export default function PostCard({
                   isVoted={post.votes.some(
                     (v) => v.userId === currentUserId && !v.isSalesApplication,
                   )}
+                  isStudio={post.isStudio}
+                  studioMgntNo={post.studioMgmtNo || undefined}
+                  title={post.title}
                   currentUserId={currentUserId}
                   disabled={!currentUserId}
                 />
