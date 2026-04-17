@@ -15,22 +15,71 @@ export const getTags = async (): Promise<{ id: string; name: string }[]> => {
   return await prisma.tags.findMany({ orderBy: { name: "asc" } });
 };
 
+export const getUsers = async (): Promise<
+  { id: string; name: string; email: string }[]
+> => {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user.id) return [];
+
+  const currentUser = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { role: true },
+  });
+
+  if (currentUser?.role !== "admin") return [];
+
+  return await prisma.user.findMany({
+    select: { id: true, name: true, email: true },
+    orderBy: [{ name: "asc" }, { email: "asc" }],
+  });
+};
+
 export const createPost = async ({
   title,
   content,
   image,
   userId,
+  authorId,
   isSalesApplication,
+  isStudio,
+  studioMgmtNo,
   tagNames = [],
 }: {
   title: string;
   content: string;
   image: File;
   userId: string;
+  authorId?: string;
   isSalesApplication: boolean;
+  isStudio?: boolean;
+  studioMgmtNo?: number | null;
   tagNames?: string[];
 }) => {
   try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    const currentUserId = session?.user.id;
+    if (!currentUserId) return false;
+
+    const currentUser = await prisma.user.findUnique({
+      where: { id: currentUserId },
+      select: { role: true },
+    });
+    if (!currentUser) return false;
+
+    const isAdmin = currentUser.role === "admin";
+    const requestedAuthorId = authorId ?? userId;
+    const authorIdToSave = isAdmin ? requestedAuthorId : currentUserId;
+    const isStudioToSave = isAdmin ? Boolean(isStudio) : false;
+    const studioMgmtNoToSave = isStudioToSave ? studioMgmtNo : null;
+
+    if (
+      isStudioToSave &&
+      (!Number.isInteger(studioMgmtNoToSave) || (studioMgmtNoToSave ?? 0) <= 0)
+    ) {
+      console.warn("studioMgmtNo is required when isStudio is enabled");
+      return false;
+    }
+
     // file-typeで拡張子を判定し、パストラバーサル等のリスクを排除
     const { fileTypeFromBuffer } = await import("file-type");
     const MIME_TO_EXT: Record<string, string> = {
@@ -66,7 +115,9 @@ export const createPost = async ({
         description: content,
         imageUrl,
         isSalesApplication,
-        authorId: userId,
+        isStudio: isStudioToSave,
+        studioMgmtNo: studioMgmtNoToSave,
+        authorId: authorIdToSave,
         tags:
           validTagNames.length > 0
             ? {
@@ -99,25 +150,34 @@ export const updatePost = async ({
   content,
   image,
   isSalesApplication,
+  isStudio,
+  studioMgmtNo,
   tagNames = [],
-  userId,
+  authorId,
 }: {
   id: string;
   title: string;
   content: string;
   image?: File | null;
   isSalesApplication: boolean;
+  isStudio?: boolean;
+  studioMgmtNo?: number | null;
   tagNames?: string[];
-  userId: string;
+  userId?: string;
+  authorId?: string;
 }) => {
   try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    const currentUserId = session?.user.id;
+    if (!currentUserId) return false;
+
     const [existingPost, user] = await Promise.all([
       prisma.post.findUnique({
         where: { id },
         select: { authorId: true, imageUrl: true },
       }),
       prisma.user.findUnique({
-        where: { id: userId },
+        where: { id: currentUserId },
         select: { role: true },
       }),
     ]);
@@ -126,11 +186,11 @@ export const updatePost = async ({
 
     // 認可チェック: 管理者であるか、投稿の所有者である場合のみ許可
     const isAdmin = user.role === "admin";
-    const isAuthor = existingPost.authorId === userId;
+    const isAuthor = existingPost.authorId === currentUserId;
 
     if (!isAdmin && !isAuthor) {
       console.warn(
-        `Unauthorized update attempt by user ${userId} on post ${id}`,
+        `Unauthorized update attempt by user ${currentUserId} on post ${id}`,
       );
       return false;
     }
@@ -179,25 +239,65 @@ export const updatePost = async ({
       ...new Set(tagNames.map((n) => n.trim().slice(0, 32)).filter(Boolean)),
     ].slice(0, MAX_TAGS);
 
+    const updateData: {
+      title: string;
+      description: string;
+      isSalesApplication: boolean;
+      imageUrl?: string;
+      authorId?: string;
+      isStudio?: boolean;
+      studioMgmtNo?: number | null;
+      tags: {
+        deleteMany: Record<string, never>;
+        create: {
+          tag: {
+            connectOrCreate: {
+              where: { name: string };
+              create: { name: string };
+            };
+          };
+        }[];
+      };
+    } = {
+      title,
+      description: content,
+      isSalesApplication,
+      ...(imageUrl ? { imageUrl } : {}),
+      tags: {
+        deleteMany: {},
+        create: validTagNames.map((name) => ({
+          tag: {
+            connectOrCreate: {
+              where: { name },
+              create: { name },
+            },
+          },
+        })),
+      },
+    };
+
+    if (isAdmin) {
+      if (typeof isStudio === "boolean") {
+        updateData.isStudio = isStudio;
+        if (!isStudio) {
+          updateData.studioMgmtNo = null;
+        }
+      }
+      if (isStudio === true) {
+        if (!Number.isInteger(studioMgmtNo) || (studioMgmtNo ?? 0) <= 0) {
+          console.warn("studioMgmtNo is required when isStudio is enabled");
+          return false;
+        }
+        updateData.studioMgmtNo = studioMgmtNo;
+      }
+      if (authorId) {
+        updateData.authorId = authorId;
+      }
+    }
+
     await prisma.post.update({
       where: { id },
-      data: {
-        title,
-        description: content,
-        isSalesApplication,
-        ...(imageUrl ? { imageUrl } : {}),
-        tags: {
-          deleteMany: {},
-          create: validTagNames.map((name) => ({
-            tag: {
-              connectOrCreate: {
-                where: { name },
-                create: { name },
-              },
-            },
-          })),
-        },
-      },
+      data: updateData,
     });
 
     revalidatePath(`/admin/posts/${id}`);
