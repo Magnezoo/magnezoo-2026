@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import Link from "next/link";
 
-export default function Forbidden() {
+export default function Unauthorized() {
   return (
     <Stack
       sx={{ minHeight: "100vh" }}

@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import Link from "next/link";
 
-export default function Forbidden() {
+export default function NotFound() {
   return (
     <Stack
       sx={{ minHeight: "100vh" }}
@@ -10,9 +10,9 @@ export default function Forbidden() {
       alignItems={"center"}
       spacing={2}
     >
-      <Typography variant="h2">403 - Forbidden</Typography>
-      <Typography>You are not authorized to access this resource.</Typography>
-      <Typography>このページにアクセスする権限がありません。</Typography>
+      <Typography variant="h2">404 - Not Found</Typography>
+      <Typography>The resource is not found.</Typography>
+      <Typography>お探しのページは見つかりませんでした。</Typography>
       <Link href="/" className="underline">
         Return Home →
       </Link>
