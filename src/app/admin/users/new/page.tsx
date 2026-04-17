@@ -22,7 +22,7 @@ export default function NewUserPage() {
               name: formdata.get("name") as string,
               email: formdata.get("email") as string,
               password: formdata.get("password") as string,
-              role: "admin",
+              role: "user",
             });
             enqueueSnackbar("ユーザーが作成されました", { variant: "success" });
             router.push("/admin/users");
@@ -47,7 +47,6 @@ export default function NewUserPage() {
           label="パスワード"
           type="password"
           fullWidth
-          required
         />
         <Button variant="contained" color="primary" type="submit">
           作成
