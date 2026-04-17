@@ -64,7 +64,7 @@ export default function VoteButton({
           type="button"
           onClick={
             isStudio
-              ? () => window.location.assign(formURL)
+              ? () => window.open(formURL, "_blank", "noopener,noreferrer")
               : currentUserId
                 ? async (e) => {
                     e.stopPropagation();
