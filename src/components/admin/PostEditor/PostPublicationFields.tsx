@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkbox, Stack, Typography } from "@mui/material";
+import { Checkbox, Stack, Switch, Typography } from "@mui/material";
 
 export default function PostPublicationFields({
   isSalesApplication,
@@ -9,6 +9,9 @@ export default function PostPublicationFields({
   tosChecked,
   setTosChecked,
   disabled,
+  isStudio,
+  setIsStudio,
+  isStudioDisabled = true,
 }: {
   isSalesApplication: boolean;
   salesAgreementChecked: boolean;
@@ -16,9 +19,30 @@ export default function PostPublicationFields({
   tosChecked: boolean;
   setTosChecked: (v: boolean) => void;
   disabled: boolean;
+  isStudio?: boolean;
+  setIsStudio?: (v: boolean) => void;
+  isStudioDisabled?: boolean;
 }) {
   return (
     <Stack spacing={1} sx={{ opacity: 0.8 }}>
+      {typeof isStudio === "boolean" && setIsStudio && (
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          sx={{ p: 1.5, borderRadius: 1, backgroundColor: "action.hover" }}
+        >
+          <Switch
+            checked={isStudio}
+            onChange={(e) => setIsStudio(e.target.checked)}
+            disabled={isStudioDisabled}
+            size="small"
+          />
+          <Typography variant="body2" color="text.primary" fontWeight={700}>
+            投稿の種類を「Studio」に設定する
+          </Typography>
+        </Stack>
+      )}
       {isSalesApplication && (
         <Stack direction="row" spacing={1} alignItems="start">
           <Checkbox

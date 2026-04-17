@@ -34,7 +34,13 @@ export default function ResolvedPostsPage({
   }
 
   const where =
-    filterByCurrentUser && currentUser ? { authorId: currentUser.id } : {};
+    filterByCurrentUser && currentUser
+      ? { authorId: currentUser.id }
+      : {
+          isStudio: {
+            equals: false,
+          },
+        };
 
   const count = use(prisma.post.count({ where }));
 

@@ -159,6 +159,9 @@ export default function PostDetailDialogClient(props: Props) {
                 (v) =>
                   v.userId === props.currentUserId && !v.isSalesApplication,
               )}
+              isStudio={props.post.isStudio}
+              studioMgmtNo={props.post.studioMgmtNo || undefined}
+              title={props.post.title}
               currentUserId={props.currentUserId || null}
               disabled={!props.currentUserId}
             />
