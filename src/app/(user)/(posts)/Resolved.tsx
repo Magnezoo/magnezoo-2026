@@ -59,6 +59,11 @@ export async function ResolvedRecentPosts({
         select: { userId: true },
       },
     },
+    where: {
+      isStudio: {
+        equals: false,
+      },
+    },
   });
   if (posts.length === 0) {
     return <div>投稿が見つかりませんでした。</div>;
