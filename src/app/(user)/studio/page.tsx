@@ -73,7 +73,7 @@ export default async function SalesAppCampainPage() {
   });
 
   const maxWidth = 1400;
-  const paddinX = 2;
+  const paddingX = 2;
   return (
     <div className="relative flex min-h-screen flex-col items-center bg-[#FFEECE] font-sans text-slate-900 py-12 md:py-20 overflow-x-hidden">
       {/* 幾何学的な背景アニメーション（既存のCSSクラスを想定） */}
@@ -183,7 +183,7 @@ export default async function SalesAppCampainPage() {
           </Section>
         </div>
 
-        <Stack id="pickup" width={"100%"} maxWidth={maxWidth} px={paddinX}>
+        <Stack id="pickup" width={"100%"} maxWidth={maxWidth} px={paddingX}>
           <Typography
             variant="h4"
             align="left"

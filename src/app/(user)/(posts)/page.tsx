@@ -8,7 +8,7 @@ import { ResolvedPickupPosts, ResolvedRecentPosts } from "./Resolved";
 export default async function HomePage() {
   const session = await auth.api.getSession({ headers: await headers() });
   const maxWidth = 1400;
-  const paddinX = 2;
+  const paddingX = 2;
   return (
     <Stack
       component={"main"}
@@ -28,7 +28,7 @@ export default async function HomePage() {
         maxWidth={maxWidth}
         width={"100%"}
         textAlign="left"
-        px={paddinX}
+        px={paddingX}
       >
         <Typography variant="h4" fontWeight="bold" align="left">
           「Magnezoo」とは？
@@ -47,13 +47,13 @@ export default async function HomePage() {
           />
         </Stack>
       </Stack>
-      <Stack id="pickup" width={"100%"} maxWidth={maxWidth} px={paddinX}>
+      <Stack id="pickup" width={"100%"} maxWidth={maxWidth} px={paddingX}>
         <Typography variant="h4" align="left" mt={10} mb={5} fontWeight="bold">
           PickUp !
         </Typography>
         <ResolvedPickupPosts currentUserId={session?.user.id ?? null} />
       </Stack>
-      <Stack id="recent" width={"100%"} maxWidth={maxWidth} px={paddinX}>
+      <Stack id="recent" width={"100%"} maxWidth={maxWidth} px={paddingX}>
         <Typography variant="h4" align="left" mt={10} mb={5} fontWeight="bold">
           最近のポスト
         </Typography>
