@@ -26,7 +26,6 @@ import PostTitleDescFields from "@/components/admin/PostEditor/PostTitleDescFiel
 import {
   createPost,
   getTags,
-  getUsers,
   updatePost,
 } from "@/components/Forms/Post/action";
 import { authClient } from "@/lib/auth-client";
@@ -57,14 +56,23 @@ const DEFAULT_NEW_POST: PostWithTags = {
   tags: [],
 };
 
-function PostEditFormContent({ post }: { post?: PostWithTags }) {
+function PostEditFormContent({
+  post,
+  users,
+}: {
+  post?: PostWithTags;
+  users: User[];
+}) {
   const currentPost = post ?? DEFAULT_NEW_POST;
   const isCreateMode = !post;
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [submitting, setSubmitting] = useState(false);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
-  const [availableUsers, setAvailableUsers] = useState<User[]>([]);
+  const availableUsers = users.sort((a, b) => {
+    const result = a.email.localeCompare(b.email);
+    return result;
+  });
 
   // Form State
   const [title, setTitle] = useState(currentPost.title);
@@ -92,15 +100,7 @@ function PostEditFormContent({ post }: { post?: PostWithTags }) {
 
   useEffect(() => {
     getTags().then(setAvailableTags).catch(console.error);
-    getUsers()
-      .then((users) => {
-        setAvailableUsers(users);
-        if (!selectedAuthorId && users.length > 0) {
-          setSelectedAuthorId(users[0].id);
-        }
-      })
-      .catch(console.error);
-  }, [selectedAuthorId]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -354,10 +354,16 @@ function PostEditFormContent({ post }: { post?: PostWithTags }) {
   );
 }
 
-export default function PostEditForm({ post }: { post?: PostWithTags }) {
+export default function PostEditForm({
+  post,
+  users,
+}: {
+  post?: PostWithTags;
+  users: User[];
+}) {
   return (
     <SnackbarProvider maxSnack={3}>
-      <PostEditFormContent post={post} />
+      <PostEditFormContent post={post} users={users} />
     </SnackbarProvider>
   );
 }

@@ -15,25 +15,6 @@ export const getTags = async (): Promise<{ id: string; name: string }[]> => {
   return await prisma.tags.findMany({ orderBy: { name: "asc" } });
 };
 
-export const getUsers = async (): Promise<
-  { id: string; name: string; email: string }[]
-> => {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user.id) return [];
-
-  const currentUser = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true },
-  });
-
-  if (currentUser?.role !== "admin") return [];
-
-  return await prisma.user.findMany({
-    select: { id: true, name: true, email: true },
-    orderBy: [{ name: "asc" }, { email: "asc" }],
-  });
-};
-
 export const createPost = async ({
   title,
   content,

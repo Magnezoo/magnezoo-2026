@@ -21,5 +21,13 @@ export default async function PostEditPage({
 
   if (!post) return notFound();
 
-  return <PostEditForm post={post} />;
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+    },
+  });
+
+  return <PostEditForm post={post} users={users} />;
 }
