@@ -126,11 +126,14 @@ function PostEditFormContent({
       const tagNames = selectedTags.map((t) =>
         typeof t === "string" ? t : t.name,
       );
+      const compressedImage = image
+        ? await compressImage(image, 1024, 0.8)
+        : null;
       const ok = isCreateMode
         ? await createPost({
             title,
             content: description,
-            image: image as File,
+            image: compressedImage as File,
             userId: session.user.id,
             authorId: selectedAuthorId,
             isSalesApplication: salesAgreementChecked,
@@ -142,7 +145,7 @@ function PostEditFormContent({
             id: currentPost.id,
             title,
             content: description,
-            image,
+            image: compressedImage,
             isSalesApplication: salesAgreementChecked,
             isStudio: isStudioChecked,
             studioMgmtNo: parsedStudioMgmtNo,
@@ -367,3 +370,59 @@ export default function PostEditForm({
     </SnackbarProvider>
   );
 }
+
+const compressImage = (
+  file: File,
+  maxSize: number,
+  quality: number,
+): Promise<File> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      let { width, height } = img;
+
+      if (width > height) {
+        if (width > maxSize) {
+          height *= maxSize / width;
+          width = maxSize;
+        }
+      } else {
+        if (height > maxSize) {
+          width *= maxSize / height;
+          height = maxSize;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        reject(new Error("Canvasのコンテキストを取得できませんでした。"));
+        return;
+      }
+
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            resolve(new File([blob], file.name, { type: blob.type }));
+          } else {
+            reject(new Error("画像の圧縮に失敗しました。"));
+          }
+        },
+        "image/jpeg",
+        quality,
+      );
+    };
+
+    img.onerror = () => {
+      reject(new Error("画像の読み込みに失敗しました。"));
+    };
+
+    img.src = url;
+  });
+};
