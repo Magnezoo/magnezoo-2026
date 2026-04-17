@@ -89,7 +89,7 @@ export default function VoteButton({
                   }
                 : (e) => e.stopPropagation()
           }
-          disabled={(disabled || !currentUserId) && isStudio}
+          disabled={!isStudio && (disabled || !currentUserId)}
           className={"cursor-pointer"}
         >
           <Avatar
