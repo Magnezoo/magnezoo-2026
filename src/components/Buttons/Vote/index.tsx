@@ -42,7 +42,7 @@ export default function VoteButton({
   const urlEncodedFormLabel =
     studioMgmtNo && isStudio ? encodeURIComponent(`「${title}」`) : undefined;
   const formURL =
-    studioMgmtNo && isStudio
+    studioMgmtNo && isStudio && title
       ? `https://docs.google.com/forms/d/e/1FAIpQLSc2Hf5Itzp7QZPdzNFRYIXUzeUYLm76YGQHeSzsbR5qFsMPIQ/viewform?usp=pp_url&entry.574807429=No.${studioMgmtNo}+${urlEncodedFormLabel}`
       : `https://forms.gle/8NuR57dDeUKrGCfq8`;
 
