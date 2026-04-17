@@ -84,9 +84,7 @@ function PostEditFormContent({ post }: { post?: PostWithTags }) {
     currentPost.authorId,
   );
   const [tosChecked, setTosChecked] = useState(true);
-  const parsedStudioMgmtNo = studioMgmtNo.trim()
-    ? Number.parseInt(studioMgmtNo, 10)
-    : null;
+  const parsedStudioMgmtNo = studioMgmtNo.trim() ? Number(studioMgmtNo) : null;
   const isStudioMgmtNoValid =
     parsedStudioMgmtNo !== null &&
     Number.isInteger(parsedStudioMgmtNo) &&
