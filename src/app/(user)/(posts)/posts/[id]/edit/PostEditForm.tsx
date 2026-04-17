@@ -93,7 +93,7 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
       });
 
       if (ok) {
-        router.push(`/admin/posts/${post.id}`);
+        router.push(`/posts/${post.id}`);
       } else {
         enqueueSnackbar("更新に失敗しました", { variant: "error" });
       }
