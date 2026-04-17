@@ -166,7 +166,9 @@ export default function ButtonAppBar({
             <Button
               color="warning"
               variant="contained"
-              onClick={() => {}}
+              onClick={() => {
+                router.push("/studio");
+              }}
               sx={{ fontWeight: "bold", alignItems: "center" }}
             >
               詳しくはこちら
