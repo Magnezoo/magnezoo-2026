@@ -115,6 +115,8 @@ export default function VoteButton({
           color="gray"
           component={Link}
           href={formURL}
+          target="_blank"
+          rel="noopener noreferrer"
           sx={{
             textDecoration: "underline",
           }}
