@@ -148,6 +148,7 @@ export default function ButtonAppBar({
         </AppBar>
       </Box>
       <DrawerHeader />
+      {/*TODO: fix終わったら外す
       <Stack bgcolor={"#fff4e5"} direction={"row"} justifyContent={"center"}>
         <Alert
           severity="warning"
@@ -180,6 +181,7 @@ export default function ButtonAppBar({
           </Typography>
         </Alert>
       </Stack>
+      */}
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { Link as MUILink } from "@mui/material";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { forbidden } from "next/navigation";
 import PostButton from "@/components/Buttons/Post";
 import { auth } from "@/lib/auth";
 
@@ -31,7 +32,7 @@ function Section({
 
 export default async function SalesAppCampainPage() {
   const session = await auth.api.getSession({ headers: await headers() });
-
+  if (session?.user.role !== "admin") forbidden();
   return (
     <div className="relative flex min-h-screen flex-col items-center bg-[#FFEECE] font-sans text-black py-10 overflow-x-hidden">
       {/* 幾何学的な背景アニメーション */}
@@ -121,7 +122,8 @@ export default async function SalesAppCampainPage() {
         <Section title="注意事項">
           <ul className="list-disc list-outside text-left mx-auto space-y-3 max-w-md">
             <li>
-              応募は<span className="font-bold text-[#E48B00]">何回でもOK</span>
+              応募は
+              <span className="font-bold text-[#E48B00]">何回でもOK</span>
               です。
             </li>
             <li>
