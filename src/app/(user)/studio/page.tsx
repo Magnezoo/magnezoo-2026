@@ -1,14 +1,13 @@
-import { Link as MUILink } from "@mui/material";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { forbidden } from "next/navigation";
-import PostButton from "@/components/Buttons/Post";
 import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {
-  title: "Magnezoo × 磁石祭2026 ライブスタジオ 連携企画！",
+  title: "スタジオ幕間VTR コンテスト企画〜ペット部門〜 - Magnezoo × 磁石祭2026",
   description:
-    "Magnezooは、生徒から募集した「ウチの子（ペット）」の写真をもとに制作するネット企画です。今年はなんと、ライブスタジオと協力して最高に「かわいい」時間をお届けします！",
+    "Magnezooは、生徒から募集した「ウチの子（ペット）」の写真をもとに制作するネット企画です。ライブスタジオと協力して最高に「かわいい」時間をお届けします！",
 };
 
 function Section({
@@ -19,12 +18,15 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mb-10">
-      <div className="bg-white/90 rounded-2xl border border-[#E48B00]/20 px-6 py-8 md:px-10 md:py-10 text-black shadow-sm">
-        <h2 className="text-xl font-semibold! mb-6 text-[#E48B00] border-b border-[#E48B00]/10 pb-2 inline-block">
-          {title}
-        </h2>
-        <div className="text-left md:text-center">{children}</div>
+    <section className="mb-12 group">
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl border-2 border-[#E48B00]/10 px-6 py-10 md:px-12 md:py-12 text-black shadow-lg transition-all duration-300 hover:border-[#E48B00]/30">
+        <div className="flex flex-col items-center mb-8">
+          <h2 className="text-2xl font-bold! text-[#E48B00] relative">
+            {title}
+            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#E48B00] rounded-full"></span>
+          </h2>
+        </div>
+        <div className="text-center leading-relaxed">{children}</div>
       </div>
     </section>
   );
@@ -32,149 +34,135 @@ function Section({
 
 export default async function SalesAppCampainPage() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (session?.user.role !== "admin") forbidden();
+
+  if (
+    session?.user.role !== "admin" &&
+    process.env.NODE_ENV !== "development"
+  ) {
+    forbidden();
+  }
+
   return (
-    <div className="relative flex min-h-screen flex-col items-center bg-[#FFEECE] font-sans text-black py-10 overflow-x-hidden">
-      {/* 幾何学的な背景アニメーション */}
+    <div className="relative flex min-h-screen flex-col items-center bg-[#FFEECE] font-sans text-slate-900 py-12 md:py-20 overflow-x-hidden">
+      {/* 幾何学的な背景アニメーション（既存のCSSクラスを想定） */}
       <div className="animated-bg-circles" aria-hidden="true">
-        <div className="circle circle1" />
-        <div className="circle circle2" />
-        <div className="circle circle3" />
-        <div className="circle circle4" />
-        <div className="circle circle5" />
+        <div className="circle circle1 opacity-50" />
+        <div className="circle circle2 opacity-50" />
+        <div className="circle circle3 opacity-50" />
       </div>
 
-      <main className="relative w-full max-w-4xl mx-auto px-4 text-center leading-relaxed z-10">
-        <header className="mb-8">
-          <div className="bg-white/95 rounded-2xl border border-[#E48B00]/20 px-6 py-8 md:px-10 shadow-md">
-            <p className="text-lg font-bold! text-[#E48B00] mb-1">
+      <main className="relative w-full max-w-4xl mx-auto px-6 z-10">
+        <header className="mb-12 text-center">
+          <div className="bg-white/95 rounded-4xl border-2 border-[#E48B00]/20 p-8 md:p-12 shadow-xl ring-8 ring-[#FFEECE]">
+            <span className="inline-block bg-[#E48B00] text-white text-sm md:text-base font-bold! px-4 py-1 rounded-full mb-4">
               スタジオ連携企画
-            </p>
-            <h1 className="text-2xl md:text-4xl font-bold! text-[#E48B00] leading-tight">
-              あなたの写真がスタジオに！？
+            </span>
+            <h1 className="text-3xl md:text-5xl font-black text-[#E48B00] tracking-tight leading-tight">
+              スタジオ幕間VTR
+              <br />
+              <span className="text-2xl md:text-4xl">
+                コンテスト企画 〜ペット部門〜
+              </span>
             </h1>
           </div>
         </header>
 
         <Section title="企画概要">
-          <div className="max-w-2xl mx-auto space-y-2 text-lg">
-            <p className="flex flex-wrap justify-center gap-x-2">
-              <span>Magnezooは、</span>
-              <span>生徒から募集した</span>
-              <span>「ウチの子（ペット）」の</span>
-              <span>写真をもとに制作する</span>
-              <span>ネット企画です。</span>
-            </p>
-            <p className="font-bold text-[#E48B00] mt-4">
-              今年はなんと、ライブスタジオと協力して
+          <div className="max-w-2xl mx-auto space-y-6 text-base md:text-lg">
+            <p className="font-medium">
+              スタジオ番組の幕間VTRで、N高グループ関係者から応募された
               <br className="hidden md:block" />
-              最高に「かわいい」時間をお届けします！
+              フォトコンテストを実施します！
+            </p>
+            <p>
+              ペット部門では、可愛すぎて思わず自慢したくなる
+              <br className="hidden md:block" />
+              <span className="text-[#E48B00] font-bold! text-xl">
+                「うちの子」
+              </span>
+              が続々登場！
+            </p>
+            <p className="bg-[#FFEECE]/50 p-4 rounded-xl">
+              栄えあるNo.1に輝く作品は、
+              <br />
+              <span className="font-bold! border-b-2 border-[#E48B00]">
+                視聴者の皆さんの投票
+              </span>
+              で決まります 👀
             </p>
           </div>
-        </Section>
-
-        <Section title="写真の応募方法">
-          <p className="mb-6 text-center">
-            Magnezooに投稿された作品の中から、
-            <br className="hidden md:block" />
-            <span className="font-bold text-[#E48B00] text-lg">
-              ライブスタジオの幕間企画として紹介させていただきます！
-            </span>
-          </p>
-
-          <div className="grid gap-6 text-left max-w-xl mx-auto">
-            <div className="flex gap-4">
-              <span className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#E48B00] text-white font-bold">
-                1
-              </span>
-              <div>
-                <p className="font-bold">写真を撮る</p>
-                <p className="text-sm text-gray-700">
-                  ペット等の写真を高画質かつ正方形にカットしやすい構図で撮影してください。地域猫やカフェの動物も歓迎！
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <span className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#E48B00] text-white font-bold">
-                2
-              </span>
-              <div>
-                <p className="font-bold">投稿ボタンを押す</p>
-                <p className="text-sm text-gray-700">
-                  ページ下部の「投稿する」ボタンから、必要事項を入力してください。
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <span className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#E48B00] text-white font-bold">
-                3
-              </span>
-              <div>
-                <p className="font-bold">完了！</p>
-                <p className="text-sm text-gray-700">
-                  選定された写真は、スタジオでの紹介が行われます。お楽しみに！
-                </p>
-              </div>
-            </div>
+          <div className="mt-8 flex justify-center">
+            <Link
+              href="https://forms.gle/8NuR57dDeUKrGCfq8"
+              target="_blank"
+              className="inline-block bg-white border-2 md:border-[3px] border-black text-black font-black 
+               py-3 px-8 text-lg 
+               md:py-5 md:px-16 md:text-2xl 
+               rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] 
+               md:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] 
+               hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 
+               md:hover:translate-x-1 md:hover:translate-y-1 
+               transition-all duration-200"
+            >
+              投票する 🐾
+            </Link>
           </div>
         </Section>
 
         <Section title="注意事項">
-          <ul className="list-disc list-outside text-left mx-auto space-y-3 max-w-md">
-            <li>
-              応募は
-              <span className="font-bold text-[#E48B00]">何回でもOK</span>
-              です。
-            </li>
-            <li>
-              写真はオリジナルのものに限ります。
-              <ul className="list-[circle] ml-6 mt-2 space-y-1 text-gray-600">
-                <li>人が大きく写り込んでいるものは避けてください。</li>
-                <li>他のお客さんが写らないよう配慮をお願いします。</li>
-              </ul>
-            </li>
-            <li>選ばれた写真は、紹介のために加工される場合があります。</li>
-            <li>応募後の写真は返却できませんのでご了承ください。</li>
-          </ul>
+          <div className="inline-block text-left bg-orange-50 p-6 rounded-2xl border border-orange-100">
+            <ul className="list-disc list-outside ml-5 space-y-4 max-w-md">
+              <li className="font-semibold text-red-600">
+                フォームへの回答は
+                <span className="underline decoration-2">お一人様一回まで</span>
+                となります。
+              </li>
+              <li className="text-gray-700">
+                他の部門（企画）も同じフォームから投票いただけます。ぜひ併せてご覧ください！
+              </li>
+            </ul>
+          </div>
         </Section>
 
         <Section title="お問い合わせ">
-          <div className="max-w-xl mx-auto text-left space-y-4 text-sm md:text-base">
-            <div className="flex flex-col md:flex-row md:items-center gap-2">
-              <span className="font-bold md:w-24">企画全般:</span>
-              <span>
-                Slackにて{" "}
-                <code className="bg-gray-100 px-1 rounded">
-                  @あかつきゆいと
-                </code>{" "}
-                /{" "}
-                <code className="bg-gray-100 px-1 rounded">@おは._.ゆーし</code>{" "}
-                まで
+          <div className="max-w-xl mx-auto bg-gray-50 p-6 rounded-2xl text-left border border-gray-200">
+            <div className="flex flex-col md:flex-row gap-3 items-start">
+              <span className="font-bold! text-[#E48B00] shrink-0">
+                企画全般 :
               </span>
-            </div>
-            <div className="flex flex-col md:flex-row md:items-center gap-2">
-              <span className="font-bold md:w-24">法的事項:</span>
-              <MUILink
-                href="/privacy"
-                target="_blank"
-                className="text-[#E48B00] underline"
-              >
-                プライバシー・ポリシーをご確認ください
-              </MUILink>
+              <div className="space-y-2">
+                <p className="text-sm md:text-base">
+                  Slackにて下記チャンネルまたはメンションまで
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <code className="bg-white border border-gray-300 px-2 py-1 rounded text-sm font-mono text-pink-600">
+                    #磁石祭2026_問い合わせ
+                  </code>
+                  <code className="bg-white border border-gray-300 px-2 py-1 rounded text-sm font-mono text-blue-600">
+                    @magfes_staff-studio
+                  </code>
+                </div>
+              </div>
             </div>
           </div>
         </Section>
 
         <div className="flex flex-col items-center py-10">
-          <PostButton
-            userId={session?.user?.id}
-            isSalesApplication
-            path="/studio"
-            disabled={false} // 公開時はfalseに
-            className="bg-white border-2 border-black text-black font-bold py-4 px-12 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all duration-200 text-xl cursor-pointer"
-          />
-          <p className="mt-8 text-[#E48B00] text-xl md:text-2xl font-semibold! tracking-wider animate-bounce">
-            みなさんのご応募をお待ちしております！
+          <Link
+            href="https://forms.gle/8NuR57dDeUKrGCfq8"
+            target="_blank"
+            className="group relative bg-white border-2 md:border-[3px] border-black text-black font-black 
+               py-4 px-10 text-xl 
+               md:py-6 md:px-20 md:text-3xl 
+               rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] 
+               md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] 
+               hover:shadow-none hover:translate-x-1 hover:translate-y-1 
+               transition-all duration-200"
+          >
+            投票はこちらから
+          </Link>
+          <p className="mt-8 text-[#E48B00] text-lg md:text-2xl font-black tracking-widest animate-bounce text-center">
+            ＼ あなたの一票をお待ちしています！ ／
           </p>
         </div>
       </main>
