@@ -167,7 +167,7 @@ export default async function SalesAppCampainPage() {
           <PostButton
             userId={session?.user?.id}
             isSalesApplication
-            path="/sales_app"
+            path="/studio"
             disabled={false} // 公開時はfalseに
             className="bg-white border-2 border-black text-black font-bold py-4 px-12 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all duration-200 text-xl cursor-pointer"
           />
