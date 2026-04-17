@@ -7,7 +7,7 @@ import { auth } from "@/lib/auth";
 export const metadata: Metadata = {
   title: "Magnezoo × 磁石祭2026 ライブスタジオ 連携企画！",
   description:
-    "Magnezoo物販企画(仮)は、生徒から募集した「ウチの子（ペット）」の写真をもとに制作する、ネット企画Magnezoo！今年は何と、スタジオ企画と連携することになりました！",
+    "Magnezooは、生徒から募集した「ウチの子（ペット）」の写真をもとに制作するネット企画です。今年はなんと、ライブスタジオと協力して最高に「かわいい」時間をお届けします！",
 };
 
 function Section({
