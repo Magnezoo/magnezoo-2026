@@ -19,6 +19,7 @@ export const createPost = async ({
   title,
   content,
   image,
+  imagePositionY,
   userId,
   authorId,
   isSalesApplication,
@@ -29,6 +30,7 @@ export const createPost = async ({
   title: string;
   content: string;
   image: File;
+  imagePositionY?: number;
   userId: string;
   authorId?: string;
   isSalesApplication: boolean;
@@ -95,6 +97,7 @@ export const createPost = async ({
         title,
         description: content,
         imageUrl,
+        imagePositionY,
         isSalesApplication,
         isStudio: isStudioToSave,
         studioMgmtNo: studioMgmtNoToSave,
@@ -130,6 +133,7 @@ export const updatePost = async ({
   title,
   content,
   image,
+  imagePositionY,
   isSalesApplication,
   isStudio,
   studioMgmtNo,
@@ -140,6 +144,7 @@ export const updatePost = async ({
   title: string;
   content: string;
   image?: File | null;
+  imagePositionY?: number; // 追加
   isSalesApplication: boolean;
   isStudio?: boolean;
   studioMgmtNo?: number | null;
@@ -224,6 +229,7 @@ export const updatePost = async ({
       title: string;
       description: string;
       isSalesApplication: boolean;
+      imagePositionY?: number;
       imageUrl?: string;
       authorId?: string;
       isStudio?: boolean;
@@ -243,6 +249,7 @@ export const updatePost = async ({
       title,
       description: content,
       isSalesApplication,
+      imagePositionY,
       ...(imageUrl ? { imageUrl } : {}),
       tags: {
         deleteMany: {},

@@ -107,6 +107,7 @@ model Post {
   description        String      @db.Text
   imageUrl           String
   authorId           String
+  imagePositionY     Int         @default(50)
   isSalesApplication Boolean     @default(false)
   isStudio           Boolean     @default(false)
   studioMgmtNo       Int?

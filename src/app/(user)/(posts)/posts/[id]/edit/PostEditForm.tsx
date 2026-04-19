@@ -38,6 +38,7 @@ type PostWithTags = {
   title: string;
   description: string;
   imageUrl: string;
+  imagePositionY: number;
   isSalesApplication: boolean;
   tags: { tag: Tag }[];
 };
@@ -53,6 +54,7 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
   const [title, setTitle] = useState(post.title);
   const [description, setDescription] = useState(post.description);
   const [image, setImage] = useState<File | null>(null);
+  const [imagePosition, setImagePosition] = useState(post.imagePositionY ?? 50);
   const [selectedTags, setSelectedTags] = useState<(Tag | string)[]>(
     post.tags.map((t) => t.tag),
   );
@@ -87,6 +89,7 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
         title,
         content: description,
         image,
+        imagePositionY: imagePosition,
         isSalesApplication: salesAgreementChecked,
         tagNames,
         userId: session.user.id,
@@ -178,6 +181,8 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
             setImage={setImage}
             existingImageUrl={post.imageUrl}
             disabled={submitting}
+            imagePosition={imagePosition}
+            setImagePosition={setImagePosition}
           />
 
           <PostTagField

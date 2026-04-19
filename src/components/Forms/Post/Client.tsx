@@ -15,6 +15,7 @@ import {
   IconButton,
   MenuItem,
   MenuList,
+  Slider,
   Stack,
   TextField,
   Typography,
@@ -28,7 +29,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { createPost, getTags } from "./action";
+import { createPost, getTags } from "@/components/Forms/Post/action";
 
 type Tag = { id: string; name: string };
 
@@ -81,6 +82,7 @@ export default function PostFormClient({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [imagePosition, setImagePosition] = useState(50); // 追加: 画像の表示位置 (0-100)
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
   const [selectedTags, setSelectedTags] = useState<(Tag | string)[]>([]);
   const [tagInputValue, setTagInputValue] = useState("");
@@ -128,6 +130,7 @@ export default function PostFormClient({
     setTitle("");
     setDescription("");
     setImage(null);
+    setImagePosition(50); // リセット時にも中央に戻す
     if (fileInputRef.current) {
       try {
         // clear file input value
@@ -159,6 +162,7 @@ export default function PostFormClient({
     setImage(
       e.target.files && e.target.files.length > 0 ? e.target.files[0] : null,
     );
+    setImagePosition(50); // 画像が変更されたら位置をリセット
   };
 
   useEffect(() => {
@@ -258,6 +262,7 @@ export default function PostFormClient({
         title: String(title),
         content: String(description),
         image: compressedImage,
+        imagePositionY: imagePosition, // 追加: Actionへ渡す
         userId,
         isSalesApplication: salesAgreementChecked,
         tagNames,
@@ -550,14 +555,10 @@ export default function PostFormClient({
                             <Box
                               sx={{
                                 display: "flex",
-                                gap: 4,
-                                mt: 4,
-                                flexWrap: "wrap",
+                                flexDirection: "column",
+                                gap: 2,
+                                mt: 2,
                                 width: "100%",
-                                justifyContent: {
-                                  xs: "center",
-                                  xl: "flex-start",
-                                },
                               }}
                             >
                               <Box
@@ -567,18 +568,59 @@ export default function PostFormClient({
                                   textAlign: "center",
                                 }}
                               >
+                                <Typography
+                                  variant="subtitle2"
+                                  gutterBottom
+                                  align="left"
+                                >
+                                  プレビュー (16:9 表示枠)
+                                </Typography>
                                 <Box
                                   component="img"
                                   src={preview.url}
                                   alt={preview.name}
                                   sx={{
                                     width: "100%",
-                                    height: { xs: 200, sm: 240 },
+                                    aspectRatio: "16/9", // 16:9 に固定
                                     objectFit: "cover",
+                                    objectPosition: `center ${imagePosition}%`, // スライダーの値を反映
                                     borderRadius: 2,
                                     border: "1px solid #e0e0e0",
+                                    bgcolor: "grey.100",
                                   }}
                                 />
+                                <Box sx={{ mt: 2, width: "100%" }}>
+                                  <Stack
+                                    direction="row"
+                                    spacing={2}
+                                    alignItems="center"
+                                  >
+                                    <Typography
+                                      variant="caption"
+                                      sx={{ minWidth: 80, fontWeight: "bold" }}
+                                    >
+                                      表示位置(上下)
+                                    </Typography>
+                                    <Slider
+                                      value={imagePosition}
+                                      min={0}
+                                      max={100}
+                                      onChange={(_, value) =>
+                                        setImagePosition(value as number)
+                                      }
+                                      disabled={submitting}
+                                      valueLabelDisplay="auto"
+                                    />
+                                  </Stack>
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    align="left"
+                                    display="block"
+                                  >
+                                    ※スライダーを動かして、枠内に表示したい部分を調整してください。
+                                  </Typography>
+                                </Box>
                                 <Typography
                                   sx={{ fontSize: { xs: 14, xl: 14 }, mt: 1 }}
                                   noWrap
