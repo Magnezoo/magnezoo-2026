@@ -54,7 +54,7 @@ function PostEditFormContent({ post }: { post: PostWithTags }) {
   const [title, setTitle] = useState(post.title);
   const [description, setDescription] = useState(post.description);
   const [image, setImage] = useState<File | null>(null);
-  const [imagePosition, setImagePosition] = useState(post.imagePositionY ?? 50);
+  const [imagePosition, setImagePosition] = useState(post.imagePositionY);
   const [selectedTags, setSelectedTags] = useState<(Tag | string)[]>(
     post.tags.map((t) => t.tag),
   );
