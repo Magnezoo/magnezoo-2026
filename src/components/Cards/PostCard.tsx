@@ -177,7 +177,6 @@ export default function PostCard({
                         currentVoteCount={votes.length}
                         isVoted={isVoted}
                         currentUserId={currentUserId}
-                        disabled={!currentUserId}
                         isSalesApplication
                         salesType={type}
                       />
@@ -203,7 +202,6 @@ export default function PostCard({
                   studioMgmtNo={post.studioMgmtNo || undefined}
                   title={post.title}
                   currentUserId={currentUserId}
-                  disabled={!currentUserId}
                 />
                 <Stack direction="row" spacing={1}>
                   {isAdmin && (
