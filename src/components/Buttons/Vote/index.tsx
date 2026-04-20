@@ -145,34 +145,36 @@ export default function VoteButton({
           {voteCount} {isSalesApplication ? "票" : "いいね"}
         </Typography>
       )}
-      <Dialog
-        open={isSuggestLoginOpen}
-        onClose={() => setSuggestLoginOpen(false)}
-      >
-        <DialogContent>
-          <Typography variant="h5">
-            「いいね」をするにはログインが必要です。
-          </Typography>
-          <Typography>ログインは学園関係者のみ可能です。</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setSuggestLoginOpen(false);
-            }}
-            color={"inherit"}
-          >
-            キャンセル
-          </Button>
-          <Button
-            onClick={() => {
-              router.push("/signin");
-            }}
-          >
-            ログイン
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {currentUserId && (
+        <Dialog
+          open={isSuggestLoginOpen}
+          onClose={() => setSuggestLoginOpen(false)}
+        >
+          <DialogContent>
+            <Typography variant="h5">
+              「いいね」をするにはログインが必要です。
+            </Typography>
+            <Typography>ログインは学園関係者のみ可能です。</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setSuggestLoginOpen(false);
+              }}
+              color={"inherit"}
+            >
+              キャンセル
+            </Button>
+            <Button
+              onClick={() => {
+                router.push("/signin");
+              }}
+            >
+              ログイン
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Stack>
   );
 }
