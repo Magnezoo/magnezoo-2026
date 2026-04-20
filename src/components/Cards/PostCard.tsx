@@ -15,12 +15,8 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  type Post,
-  SalesType,
-  type Slacks,
-  type User,
-} from "@/generated/prisma/browser";
+import type { Post, Slacks, User } from "@/generated/prisma/browser";
+import { SalesType } from "@/generated/prisma/browser";
 import VoteButton from "../Buttons/Vote";
 import AuthorCard from "./AuthorCard";
 
@@ -104,6 +100,7 @@ export default function PostCard({
               borderTopLeftRadius: 4,
               borderTopRightRadius: 4,
               cursor: "pointer",
+              bgcolor: "grey.100",
             }}
           >
             <Image
@@ -112,6 +109,7 @@ export default function PostCard({
               fill
               style={{
                 objectFit: "cover",
+                objectPosition: `center ${post.imagePositionY ?? 50}%`,
               }}
               sizes="(max-width: 768px) 100vw, 450px"
               fetchPriority={index !== undefined && index < 5 ? "high" : "auto"}
