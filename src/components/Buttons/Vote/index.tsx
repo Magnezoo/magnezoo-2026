@@ -103,7 +103,6 @@ export default function VoteButton({
                 : (e) => {
                     e.stopPropagation();
                     setSuggestLoginOpen(true);
-                    console.log("Action!");
                   }
           }
           disabled={!isStudio && disabled}
@@ -152,7 +151,7 @@ export default function VoteButton({
         >
           <DialogContent>
             <Typography variant="h5">
-              「いいね」をするにはログインが必要です。
+              「{voteLabel}」をするにはログインが必要です。
             </Typography>
             <Typography>ログインは学園関係者のみ可能です。</Typography>
           </DialogContent>
