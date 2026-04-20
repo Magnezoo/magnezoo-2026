@@ -612,6 +612,17 @@ export default function PostFormClient({
                                       valueLabelDisplay="auto"
                                     />
                                   </Stack>
+                                  <Button
+                                    variant="text"
+                                    onClick={() => setImagePosition(50)}
+                                    disabled={submitting}
+                                    sx={{
+                                      display: "flex",
+                                      justifyContent: "flex-end",
+                                    }}
+                                  >
+                                    表示位置をリセット
+                                  </Button>
                                   <Typography
                                     variant="caption"
                                     color="text.secondary"
