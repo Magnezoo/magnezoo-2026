@@ -177,7 +177,6 @@ export default function PostCard({
                         currentVoteCount={votes.length}
                         isVoted={isVoted}
                         currentUserId={currentUserId}
-                        disabled={!currentUserId}
                         isSalesApplication
                         salesType={type}
                       />
