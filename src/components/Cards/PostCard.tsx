@@ -203,7 +203,6 @@ export default function PostCard({
                   studioMgmtNo={post.studioMgmtNo || undefined}
                   title={post.title}
                   currentUserId={currentUserId}
-                  disabled={!currentUserId}
                 />
                 <Stack direction="row" spacing={1}>
                   {isAdmin && (

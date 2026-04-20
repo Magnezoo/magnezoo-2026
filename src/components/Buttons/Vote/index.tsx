@@ -2,9 +2,19 @@
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { Avatar, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { pink } from "@mui/material/colors";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import type { SalesType } from "@/generated/prisma/client";
@@ -35,7 +45,10 @@ export default function VoteButton({
 }) {
   const [voteCount, setVoteCount] = useState(currentVoteCount);
   const [isVotedState, setIsVotedState] = useState(isVoted);
+  const [isSuggestLoginOpen, setSuggestLoginOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+
+  const router = useRouter();
 
   const voteLabel = isSalesApplication ? "投票" : "いいね";
 
@@ -87,9 +100,13 @@ export default function VoteButton({
                       return;
                     }
                   }
-                : (e) => e.stopPropagation()
+                : (e) => {
+                    e.stopPropagation();
+                    setSuggestLoginOpen(true);
+                    console.log("Action!");
+                  }
           }
-          disabled={!isStudio && (disabled || !currentUserId)}
+          disabled={!isStudio && disabled}
           className={"cursor-pointer"}
         >
           <Avatar
@@ -128,6 +145,34 @@ export default function VoteButton({
           {voteCount} {isSalesApplication ? "票" : "いいね"}
         </Typography>
       )}
+      <Dialog
+        open={isSuggestLoginOpen}
+        onClose={() => setSuggestLoginOpen(false)}
+      >
+        <DialogContent>
+          <Typography variant="h5">
+            「いいね」をするにはログインが必要です。
+          </Typography>
+          <Typography>ログインは学園関係者のみ可能です。</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setSuggestLoginOpen(false);
+            }}
+            color={"inherit"}
+          >
+            キャンセル
+          </Button>
+          <Button
+            onClick={() => {
+              router.push("/signin");
+            }}
+          >
+            ログイン
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Stack>
   );
 }
