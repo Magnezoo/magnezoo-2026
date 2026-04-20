@@ -144,7 +144,7 @@ export default function VoteButton({
           {voteCount} {isSalesApplication ? "票" : "いいね"}
         </Typography>
       )}
-      {currentUserId && (
+      {!currentUserId && (
         <Dialog
           open={isSuggestLoginOpen}
           onClose={() => setSuggestLoginOpen(false)}
