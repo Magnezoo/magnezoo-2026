@@ -96,11 +96,15 @@ export default function PostDetailDialogClient(props: Props) {
       >
         {/* 左側：画像エリア（比率を 80% に拡大） */}
         <Box
+          component="button"
+          type="button"
+          aria-label={`${props.post.title}の画像を拡大表示`}
           sx={{
-            width: { xs: "100%", md: "80%" },
+            width: { xs: "100%", md: "auto" },
+            flex: { xs: "none", md: "1 1 auto" },
+            minWidth: 0,
             height: { xs: "50vh", sm: "60vh", md: "100%" },
             position: "relative",
-            flexShrink: 0,
             cursor: "zoom-in",
             display: "flex",
             alignItems: "center",
@@ -119,16 +123,15 @@ export default function PostDetailDialogClient(props: Props) {
             }}
           />
         </Box>
-
         {/* 右: コンテンツエリア */}
         <Stack
           sx={{
-            width: { xs: "100%", md: "20%" },
-            minWidth: { md: "300px" },
+            width: { xs: "100%", md: 320, lg: 360 },
+            flexShrink: 0,
             height: "100%",
             overflowY: { xs: "visible", md: "auto" },
             backgroundColor: "#fff",
-            borderLeft: { md: "1px solid #ececec" },
+            borderLeft: { md: "1px solid `#ececec`" },
           }}
         >
           {/* 閉じるボタン（sticky） */}
@@ -185,7 +188,7 @@ export default function PostDetailDialogClient(props: Props) {
                   sx={{
                     bgcolor: "#f0f0f0",
                     fontWeight: 500,
-                    cursor: "pointer",
+                    // cursor: "pointer", 今の所は
                     "&:hover": { bgcolor: "#e0e0e0" },
                   }}
                 />
