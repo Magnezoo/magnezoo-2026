@@ -42,13 +42,20 @@ export default function PostDetailDialogClient(props: Props) {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleClose();
+      if (e.key !== "Escape") {
+        return;
       }
+
+      if (openLightbox) {
+        setOpenLightbox(false);
+        return;
+      }
+
+      handleClose();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleClose]);
+  }, [handleClose, openLightbox]);
 
   return (
     <Box
