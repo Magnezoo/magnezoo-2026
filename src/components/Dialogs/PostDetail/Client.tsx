@@ -188,8 +188,8 @@ export default function PostDetailDialogClient(props: Props) {
                   sx={{
                     bgcolor: "#f0f0f0",
                     fontWeight: 500,
-                    // cursor: "pointer", 今の所は
-                    "&:hover": { bgcolor: "#e0e0e0" },
+                    // cursor: "pointer", 今の所はホバーもポインターも削除
+                    // "&:hover": { bgcolor: "#e0e0e0" },
                   }}
                 />
               ))}
