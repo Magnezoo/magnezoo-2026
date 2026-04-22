@@ -4,7 +4,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { styled } from "@mui/material";
+import { Alert, Button, Stack, styled, Typography } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -148,7 +148,6 @@ export default function ButtonAppBar({
         </AppBar>
       </Box>
       <DrawerHeader />
-      {/*TODO: fix終わったら外す
       <Stack bgcolor={"#fff4e5"} direction={"row"} justifyContent={"center"}>
         <Alert
           severity="warning"
@@ -168,7 +167,7 @@ export default function ButtonAppBar({
               color="warning"
               variant="contained"
               onClick={() => {
-                router.push("/studio");
+                router.push("/sales");
               }}
               sx={{ fontWeight: "bold", alignItems: "center" }}
             >
@@ -177,11 +176,10 @@ export default function ButtonAppBar({
           }
         >
           <Typography fontWeight={700}>
-            現在、スタジオ企画との連携企画が進行中！
+            リアル会場にて物販企画が進行中！
           </Typography>
         </Alert>
       </Stack>
-      */}
     </>
   );
 }
