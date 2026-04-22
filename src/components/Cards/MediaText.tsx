@@ -24,7 +24,7 @@ export default function MediaText({
       }`}
     >
       <div className="w-full md:w-5/12 p-4 flex justify-center items-center bg-white/20">
-        <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl border-2 border-[#E48B00]/80 bg-white/40">
+        <div className="relative w-full aspect-4/3 overflow-hidden rounded-2xl border-2 border-[#E48B00]/80 bg-white/40">
           <Image
             src={imageSrc}
             alt={imageAlt}
