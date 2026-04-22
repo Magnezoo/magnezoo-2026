@@ -96,7 +96,7 @@ export default async function SalesAppCampainPage() {
           </h2>
         </Divider>
 
-        <div className="relative w-[80vw] max-w-7xl mx-auto px-4 leading-relaxed z-10">
+        <div className="relative w-[80vw] max-w-7xl mx-auto leading-relaxed z-10">
           <MediaText
             imageSrc="/img/merchandise/sakura_01.png"
             imageAlt="オリジナルステッカー"
