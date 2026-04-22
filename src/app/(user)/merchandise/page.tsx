@@ -28,7 +28,7 @@ function Section({
 }
 
 export default async function SalesAppCampainPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  // const session = await auth.api.getSession({ headers: await headers() });
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#FFEECE] font-sans text-black py-10 overflow-hidden">
       {/* 幾何学的な背景アニメーション */}
@@ -43,67 +43,13 @@ export default async function SalesAppCampainPage() {
         <header className="mb-8">
           <div className="bg-white/95 rounded-2xl border border-[#E48B00]/20 px-10 py-8 mb-2">
             <h1 className="text-2xl font-bold mb-2 text-[#E48B00]">
-              【物販企画】
+              【物販特設サイト】
             </h1>
             <h2 className="text-3xl font-bold mb-0 text-[#E48B00]">
               あなたのウチの子が商品に！？
             </h2>
           </div>
         </header>
-
-        <Section title="企画概要">
-          <p className="mb-2 leading-normal [&_span]:inline-block max-w-xl mx-auto">
-            <span>
-              <span>
-                <span>Magnezoo物販企画(仮)は、</span>
-                <span>生徒から募集した</span>
-              </span>
-              <span>
-                <span>「ウチの子（ペット）」の</span>
-                <span>写真をもとに</span>
-                <span>制作する、</span>
-              </span>
-              <span>
-                <span>ネット企画Magnezoo発の</span>
-                <span>物販企画です。</span>
-              </span>
-              <span>
-                <span>ここでしか手に入らない、</span>
-                <span>
-                  <span>尊くて愛しい</span>限定アイテムを
-                </span>
-              </span>
-              <span>展開します。</span>
-            </span>
-          </p>
-        </Section>
-
-        <Section title="企画概要">
-          <p className="mb-2 leading-normal [&_span]:inline-block max-w-7xl mx-auto">
-            <span>
-              <span>
-                <span>Magnezoo物販企画(仮)は、</span>
-                <span>生徒から募集した</span>
-              </span>
-              <span>
-                <span>「ウチの子（ペット）」の</span>
-                <span>写真をもとに</span>
-                <span>制作する、</span>
-              </span>
-              <span>
-                <span>ネット企画Magnezoo発の</span>
-                <span>物販企画です。</span>
-              </span>
-              <span>
-                <span>ここでしか手に入らない、</span>
-                <span>
-                  <span>尊くて愛しい</span>限定アイテムを
-                </span>
-              </span>
-              <span>展開します。</span>
-            </span>
-          </p>
-        </Section>
       </main>
     </div>
   );
