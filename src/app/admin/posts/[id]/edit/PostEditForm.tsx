@@ -37,6 +37,7 @@ type PostWithTags = {
   title: string;
   description: string;
   imageUrl: string;
+  imagePositionY?: number;
   isSalesApplication: boolean;
   isStudio: boolean;
   studioMgmtNo: number | null;
@@ -49,6 +50,7 @@ const DEFAULT_NEW_POST: PostWithTags = {
   title: "",
   description: "",
   imageUrl: "",
+  imagePositionY: 50,
   isSalesApplication: false,
   isStudio: false,
   studioMgmtNo: null,
@@ -78,6 +80,9 @@ function PostEditFormContent({
   const [title, setTitle] = useState(currentPost.title);
   const [description, setDescription] = useState(currentPost.description);
   const [image, setImage] = useState<File | null>(null);
+  const [imagePosition, setImagePosition] = useState(
+    currentPost.imagePositionY ?? 50,
+  );
   const [selectedTags, setSelectedTags] = useState<(Tag | string)[]>(
     currentPost.tags.map((t) => t.tag),
   );
@@ -134,6 +139,7 @@ function PostEditFormContent({
             title,
             content: description,
             image: compressedImage as File,
+            imagePositionY: imagePosition,
             userId: session.user.id,
             authorId: selectedAuthorId,
             isSalesApplication: salesAgreementChecked,
@@ -146,6 +152,7 @@ function PostEditFormContent({
             title,
             content: description,
             image: compressedImage,
+            imagePositionY: imagePosition,
             isSalesApplication: salesAgreementChecked,
             isStudio: isStudioChecked,
             studioMgmtNo: parsedStudioMgmtNo,
@@ -267,6 +274,8 @@ function PostEditFormContent({
             setImage={setImage}
             existingImageUrl={currentPost.imageUrl || undefined}
             disabled={submitting}
+            imagePosition={imagePosition}
+            setImagePosition={setImagePosition}
           />
 
           <PostTagField

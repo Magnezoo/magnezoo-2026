@@ -1,10 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import Link from "next/link";
-import { forbidden } from "next/navigation";
 import PostsList from "@/components/Lists/Post";
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -36,15 +33,6 @@ function Section({
 }
 
 export default async function SalesAppCampainPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-
-  if (
-    session?.user.role !== "admin" &&
-    process.env.NODE_ENV !== "development"
-  ) {
-    forbidden();
-  }
-
   const posts = await prisma.post.findMany({
     include: {
       author: {
@@ -193,7 +181,7 @@ export default async function SalesAppCampainPage() {
           >
             エントリー一覧
           </Typography>
-          <PostsList posts={posts} currentUserId={session?.user.id || null} />
+          <PostsList posts={posts} currentUserId={null} />
         </Stack>
 
         <div className="flex flex-col items-center py-10">

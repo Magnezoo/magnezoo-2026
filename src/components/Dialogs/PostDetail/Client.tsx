@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import VoteButton from "@/components/Buttons/Vote";
 import AuthorCard from "@/components/Cards/AuthorCard";
 import type { PostWithAutherAndVotes } from "@/components/Cards/PostCard";
@@ -30,16 +30,32 @@ interface Props {
 
 export default function PostDetailDialogClient(props: Props) {
   const router = useRouter();
+  const [openLightbox, setOpenLightbox] = useState(false);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     if (props.closeRedirectTo) {
       router.push(props.closeRedirectTo);
     } else {
       router.back();
     }
-  };
+  }, [props.closeRedirectTo, router]);
 
-  const [openLightbox, setOpenLightbox] = useState(false);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") {
+        return;
+      }
+
+      if (openLightbox) {
+        setOpenLightbox(false);
+        return;
+      }
+
+      handleClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleClose, openLightbox]);
 
   return (
     <Box
@@ -48,12 +64,13 @@ export default function PostDetailDialogClient(props: Props) {
         position: "fixed",
         inset: 0,
         zIndex: 900,
-        backgroundColor: "rgba(0,0,0,0.5)",
+        backgroundColor: "rgba(0,0,0,0.9)", // 没入感を高めるためさらに暗く
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
-        p: { xs: 1, md: 4 },
-        overflowY: "scroll",
+        alignItems: { xs: "flex-start", md: "center" },
+        p: { xs: 0, md: 2, lg: 4 }, // 画面が大きいほど余白をとって枠線を際立たせる
+        pt: { xs: 7, lg: 12 },
+        overflowY: { xs: "auto", md: "hidden" },
       }}
     >
       <Box
@@ -62,30 +79,36 @@ export default function PostDetailDialogClient(props: Props) {
           width: "100%",
           maxWidth: {
             xs: "100%",
-            sm: "720px",
-            md: "1000px",
-            lg: "95vw",
+            sm: "90vw",
+            md: "95vw",
+            lg: "1600px",
           },
-          mt: { xs: 20, md: 5 },
-          height: { xs: "auto", md: "85vh" },
+          height: { xs: "auto", md: "90vh" },
+          minHeight: { xs: "100%", md: "auto" },
           backgroundColor: "#fff",
           borderRadius: { xs: 0, md: 2 },
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Escape") {
-            handleClose();
-          }
+          overflow: "hidden",
+          position: "relative",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
         }}
       >
-        {/* 画像エリア */}
+        {/* 左側：画像エリア（比率を 80% に拡大） */}
         <Box
+          component="button"
+          type="button"
+          aria-label={`${props.post.title}の画像を拡大表示`}
           sx={{
-            width: { xs: "100%", md: "70%" },
-            height: { xs: "60%", md: "100%" },
-            minHeight: 300,
+            width: { xs: "100%", md: "auto" },
+            flex: { xs: "none", md: "1 1 auto" },
+            minWidth: 0,
+            height: { xs: "50vh", sm: "60vh", md: "100%" },
             position: "relative",
+            cursor: "zoom-in",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
           onClick={() => setOpenLightbox(true)}
         >
@@ -93,17 +116,22 @@ export default function PostDetailDialogClient(props: Props) {
             src={props.post.imageUrl!}
             alt={props.post.title}
             fill
+            priority
             style={{
-              objectFit: "cover",
+              objectFit: "contain",
+              padding: "10px",
             }}
           />
         </Box>
-
-        {/* コンテンツエリア */}
+        {/* 右: コンテンツエリア */}
         <Stack
           sx={{
-            width: { xs: "100%", md: "30%" },
-            height: { xs: "40%", md: "100%" },
+            width: { xs: "100%", md: 320, lg: 360 },
+            flexShrink: 0,
+            height: "100%",
+            overflowY: { xs: "visible", md: "auto" },
+            backgroundColor: "#fff",
+            borderLeft: { md: "1px solid `#ececec`" },
           }}
         >
           {/* 閉じるボタン（sticky） */}
@@ -113,45 +141,70 @@ export default function PostDetailDialogClient(props: Props) {
               top: 0,
               display: "flex",
               justifyContent: "flex-end",
-              p: 1,
-              backgroundColor: "#fff",
+              p: 1.5,
+              backgroundColor: "rgba(255,255,255,0.95)",
+              backdropFilter: "blur(10px)",
               zIndex: 10,
+              borderBottom: "1px solid #f9f9f9",
             }}
           >
-            <IconButton onClick={handleClose}>
+            <IconButton onClick={handleClose} sx={{ color: "text.primary" }}>
               <CloseIcon />
             </IconButton>
           </Box>
 
-          {/* 本文 */}
-          <Stack
-            spacing={2}
-            sx={{
-              px: { xs: 2, md: 4 },
-              pb: 4,
-            }}
-          >
-            <Typography variant="h5" fontWeight="bold">
-              {props.post.title}
-            </Typography>
+          {/* コンテンツ本体 */}
+          <Stack spacing={4} sx={{ px: 3, py: 4, pb: 10 }}>
+            <Box>
+              <Typography
+                variant="h5"
+                fontWeight="800"
+                component="h1"
+                gutterBottom
+              >
+                {props.post.title}
+              </Typography>
+              <Typography
+                variant="caption"
+                color="text.disabled"
+                sx={{ display: "block" }}
+              >
+                {props.post.createdAt
+                  ? new Date(props.post.createdAt).toLocaleString("ja-JP", {
+                      dateStyle: "long",
+                      timeStyle: "short",
+                    })
+                  : ""}
+              </Typography>
+            </Box>
 
-            <Typography variant="caption" color="text.secondary">
-              {props.post.createdAt
-                ? new Date(props.post.createdAt).toLocaleString()
-                : ""}
-            </Typography>
-
-            {/* タグ */}
-            <Stack direction="row" spacing={1} flexWrap="wrap">
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
               {props.post.tags.map((tag) => (
-                <Chip key={tag.tag.id} label={tag.tag.name} size="small" />
+                <Chip
+                  key={tag.tag.id}
+                  label={tag.tag.name}
+                  size="small"
+                  variant="filled"
+                  sx={{
+                    bgcolor: "#f0f0f0",
+                    fontWeight: 500,
+                    // cursor: "pointer", 今の所はホバーもポインターも削除
+                    // "&:hover": { bgcolor: "#e0e0e0" },
+                  }}
+                />
               ))}
             </Stack>
 
-            {/* 投稿者 */}
-            <AuthorCard user={props.post.author} avatarSize={32} />
+            <Box
+              sx={{
+                py: 1,
+                borderTop: "1px solid #f5f5f5",
+                borderBottom: "1px solid #f5f5f5",
+              }}
+            >
+              <AuthorCard user={props.post.author} avatarSize={40} />
+            </Box>
 
-            {/* 投票 */}
             <VoteButton
               postId={props.post.id}
               currentVoteCount={props.post.votes.length}
@@ -166,26 +219,44 @@ export default function PostDetailDialogClient(props: Props) {
               disabled={!props.currentUserId}
             />
 
-            {/* 説明 */}
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              sx={{ whiteSpace: "pre-wrap" }}
-            >
-              {props.post.description}
-            </Typography>
+            <Box>
+              <Typography
+                variant="overline"
+                color="text.disabled"
+                sx={{ fontWeight: "bold" }}
+              >
+                Description
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.primary"
+                sx={{
+                  mt: 1,
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
+                  lineHeight: 1.8,
+                  fontSize: "0.9rem",
+                }}
+              >
+                {props.post.description}
+              </Typography>
+            </Box>
           </Stack>
         </Stack>
       </Box>
+
+      {/* ライトボックス表示 */}
       <Dialog
         open={openLightbox}
-        onClose={() => setOpenLightbox(false)}
-        fullWidth
-        maxWidth={false}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpenLightbox(false);
+        }}
+        fullScreen
         slotProps={{
           paper: {
             sx: {
-              backgroundColor: "rgba(0,0,0,0.95)",
+              backgroundColor: "rgba(0,0,0,0.98)",
               boxShadow: "none",
             },
           },
@@ -194,30 +265,35 @@ export default function PostDetailDialogClient(props: Props) {
         <Box
           sx={{
             position: "relative",
-            width: "100%",
-            height: "90vh",
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
+          onClick={() => setOpenLightbox(false)}
         >
           <Image
             src={props.post.imageUrl!}
             alt={props.post.title}
             fill
-            style={{
-              objectFit: "contain",
-            }}
+            style={{ objectFit: "contain" }}
           />
-
-          {/* 閉じるボタン */}
           <IconButton
-            onClick={() => setOpenLightbox(false)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenLightbox(false);
+            }}
             sx={{
               position: "absolute",
-              top: 16,
-              right: 16,
+              top: 32,
+              right: 32,
               color: "#fff",
+              bgcolor: "rgba(255,255,255,0.1)",
+              "&:hover": { bgcolor: "rgba(255,255,255,0.2)" },
             }}
           >
-            <CloseIcon />
+            <CloseIcon sx={{ fontSize: 32 }} />
           </IconButton>
         </Box>
       </Dialog>
