@@ -30,6 +30,7 @@ import Typography from "@mui/material/Typography";
 import type { User } from "better-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { SnackbarProvider } from "notistack";
 import * as React from "react";
 import { authClient } from "@/lib/auth-client";
 
@@ -137,143 +138,154 @@ export default function Sidebar({ children, user }: Props) {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={[{ mr: 2 }, open && { display: "none" }]}
-          >
-            <MenuIcon />
-          </IconButton>
+    <SnackbarProvider maxSnack={3} autoHideDuration={5000}>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="fixed" open={open}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={[{ mr: 2 }, open && { display: "none" }]}
+            >
+              <MenuIcon />
+            </IconButton>
 
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            <Link href="/" className="text-white no-underline">
-              Magnezoo Control Panel
-            </Link>
-          </Typography>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ flexGrow: 1 }}
+            >
+              <Link href="/" className="text-white no-underline">
+                Magnezoo Control Panel
+              </Link>
+            </Typography>
 
-          {/* --- ここからアカウントメニュー --- */}
-          <Box
-            sx={{ display: "flex", alignItems: "center", textAlign: "center" }}
-          >
-            <Tooltip title="Account settings">
-              <IconButton
-                onClick={handleAccountClick}
-                size="small"
-                sx={{ ml: 2 }}
-                aria-controls={menuOpen ? "account-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={menuOpen ? "true" : undefined}
-              >
-                <Avatar
-                  sx={{ width: 32, height: 32, bgcolor: "orange" }}
-                  src={user.image || undefined}
-                />
-              </IconButton>
-            </Tooltip>
-          </Box>
-          {/* --- ここまでアカウントメニュー --- */}
-        </Toolbar>
-      </AppBar>
+            {/* --- ここからアカウントメニュー --- */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <Tooltip title="Account settings">
+                <IconButton
+                  onClick={handleAccountClick}
+                  size="small"
+                  sx={{ ml: 2 }}
+                  aria-controls={menuOpen ? "account-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={menuOpen ? "true" : undefined}
+                >
+                  <Avatar
+                    sx={{ width: 32, height: 32, bgcolor: "orange" }}
+                    src={user.image || undefined}
+                  />
+                </IconButton>
+              </Tooltip>
+            </Box>
+            {/* --- ここまでアカウントメニュー --- */}
+          </Toolbar>
+        </AppBar>
 
-      {/* アカウントメニューの中身*/}
-      <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={menuOpen}
-        onClose={handleAccountClose}
-        onClick={handleAccountClose}
-        slotProps={{
-          paper: {
-            elevation: 0,
-            sx: {
-              overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: 1.5,
-              "& .MuiAvatar-root": { width: 32, height: 32, ml: -0.5, mr: 1 },
-              "&::before": {
-                content: '""',
-                display: "block",
-                position: "absolute",
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: "background.paper",
-                transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0,
+        {/* アカウントメニューの中身*/}
+        <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={menuOpen}
+          onClose={handleAccountClose}
+          onClick={handleAccountClose}
+          slotProps={{
+            paper: {
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 1.5,
+                "& .MuiAvatar-root": { width: 32, height: 32, ml: -0.5, mr: 1 },
+                "&::before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
               },
             },
-          },
-        }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
-        <MenuItem
-          onClick={handleAccountClose}
-          component={Link}
-          href="/settings"
+          }}
+          transformOrigin={{ horizontal: "right", vertical: "top" }}
+          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          個人設定
-        </MenuItem>
+          <MenuItem
+            onClick={handleAccountClose}
+            component={Link}
+            href="/settings"
+          >
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            個人設定
+          </MenuItem>
 
-        <MenuItem onClick={handleLogout}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          ログアウト
-        </MenuItem>
-      </Menu>
-      {/* ここまでがアカウントメニューの中身*/}
+          <MenuItem onClick={handleLogout}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            ログアウト
+          </MenuItem>
+        </Menu>
+        {/* ここまでがアカウントメニューの中身*/}
 
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
+        <Drawer
+          sx={{
             width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={open}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "ltr" ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
 
-        <Divider />
-        <List>
-          {NAVIGATION_ITEMS.map((item) => (
-            <ListItem key={item.text} disablePadding>
-              <ListItemButton component={Link} href={item.href}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+          <Divider />
+          <List>
+            {NAVIGATION_ITEMS.map((item) => (
+              <ListItem key={item.text} disablePadding>
+                <ListItemButton component={Link} href={item.href}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
 
-      <Main open={open}>
-        <DrawerHeader />
-        {children}
-      </Main>
-    </Box>
+        <Main open={open}>
+          <DrawerHeader />
+          {children}
+        </Main>
+      </Box>
+    </SnackbarProvider>
   );
 }

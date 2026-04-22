@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { SnackbarProvider, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import PostImageField from "@/components/admin/PostEditor/PostImageField";
 import PostPublicationFields from "@/components/admin/PostEditor/PostPublicationFields";
@@ -58,7 +58,7 @@ const DEFAULT_NEW_POST: PostWithTags = {
   tags: [],
 };
 
-function PostEditFormContent({
+export default function PostEditForm({
   post,
   users,
 }: {
@@ -363,20 +363,6 @@ function PostEditFormContent({
         </Stack>
       </Backdrop>
     </Container>
-  );
-}
-
-export default function PostEditForm({
-  post,
-  users,
-}: {
-  post?: PostWithTags;
-  users: User[];
-}) {
-  return (
-    <SnackbarProvider maxSnack={3}>
-      <PostEditFormContent post={post} users={users} />
-    </SnackbarProvider>
   );
 }
 
