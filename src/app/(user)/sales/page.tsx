@@ -1,4 +1,4 @@
-import { Divider, Link, Link as MUILink } from "@mui/material";
+import { Divider, Link } from "@mui/material";
 import type { Metadata } from "next";
 import Image from "next/image";
 import CountdownTimer from "@/components/Cards/CountdownTimer";
@@ -18,9 +18,11 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mb-10">
-      <div className="bg-white/90 rounded-2xl border border-[#E48B00]/20 px-10 py-10 text-black">
-        <h2 className="text-xl font-bold mb-4 text-[#E48B00]">{title}</h2>
+    <section className="mb-12">
+      <div className="bg-white/85 backdrop-blur-sm rounded-3xl border border-[#E48B00]/30 shadow-lg shadow-[#E48B00]/10 px-6 py-8 md:px-10 md:py-10 text-stone-800 transition-all hover:shadow-xl hover:bg-white/95">
+        <h2 className="text-2xl font-bold mb-6 text-[#E48B00] border-b-2 border-[#E48B00]/20 pb-2 inline-block">
+          {title}
+        </h2>
         <div>{children}</div>
       </div>
     </section>
@@ -28,10 +30,9 @@ function Section({
 }
 
 export default async function SalesAppCampainPage() {
-  // const session = await auth.api.getSession({ headers: await headers() });
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#FFEECE] font-sans text-black py-10 overflow-hidden">
-      {/* 幾何学的な背景アニメーション */}
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#FFEECE] font-sans py-12 overflow-hidden">
+      {/* 幾何学的な背景アニメーション（元のまま） */}
       <div className="animated-bg-circles" aria-hidden="true">
         <div className="circle circle1" />
         <div className="circle circle2" />
@@ -39,57 +40,72 @@ export default async function SalesAppCampainPage() {
         <div className="circle circle4" />
         <div className="circle circle5" />
       </div>
-      <main>
-        <div className="relative w-full max-w-4xl mx-auto px-4 leading-relaxed z-10 text-center">
-          <header className="mb-8">
-            <div className="bg-white/95 rounded-2xl border border-[#E48B00]/20 px-10 py-8 mb-2">
-              <h1 className="text-2xl font-bold mb-2 text-[#E48B00]">
+
+      <main className="w-full z-10">
+        <div className="relative w-full max-w-4xl mx-auto px-4 leading-relaxed text-center">
+          <header className="mb-12">
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-[#E48B00]/30 shadow-xl shadow-[#E48B00]/10 px-6 py-10 md:px-12 md:py-12">
+              <h1 className="text-lg md:text-xl font-bold mb-2 text-[#E48B00]/80 tracking-wide">
                 【物販特設サイト】
               </h1>
-              <h2 className="text-3xl mb-6 font-bold text-[#E48B00]">
+              <h2 className="text-3xl md:text-4xl mb-6 font-extrabold text-[#E48B00]">
                 生徒たちで作るチャリティー企画
               </h2>
-              <p className="text-md text-[#E48B00] mb-2">
-                生徒から募集した「ウチの子（ペット）」の写真たちが、物販でステッカー、缶バッジ、キーホルダーとして販売されます！
+              <p className="text-md md:text-lg text-stone-700 mb-6 font-medium">
+                生徒から募集した「ウチの子（ペット）」の写真たちが、
+                <br className="hidden md:block" />
+                ステッカー、缶バッジ、キーホルダーとして販売されます！
               </p>
-              <p className="mb-2 ">
-                ※売上金は
-                <Link
-                  href="https://jspca.or.jp/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  (公財)動物愛護協会
-                </Link>
-                へ寄付されます。
-              </p>
+              <div className="inline-block bg-[#FFEECE]/50 rounded-lg px-4 py-3 text-sm text-stone-600 border border-[#E48B00]/20">
+                <p>
+                  ※売上金は
+                  <Link
+                    href="https://jspca.or.jp/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#E48B00] font-bold hover:underline mx-1"
+                  >
+                    (公財)動物愛護協会
+                  </Link>
+                  へ寄付されます。
+                </p>
+              </div>
             </div>
           </header>
 
           <Section title="場所">
-            <p className="text-md font-bold mb-4 text-[#E48B00]">
-              幕張メッセ ホール5 物販ブース（千葉県千葉市美浜区中瀬2-1）
+            <p className="text-lg font-bold mb-6 text-stone-800">
+              幕張メッセ ホール5 物販ブース
+              <span className="block text-sm font-normal text-stone-500 mt-1">
+                （千葉県千葉市美浜区中瀬2-1）
+              </span>
             </p>
             <Link
               href="/img/merchandise/floormap.svg"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#E48B00] hover:underline"
+              className="group block text-[#E48B00] hover:text-[#c77a00] transition-colors"
             >
-              <p className="mb-2">会場地図を拡大して見る</p>
-              <Image
-                src="/img/merchandise/floormap.svg"
-                alt="会場地図"
-                width={800}
-                height={700}
-                className="mx-auto rounded-lg border-2 border-[#E48B00]/80 w-full h-auto max-w-2xl"
-              />
+              <p className="mb-3 text-sm font-bold flex items-center justify-center gap-1 group-hover:underline">
+                <span>🔍 会場地図を拡大して見る</span>
+              </p>
+              <div className="overflow-hidden rounded-2xl border-2 border-[#E48B00]/40 group-hover:border-[#E48B00]/80 transition-all shadow-md">
+                <Image
+                  src="/img/merchandise/floormap.svg"
+                  alt="会場地図"
+                  width={800}
+                  height={700}
+                  className="w-full h-auto max-w-2xl mx-auto transform group-hover:scale-[1.02] transition-transform duration-300"
+                />
+              </div>
             </Link>
-            <blockquote className="pl-4 italic mt-4 text-[#E48B00]/80">
+            <blockquote className="mt-6 text-sm text-stone-400">
+              詳細:{" "}
               <Link
                 href="https://www.m-messe.co.jp/facility/"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="hover:underline hover:text-[#E48B00]"
               >
                 https://www.m-messe.co.jp/facility/
               </Link>
@@ -97,17 +113,23 @@ export default async function SalesAppCampainPage() {
           </Section>
 
           <Section title="開催日まであと">
-            <CountdownTimer targetDate="2026-04-25T23:59:59" />
+            <div className="py-4">
+              <CountdownTimer targetDate="2026-04-25T23:59:59" />
+            </div>
           </Section>
         </div>
 
-        <Divider>
-          <h2 className="text-3xl font-bold text-[#E48B00] mb-8 mt-12 text-center">
-            商品一覧
-          </h2>
-        </Divider>
+        {/* 商品一覧の区切り */}
+        <div className="w-full max-w-6xl mx-auto px-4 my-16">
+          <Divider>
+            <span className="text-3xl font-extrabold text-[#E48B00] px-6 py-2 bg-[#FFEECE] rounded-full border-2 border-[#E48B00]/20">
+              商品一覧
+            </span>
+          </Divider>
+        </div>
 
-        <div className="relative w-[80vw] max-w-7xl mx-auto leading-relaxed z-10">
+        {/* 商品リスト */}
+        <div className="relative w-full max-w-6xl mx-auto px-4 leading-relaxed z-10 flex flex-col gap-8 md:gap-12">
           <MediaText
             imageSrc="/img/merchandise/sakura_01.png"
             imageAlt="オリジナルステッカー"
@@ -137,6 +159,7 @@ export default async function SalesAppCampainPage() {
             imageAlt="N高本校 さくらちゃん アクリルキーホルダー"
             reverse
           />
+
           <MediaText
             title="みんなのウチの子 アクリルキーホルダー"
             price={800}
