@@ -6,7 +6,7 @@ export default function CountdownTimer({ targetDate }: { targetDate: string }) {
   const [timeLeft, setTimeLeft] = useState<string>("読み込み中...");
   const requestRef = useRef<number>(null);
   const previousSecondRef = useRef<number>(0);
-  const targetTime = new Date(targetDate).getTime();
+  const targetTime = useMemo(() => new Date(targetDate).getTime(), [targetDate]);
 
   useEffect(() => {
     const updateTimer = () => {
