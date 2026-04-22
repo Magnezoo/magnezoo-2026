@@ -29,23 +29,25 @@ export default function MediaText({
             src={imageSrc}
             alt={imageAlt}
             fill
+            sizes="(min-width: 768px) 42vw, 100vw"
             className="object-contain p-2"
           />
         </div>
       </div>
       <div className="w-full md:w-7/12 text-left p-8 flex flex-col justify-center">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 mb-4">
-          <h3 className="text-2xl font-bold text-[#E48B00]">{title}</h3>
+          <h3 className="text-2xl font-bold text-[`#E48B00`]">{title}</h3>
         </div>
-        <p className="text-black leading-relaxed whitespace-pre-wrap mb-6">
-          {description}
-        </p>
+        {description && (
+          <p className="text-black leading-relaxed whitespace-pre-wrap mb-6">
+            {description}
+          </p>
+        )}
         {price !== undefined && (
           <div className="mt-auto">
-            <span className="text-2xl font-bold text-[#e55a15]">
+            <span className="text-2xl font-bold text-[`#e55a15`]">
               ¥{price.toLocaleString()}
             </span>
-            <span className="text-sm text-[#e55a15] ml-1"></span>
           </div>
         )}
       </div>
