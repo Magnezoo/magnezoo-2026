@@ -1,4 +1,4 @@
-import { Chip, Divider, Link, Link as MUILink } from "@mui/material";
+import { Divider, Link, Link as MUILink } from "@mui/material";
 import type { Metadata } from "next";
 import Image from "next/image";
 import CountdownTimer from "@/components/Cards/CountdownTimer";
@@ -86,7 +86,13 @@ export default async function SalesAppCampainPage() {
               />
             </Link>
             <blockquote className="pl-4 italic mt-4 text-[#E48B00]/80">
-              <Link>https://www.m-messe.co.jp/facility/</Link>
+              <Link
+                href="https://www.m-messe.co.jp/facility/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://www.m-messe.co.jp/facility/
+              </Link>
             </blockquote>
           </Section>
 
