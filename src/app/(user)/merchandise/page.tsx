@@ -1,6 +1,6 @@
 import { Chip, Divider, Link, Link as MUILink } from "@mui/material";
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import Image from "next/image";
 import CountdownTimer from "@/components/Cards/CountdownTimer";
 import MediaText from "@/components/Cards/MediaText";
 
@@ -68,21 +68,26 @@ export default async function SalesAppCampainPage() {
 
           <Section title="場所">
             <p className="text-md font-bold mb-4 text-[#E48B00]">
-              幕張メッセ ホール5 物販ブース（千葉県千葉市美浜区中瀬2-1）【仮】
+              幕張メッセ ホール5 物販ブース（千葉県千葉市美浜区中瀬2-1）
             </p>
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d63838.61108154273!2d140.044646!3d35.637682!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6022821fd52ebfdf%3A0xcec0c09c4bed45e0!2z5bmV5by144Oh44OD44K7!5e1!3m2!1sja!2sjp!4v1776832178907!5m2!1sja!2sjp"
-              title="幕張メッセの地図"
-              style={{
-                maxWidth: "100%",
-                width: "100%",
-                height: "500px",
-                border: 0,
-                display: "flex",
-                justifyContent: "center",
-                margin: "0 auto",
-              }}
-            />
+            <Link
+              href="/img/merchandise/floormap.svg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#E48B00] hover:underline"
+            >
+              <p className="mb-2">会場地図を拡大して見る</p>
+              <Image
+                src="/img/merchandise/floormap.svg"
+                alt="会場地図"
+                width={800}
+                height={700}
+                className="mx-auto rounded-lg border-2 border-[#E48B00]/80 w-full h-auto max-w-2xl"
+              />
+            </Link>
+            <blockquote className="pl-4 italic mt-4 text-[#E48B00]/80">
+              <Link>https://www.m-messe.co.jp/facility/</Link>
+            </blockquote>
           </Section>
 
           <Section title="開催日まであと">
