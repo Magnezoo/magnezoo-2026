@@ -248,7 +248,10 @@ export default function PostDetailDialogClient(props: Props) {
       {/* ライトボックス表示 */}
       <Dialog
         open={openLightbox}
-        onClose={() => setOpenLightbox(false)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpenLightbox(false);
+        }}
         fullScreen
         slotProps={{
           paper: {
@@ -277,7 +280,10 @@ export default function PostDetailDialogClient(props: Props) {
             style={{ objectFit: "contain" }}
           />
           <IconButton
-            onClick={() => setOpenLightbox(false)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenLightbox(false);
+            }}
             sx={{
               position: "absolute",
               top: 32,
