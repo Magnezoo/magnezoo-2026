@@ -32,7 +32,7 @@ function Section({
   );
 }
 
-export default async function SalesAppCampainPage() {
+export default function SalesAppCampaignPage() {
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#FFEECE] font-sans py-12 overflow-hidden">
       {/* 幾何学的な背景アニメーション（元のまま） */}
