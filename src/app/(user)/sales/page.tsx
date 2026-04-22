@@ -45,6 +45,17 @@ export default async function SalesAppCampainPage() {
       </div>
 
       <main className="w-full z-10">
+        <div className="w-full max-w-5xl mx-auto px-4 mb-8 md:mb-12 mt-4 md:mt-0">
+          <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-xl shadow-[#E48B00]/10 border-4 border-white/60">
+            <Image
+              src="/img/kv_booth.png"
+              alt="Magnezoo 物販企画 キービジュアル"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        </div>
         <div className="relative w-full max-w-4xl mx-auto px-4 leading-relaxed text-center">
           <header className="mb-12">
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-[#E48B00]/30 shadow-xl shadow-[#E48B00]/10 px-6 py-10 md:px-12 md:py-12">
@@ -170,6 +181,20 @@ export default async function SalesAppCampainPage() {
             imageAlt="みんなのウチの子 アクリルキーホルダー"
             reverse
           />
+        </div>
+        <div className="w-full max-w-4xl mx-auto px-4 mt-20 mb-8 text-center">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl border-2 border-[#E48B00]/40 shadow-xl shadow-[#E48B00]/10 px-8 py-10 md:py-12 transform transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#E48B00]/20">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[#E48B00] mb-4 flex items-center justify-center gap-2">
+              <span aria-hidden="true">🐾</span>
+              ぜひ会場へお越しください！
+              <span aria-hidden="true">🐾</span>
+            </h2>
+            <p className="text-md md:text-lg text-stone-700 font-medium leading-relaxed">
+              可愛い「ウチの子」たちの限定グッズをたくさんご用意しています。
+              <br className="hidden md:block" />
+              皆さまのご来場を、心よりお待ちしております！
+            </p>
+          </div>
         </div>
       </main>
     </div>
