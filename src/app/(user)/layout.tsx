@@ -45,11 +45,13 @@ export default async function RootLayout({
         component={"footer"}
         alignItems="center"
         flexDirection={"row"}
+        flexWrap={"wrap"}
         justifyContent={"space-between"}
         alignContent={"center"}
         px={2}
         py={2}
         bgcolor={"gray"}
+        gap={2}
       >
         <span className="text-sm text-white text-center">
           &copy; 2026 Magnezoo 製作委員会 All rights reserved. Server provided
