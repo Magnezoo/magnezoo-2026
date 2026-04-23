@@ -148,7 +148,7 @@ export default function SalesAppCampaignPage() {
             imageSrc="/img/merchandise/sakura_01.png"
             imageAlt="オリジナルステッカー"
             title="さくらちゃん みんなのウチの子 ステッカー (3枚組)"
-            price={500}
+            price={200}
             reverse
           />
 
@@ -156,14 +156,14 @@ export default function SalesAppCampaignPage() {
             imageSrc="/img/merchandise/sakura_03_badge.png"
             imageAlt="N高本校 さくらちゃん 缶バッチ"
             title="N高本校 さくらちゃん 缶バッチ"
-            price={150}
+            price={200}
           />
 
           <MediaText
             imageSrc="/img/merchandise/student_02_badge.png"
             imageAlt="みんなのウチの子 缶バッチ"
             title="みんなのウチの子 缶バッチ"
-            price={150}
+            price={200}
           />
 
           <MediaText
