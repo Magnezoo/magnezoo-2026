@@ -168,7 +168,7 @@ export default function SalesAppCampaignPage() {
 
           <MediaText
             title="N高本校 さくらちゃん アクリルキーホルダー"
-            price={800}
+            price={500}
             imageSrc="/img/merchandise/sakura_key-holder.png"
             imageAlt="N高本校 さくらちゃん アクリルキーホルダー"
             reverse
@@ -176,7 +176,7 @@ export default function SalesAppCampaignPage() {
 
           <MediaText
             title="みんなのウチの子 アクリルキーホルダー"
-            price={800}
+            price={500}
             imageSrc="/img/merchandise/hamuchoco.png"
             imageAlt="みんなのウチの子 アクリルキーホルダー"
             reverse
