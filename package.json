@@ -31,7 +31,7 @@
     "react-dom": "^19.2.5",
     "remark-gfm": "^4.0.1",
     "remark-toc": "^9.0.0",
-    "uuid": "^13.0.0",
+    "uuid": "^14.0.0",
     "ulid": "^3.0.2"
   },
   "devDependencies": {
